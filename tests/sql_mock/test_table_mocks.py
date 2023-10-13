@@ -137,3 +137,44 @@ def test_to_sql_model_multiple_provided():
         "SELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2"
     )
     assert sql_model == expected_sql_model
+
+
+# Test assert_equal method
+class TestData(BaseMockTable):
+    name = StringTestColumn(default='Thomas')
+    age = IntTestColumn(default=0)
+    city = StringTestColumn(default='Munich')
+
+def test_assert_equal_with_matching_data():
+    # Arrange
+    data_instance = TestData([{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}])
+    expected_data = [{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}]
+
+    # Act & Assert
+    data_instance.assert_equal(expected_data)
+    
+def test_assert_equal_with_ignored_missing_keys():
+    # Arrange
+    data_instance = TestData([{'name': 'Alice', 'age': 25, 'city': 'New York'}, {'name': 'Bob', 'age': 30, 'city': 'Munich'}])
+    expected_data = [{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}]
+
+    # Act & Assert
+    data_instance.assert_equal(expected_data, ignore_missing_keys=True)
+
+def test_assert_equal_with_non_matching_data():
+    # Arrange
+    data_instance = TestData([{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}])
+    expected_data = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]
+
+    # Act & Assert
+    with pytest.raises(AssertionError):
+        data_instance.assert_equal(expected_data)
+
+def test_assert_equal_with_ignored_missing_keys_and_non_matching_data():
+    # Arrange
+    data_instance = TestData([{'name': 'Alice', 'age': 25, 'city': 'New York'}, {'name': 'Bob', 'age': 30}])
+    expected_data = [{'name': 'Alice', 'age': 30}]
+
+    # Act & Assert
+    with pytest.raises(AssertionError):
+        data_instance.assert_equal(expected_data, ignore_missing_keys=True)
