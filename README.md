@@ -7,6 +7,17 @@ SQL Mock: Effortless SQL Query Testing with Dummy Data
 
 SQL Mock is a Python library that simplifies the testing of SQL queries by seamlessly replacing table references with Common Table Expressions (CTEs) filled with dummy data. Here's how it works:
 
+### Setup for Pytest
+If you are using pytest, make sure to add a `conftest.py` file to the root of your project.
+In the file add the following lines:
+```python
+import pytest
+pytest.register_assert_rewrite('sql_mock')
+```
+This allows you to get a rich comparison when using the `.assert_equal` method on the table mock instances.
+
+We also recommend using [pytest-icdiff](https://github.com/hjwp/pytest-icdiff) for better visibility on diffs of failed tests.
+
 ### What It Does:
 
 Table Reference Replacement: SQL Mock takes your SQL query and cleverly replaces table references (e.g., `<schema>.<table>`) with CTEs containing dummy data. For example:

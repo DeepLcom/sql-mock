@@ -562,6 +562,17 @@ grpcio = ">=1.59.0"
 protobuf = ">=4.21.6"
 
 [[package]]
+name = "icdiff"
+version = "2.0.7"
+description = "improved colored diff"
+optional = false
+python-versions = "*"
+files = [
+    {file = "icdiff-2.0.7-py3-none-any.whl", hash = "sha256:f05d1b3623223dd1c70f7848da7d699de3d9a2550b902a8234d9026292fb5762"},
+    {file = "icdiff-2.0.7.tar.gz", hash = "sha256:f79a318891adbf59a45e3a7694f5e1f18c5407065264637072ac8363b759866f"},
+]
+
+[[package]]
 name = "idna"
 version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -845,6 +856,17 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "pprintpp"
+version = "0.4.0"
+description = "A drop-in replacement for pprint that's actually pretty"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pprintpp-0.4.0-py2.py3-none-any.whl", hash = "sha256:b6b4dcdd0c0c0d75e4d7b2f21a9e933e5b2ce62b26e1a54537f9651ae5a5c01d"},
+    {file = "pprintpp-0.4.0.tar.gz", hash = "sha256:ea826108e2c7f49dc6d66c752973c3fc9749142a798d6b254e1e301cfdbc6403"},
+]
+
+[[package]]
 name = "proto-plus"
 version = "1.22.3"
 description = "Beautiful, Pythonic protocol buffers."
@@ -1083,6 +1105,22 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-icdiff"
+version = "0.8"
+description = "use icdiff for better error messages in pytest assertions"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pytest-icdiff-0.8.tar.gz", hash = "sha256:4f493ae5ee63c8e90e9f96d4b0b2968b19634dfed8a6e3c9848fcd0d6cadcf7b"},
+    {file = "pytest_icdiff-0.8-py3-none-any.whl", hash = "sha256:8fac8667d7042270c23019580b4b5dfd81e1c3e5a9bc9d5df6ac4a49788d42f2"},
+]
+
+[package.dependencies]
+icdiff = "*"
+pprintpp = "*"
+pytest = "*"
+
+[[package]]
 name = "pytest-mock"
 version = "3.11.1"
 description = "Thin-wrapper around the mock package for easier use with pytest"
@@ -1254,4 +1292,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f8a954fadf6759cbe7e8114dbed1a19c32e3861d21626f9eb04eea19c9f8a44c"
+content-hash = "89294a4e970e7c9c201b95650e44bdd5adebf26c3b3a6de7a1a4ac638c8999a9"
