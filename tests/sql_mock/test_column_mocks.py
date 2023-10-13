@@ -5,7 +5,7 @@ def test_init_no_default_not_nullable():
     """
     ...then it should raise an error.
     """
-    with pytest.raises(ValueError, match="Default cannot be None if not column is not nullable"):
+    with pytest.raises(ValueError, match="Default cannot be None if column is not nullable"):
         ColumnMock(default=None, nullable=False)
 
 def test_init_default_not_nullable():

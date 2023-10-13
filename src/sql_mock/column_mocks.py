@@ -20,7 +20,7 @@ class ColumnMock:
             nullable (bool, optional): Whether the column is nullable. Default is False.
         """
         if default is None and not nullable:
-            raise ValueError('Default cannot be None if not column is not nullable')
+            raise ValueError('Default cannot be None if column is not nullable')
         self.nullable = nullable
         self.default = default
 
