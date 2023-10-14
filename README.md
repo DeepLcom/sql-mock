@@ -1,11 +1,86 @@
 # SQL Mock: Python Library for Mocking SQL Queries with Dictionary Inputs
 
-SQL Mock is a Python library that simplifies the process of mocking SQL queries with dictionary inputs for testing purposes. This library allows you to create mock tables, define mock data, and simulate SQL query results, making it easier to test your SQL-related code without the need for a real database connection.
+## Usage
+
+The primary purpose of this library is to simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios. It library provides a consistent and convenient way to test the execution of your query without the need to process a massive amount of data.
+
+The library currently supports the following databases. Database specific documentations are provided in the links:
+* [BigQuery](src/sql_mock/bigquery/README.md)
+* [Clickhouse](src/sql_mock/clickhouse/README.md)
+
+### How it works
+
+Before diving into specific database scenarios, let's start with a simplified example of how SQL Mock works behind the scenes.
 
 
-SQL Mock: Effortless SQL Query Testing with Dummy Data
+1. You have an original SQL query, for instance:
+   ```sql
+   SELECT id FROM data.table1
+   ```
 
-SQL Mock is a Python library that simplifies the testing of SQL queries by seamlessly replacing table references with Common Table Expressions (CTEs) filled with dummy data. Here's how it works:
+
+2. Using SQL Mock, you define mock tables. You can use the built-in column types provided by SQL Mock. Available column types include `Int`, `String`, `Date`, and more. Each database type has their own column types. Define your tables by subclassing a mock table class that fits your database (e.g. `BigQueryMockTable`) and specifying the column types along with default values. In our example we use the `ClickhouseTableMock` class
+    ```python
+    from sql_mock.clickhouse import column_mocks as col
+    from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
+
+    class Table(ClickHouseTableMock):
+        id = col.Int(default=1)
+        name = col.String(default='Peter')
+
+    class ResultTable(ClickhouseTableMock):
+        id = col.Int(default=1)
+    ```
+
+3. **Creating mock data:** Define mock data for your tables using dictionaries. Each dictionary represents a row in the table, with keys corresponding to column names. Table column keys that don't get a value will use the default.
+    ```python
+    user_data = [
+        {}, # This will use the defaults for both id and name
+        {'id': 2, 'name': 'Martin'},
+        {'id': 3}, # This will use defaults for the name
+    ]
+
+    table_input_data = Table(data=user_data)
+    ```
+
+
+4. **Getting results for a table mock:** Use the `from_inputs` method of the table mock object to generate mock query results based on your mock data.
+    ```python
+    res = ResultTable.from_inputs(query='SELECT id FROM data.table1', input_data={'data.table1': table_input_data})
+    ```
+
+5. Behind the scene SQL Mock replaces table references (e.g. `data.table1`) in your query with Common Table Expressions (CTEs) filled with dummy data. It can roughly be compared to something like this:
+    ```sql
+    WITH data__table1 AS (
+        -- Mocked inputs
+        SELECT 
+            cast('1' AS 'String') AS id, 
+            cast('Peter' AS 'String') AS name
+        UNION ALL 
+        SELECT 
+            cast('2' AS 'String') AS id, 
+            cast('Martin' AS 'String') AS name
+        UNION ALL 
+        SELECT 
+            cast('3' AS 'String') AS id, 
+            cast('Peter' AS 'String') AS name
+    )
+
+    result AS (
+        -- Original query with replaced references
+        SELECT id FROM data__table1 
+    )
+
+    SELECT 
+        cast(id AS 'String') AS id
+    FROM result
+    ```
+
+6. Finally, you can compare your results to some expected results using the `assert_equal` method.
+    ```python
+    expected = [{'id': '1'},{'id': '2'},{'id': '3'}]
+    res.assert_equal(expected)
+    ```
 
 ### Setup for Pytest
 If you are using pytest, make sure to add a `conftest.py` file to the root of your project.
@@ -18,160 +93,5 @@ This allows you to get a rich comparison when using the `.assert_equal` method o
 
 We also recommend using [pytest-icdiff](https://github.com/hjwp/pytest-icdiff) for better visibility on diffs of failed tests.
 
-### What It Does:
-
-Table Reference Replacement: SQL Mock takes your SQL query and cleverly replaces table references (e.g., `<schema>.<table>`) with CTEs containing dummy data. For example:
-
-Original SQL Query:
-
-```sql
-SELECT id FROM data.table1
-```
-
-SQL Mock test:
-```python
-from sql_mock.clickhouse import column_mocks as col
-from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
-
-class Table(ClickHouseTableMock):
-    id = col.String(default=1)
-
-class ResultTable(ClickhouseTableMock):
-    id = col.String(default=1)
-
-query = 'SELECT id FROM data.table1'
-sql_mock = ClickHouseSQLMock(query=query)
-
-table_data = Table(data=[{}, {'id': 2}])
-res = ResultTable.from_inputs(query=query, input_data={"data.table1": table_data})
-```
-
-What roughly happens behind the scence:
-```sql
-WITH data__table1 AS (
-  SELECT cast('1' AS 'String') AS id
-  UNINON ALL 
-  SELECT cast('2' AS 'String') AS id
-)
-SELECT id FROM data__table1
-```
-
-* **Effortless Testing**: You can now test your SQL queries without needing a real test data. SQL Mock provides a playground for your queries.
-
-* **Streamlined Mocking**: Creating CTEs with mock data is effortless, so you can focus on testing your SQL logic.
-
-### When It's Useful:
-
-* **Query Testing:** If you're working with SQL queries and want to test them thoroughly, SQL Mock allows you to do so without the need for test data in the database.
-
-* **Database-Independent Testing**: When you want your tests to be independent of specific database setups, SQL Mock steps in to provide a consistent testing environment.
-
-* **Quick and Isolated Testing:** SQL Mock speeds up testing by isolating it from real data sources, allowing for faster development cycles.
-
-In a nutshell, SQL Mock simplifies query testing by seamlessly replacing table references with CTEs filled with dummy data. It's the perfect tool for developers who need efficient and reliable SQL query testing, regardless of their database environment.
-
-
-## Usage
-
-### Defining Mock Tables
-
-To create mock tables, you can use the built-in column types provided by SQL Mock. Available column types include `Int`, `String`, `Date`, and more. Define your tables by subclassing `BaseMockTable` or other table mock instances and specifying the column types along with default values. In our example we use the `ClickhouseTableMock` class
-
-```python
-from sql_mock.clickhouse import column_mocks as col
-from sql_mock.clickhouse.table_mocks import ClickhouseTableMock
-
-class UserTable(ClickhouseTableMock):
-    user_id = col.Int(default=1)
-    user_name = col.String(default="John Doe")
-```
-
-### Creating Mock Data
-
-Define mock data for your tables using dictionaries. Each dictionary represents a row in the table, with keys corresponding to column names. Table column keys that don't get a value will use the default
-
-```python
-user_data = [
-    {"user_id": 1, "user_name": "Alice"},
-    {"user_id": 2}, # This will use the default 'John Doe' as user_name
-    {} # This will use the defaults for both user_id and user_name
-]
-```
-
-### Getting results for a table mock
-
-Create an table mock object for your final model. 
-Use the `ClickHouseTableMock` class for ClickHouse setups or an appropriate class for your database system.
-
-```python
-from sql_mock.clickhouse.table_mocks import ClickHouseSQLMock
-
-query = """
-SELECT user_id, user_name
-FROM data.users
-WHERE user_id = 1
-"""
-class ResultTable(ClickhouseTableMock):
-    user_id = col.Int(default=1)
-    user_name = col.String(default="John Doe")
-```
-
-### Generating Mock Query Results
-
-Use the `from_inputs` method of the table mock object to generate mock query results based on your mock data.
-
-```python
-results = ResultTable.from_inputs(query=query, input_data={"data.users": user_data})
-
-# Now, you can test and assert the results as needed usin the assert_equal method.
-results.assert_equal(<some expected data>)
-```
-
-## Example
-
-Here's a complete example of how to use SQL Mock for testing for Clickhouse:
-
-```python
-import datetime
-from sql_mock.clickhouse import column_mocks as col
-from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
-
-query = """
-SELECT
-    count(*) AS subscription_count,
-    user_id
-FROM data.users
-LEFT JOIN data.subscriptions USING(user_id)
-GROUP BY user_id
-"""
-
-class UserTable(ClickHouseTableMock):
-    user_id = col.Int(default=1)
-    user_name = col.String(default="Mr. T")
-
-class SubscriptionTable(ClickHouseTableMock):
-    subscription_id = col.Int(default=1)
-    period_start_date = col.Date(default=datetime.date(2023, 9, 5))
-    period_end_date = col.Date(default=datetime.date(2023, 9, 5))
-    user_id = col.Int(default=1)
-
-class SubscriptionCountTable(ClickHouseTableMock):
-    subscription_count = col.Int(default=1)
-    user_id = col.Int(default=1)
-
-def test_something():
-    users = UserTable(data=[{"user_id": 1}, {"user_id": 2}])
-    subscriptions = SubscriptionTable(
-        data=[
-            {"subscription_id": 1, "user_id": 1},
-            {"subscription_id": 2, "user_id": 1},
-            {"subscription_id": 2, "user_id": 2},
-        ]
-    )
-
-    expected = [{"user_id": 2, "subscription_count": 1}, {"user_id": 1, "subscription_count": 2}]
-    
-    res = SubscriptionCountTable.from_inputs(query=query, input_data={"data.users": users, "data.subscriptions": subscriptions})
-    
-    res.assert_equal(expected)
-```
+### Examples
+You can find some examples in the [examples folder](examples/).
