@@ -1,4 +1,5 @@
 from jinja2 import Template
+
 from sql_mock.column_mocks import ColumnMock
 
 
@@ -26,8 +27,8 @@ class BaseMockTable:
         }
         self._data = [] if data is None else data
 
-    @classmethod 
-    def from_inputs(cls, query, input_data: dict[str, 'BaseMockTable'] = None,  query_template_kwargs: dict = None):
+    @classmethod
+    def from_inputs(cls, query, input_data: dict[str, "BaseMockTable"] = None, query_template_kwargs: dict = None):
         instance = cls(data=[])
         query_template = Template(query)
 
@@ -38,7 +39,7 @@ class BaseMockTable:
         instance._data = instance._get_results()
 
         return instance
-    
+
     def _generate_input_data_cte_snippet(self):
         # Convert instances into SQL snippets that serve as input to a CTE
         table_ctes = []
@@ -47,7 +48,7 @@ class BaseMockTable:
             table_ctes.append(f"{table_name} AS (\n{table_query}\n)")
 
         return ",\n".join(table_ctes)
-    
+
     def _generate_query(
         self,
     ):
@@ -58,22 +59,19 @@ class BaseMockTable:
         {result_query}
         )
 
-        SELECT 
-            {casted_result_fields} 
+        SELECT
+            {casted_result_fields}
         FROM result
         """
         input_data_ctes = self._generate_input_data_cte_snippet()
         casted_result_fields = ",\n".join(
-            [
-                col.cast_field(column_name=column_name)
-                for column_name, col in self._columns.items()
-            ]
+            [col.cast_field(column_name=column_name) for column_name, col in self._columns.items()]
         )
 
         query = query_template.format(
-            input_data_ctes=input_data_ctes, 
+            input_data_ctes=input_data_ctes,
             result_query=self._rendered_query,
-            casted_result_fields=casted_result_fields
+            casted_result_fields=casted_result_fields,
         )
 
         # Replace orignal table references to point them to the mocked data
@@ -85,7 +83,11 @@ class BaseMockTable:
         return query
 
     def _get_results(self) -> list[dict]:
-        query = self._generate_query()
+        """
+        This method needs to be implemented for database specific Table Mocks
+        """
+        # This is how you can get the fully rendered test query:
+        # query = self._generate_query()
         raise NotImplementedError("Child classes need to implement this method")
 
     def _to_sql_row(self, row_data: dict) -> str:
@@ -104,7 +106,7 @@ class BaseMockTable:
                 for column_name, col in self._columns.items()
             ]
         )
-    
+
     def as_sql_input(self):
         """
         Generate a UNION ALL SQL that combines data from all rows.
@@ -116,11 +118,11 @@ class BaseMockTable:
         if len(self._data) == 0:
             # Populate default values row with a WHERE FALSE statement to simulate no rows for the model
             snippet = self._to_sql_row({})
-            snippet += ' WHERE FALSE'
+            snippet += " WHERE FALSE"
         else:
             snippet = "\nUNION ALL\nSELECT ".join([self._to_sql_row(row_data) for row_data in self._data])
         return f"SELECT {snippet}"
-    
+
     def assert_equal(self, expected: [dict], ignore_missing_keys=False):
         """
         Assert that the class data matches the expected data.

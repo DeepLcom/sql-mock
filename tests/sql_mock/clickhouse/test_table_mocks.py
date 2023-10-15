@@ -1,11 +1,15 @@
 import os
+
 import pytest
 from pydantic import ValidationError
+
 from sql_mock.clickhouse.column_mocks import Int
 from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
 
+
 class MockTestTable(ClickHouseTableMock):
     id = Int(default=1)
+
 
 @pytest.fixture(autouse=True)
 def patch_os_environment_variables(mocker):
@@ -20,6 +24,7 @@ def patch_os_environment_variables(mocker):
         clear=True,
     )
 
+
 def test_init_with_environment_variables(patch_os_environment_variables):
     """
     ...then the env vars should be used to set the attributes
@@ -29,6 +34,7 @@ def test_init_with_environment_variables(patch_os_environment_variables):
     assert table.settings.user == "test_user"
     assert table.settings.password == "test_password"
     assert table.settings.port == "9000"
+
 
 def test_init_with_missing_configs(mocker):
     """
@@ -42,6 +48,7 @@ def test_init_with_missing_configs(mocker):
         )
         ClickHouseTableMock()
 
+
 def test_get_results(mocker):
     """
     Test the _get_results method.
@@ -53,6 +60,6 @@ def test_get_results(mocker):
     mock_client.return_value.__enter__.return_value.query_dataframe.return_value = mock_dataframe
 
     table = ClickHouseTableMock()
-    result = table.from_inputs(query='SELECT foo FROM bar', input_data={"foo.bar": MockTestTable()})
+    result = table.from_inputs(query="SELECT foo FROM bar", input_data={"foo.bar": MockTestTable()})
 
     result.assert_equal(mock_query_result)
