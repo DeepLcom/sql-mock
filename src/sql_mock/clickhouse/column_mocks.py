@@ -15,11 +15,14 @@ class Int(ClickhouseColumnMock):
 class Date(ClickhouseColumnMock):
     dtype = "Date"
 
+
 class Datetime(ClickhouseColumnMock):
     dtype = "Datetime"
 
+
 class Datetime64(ClickhouseColumnMock):
     dtype = "Datetime64"
+
 
 class String(ClickhouseColumnMock):
     dtype = "String"
@@ -27,6 +30,7 @@ class String(ClickhouseColumnMock):
 
 class Float(ClickhouseColumnMock):
     dtype = "Float"
+
 
 class Boolean(ClickhouseColumnMock):
     dtype = "Boolean"

@@ -1,15 +1,21 @@
+import pytest
+
 from sql_mock.column_mocks import ColumnMock
 from sql_mock.table_mocks import BaseMockTable
-import pytest
+
 
 class IntTestColumn(ColumnMock):
     dtype = "Integer"
 
+
 class StringTestColumn(ColumnMock):
     dtype = "String"
 
+
 int_col = IntTestColumn(default=1)
 string_col = StringTestColumn(default="hey")
+
+
 class MockTestTable(BaseMockTable):
     col1 = int_col
     col2 = string_col
@@ -24,10 +30,7 @@ def base_mock_table_instance():
 # Test the __init__ method
 def test_init():
     instance = MockTestTable()
-    assert instance._columns == {
-        'col1': int_col,
-        'col2': string_col
-    }
+    assert instance._columns == {"col1": int_col, "col2": string_col}
     assert instance._data == []
 
 
@@ -36,12 +39,12 @@ def test_from_inputs(mocker):
     query = "SELECT * FROM some_table"
     input_data = {"some_table": base_mock_table_instance}
     query_template_kwargs = {}
-    
+
     # Mock the _get_results method to return a simple list of dicts
     expected_results = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
-    mocker.patch.object(BaseMockTable, '_get_results', return_value=expected_results)
+    mocker.patch.object(BaseMockTable, "_get_results", return_value=expected_results)
     instance = BaseMockTable.from_inputs(query, input_data, query_template_kwargs)
-    
+
     assert isinstance(instance, BaseMockTable)
     assert isinstance(instance._input_data, dict)
     assert isinstance(instance._rendered_query, str)
@@ -141,39 +144,45 @@ def test_to_sql_model_multiple_provided():
 
 # Test assert_equal method
 class TestData(BaseMockTable):
-    name = StringTestColumn(default='Thomas')
+    name = StringTestColumn(default="Thomas")
     age = IntTestColumn(default=0)
-    city = StringTestColumn(default='Munich')
+    city = StringTestColumn(default="Munich")
+
 
 def test_assert_equal_with_matching_data():
     # Arrange
-    data_instance = TestData([{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}])
-    expected_data = [{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}]
+    data_instance = TestData([{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}])
+    expected_data = [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]
 
     # Act & Assert
     data_instance.assert_equal(expected_data)
-    
+
+
 def test_assert_equal_with_ignored_missing_keys():
     # Arrange
-    data_instance = TestData([{'name': 'Alice', 'age': 25, 'city': 'New York'}, {'name': 'Bob', 'age': 30, 'city': 'Munich'}])
-    expected_data = [{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}]
+    data_instance = TestData(
+        [{"name": "Alice", "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}]
+    )
+    expected_data = [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]
 
     # Act & Assert
     data_instance.assert_equal(expected_data, ignore_missing_keys=True)
 
+
 def test_assert_equal_with_non_matching_data():
     # Arrange
-    data_instance = TestData([{'name': 'Alice', 'age': 25}, {'name': 'Bob', 'age': 30}])
-    expected_data = [{'name': 'Alice', 'age': 30}, {'name': 'Bob', 'age': 25}]
+    data_instance = TestData([{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}])
+    expected_data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
 
     # Act & Assert
     with pytest.raises(AssertionError):
         data_instance.assert_equal(expected_data)
 
+
 def test_assert_equal_with_ignored_missing_keys_and_non_matching_data():
     # Arrange
-    data_instance = TestData([{'name': 'Alice', 'age': 25, 'city': 'New York'}, {'name': 'Bob', 'age': 30}])
-    expected_data = [{'name': 'Alice', 'age': 30}]
+    data_instance = TestData([{"name": "Alice", "age": 25, "city": "New York"}, {"name": "Bob", "age": 30}])
+    expected_data = [{"name": "Alice", "age": 30}]
 
     # Act & Assert
     with pytest.raises(AssertionError):

@@ -20,7 +20,7 @@ class ColumnMock:
             nullable (bool, optional): Whether the column is nullable. Default is False.
         """
         if default is None and not nullable:
-            raise ValueError('Default cannot be None if column is not nullable')
+            raise ValueError("Default cannot be None if column is not nullable")
         self.nullable = nullable
         self.default = default
 
@@ -30,6 +30,6 @@ class ColumnMock:
         if val is None:
             return f"cast(NULL AS {self.dtype}) AS {column_name}"
         return f"cast('{val}' AS {self.dtype}) AS {column_name}"
-    
+
     def cast_field(self, column_name):
         return f"cast({column_name} AS {self.dtype}) AS {column_name}"

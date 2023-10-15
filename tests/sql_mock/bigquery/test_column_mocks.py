@@ -1,4 +1,3 @@
-import pytest
 from sql_mock.bigquery.column_mocks import BigQueryColumnMock, Decimal
 
 
@@ -16,6 +15,7 @@ def test_init_not_nullable():
     assert column.dtype == "Integer"
     assert not column.nullable
 
+
 def test_init_nullable():
     """
     ...then nullable should be True"
@@ -29,6 +29,7 @@ def test_init_nullable():
     assert column.default == 42
     assert column.dtype == "Integer"
     assert column.nullable
+
 
 class TestDecimalColumn:
     def test_decimal_initialization_not_nullable(self):

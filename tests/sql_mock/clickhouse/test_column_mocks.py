@@ -1,5 +1,6 @@
 from sql_mock.clickhouse.column_mocks import ClickhouseColumnMock, Decimal
 
+
 def test_init_not_nullable():
     """
     ...then nullable should be False and dtype be the same as passed.
@@ -13,6 +14,7 @@ def test_init_not_nullable():
     assert column.default == 42
     assert column.dtype == "Integer"
     assert not column.nullable
+
 
 def test_init_nullable():
     """
@@ -28,12 +30,14 @@ def test_init_nullable():
     assert column.dtype == "Nullable(Integer)"
     assert column.nullable
 
+
 def test_decimal_initialization_not_nullable():
     """Ensure that the Decimal object is initialized correctly."""
     decimal_col = Decimal(default=0.0, precision=10, scale=2, nullable=False)
     assert decimal_col.dtype == "Decimal(10, 2)"
     assert decimal_col.default == 0.0
     assert not decimal_col.nullable
+
 
 def test_decimal_initialization_nullable():
     """Ensure that the Decimal object is initialized correctly."""
