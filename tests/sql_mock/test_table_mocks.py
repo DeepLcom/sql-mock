@@ -169,6 +169,18 @@ def test_assert_equal_with_ignored_missing_keys():
     data_instance.assert_equal(expected_data, ignore_missing_keys=True)
 
 
+def test_assert_equal_dict_ordering_differs_key_order_matches(base_mock_table_instance):
+    expected_data = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
+    base_mock_table_instance._data = [{"column1": 2, "column2": "value2"}, {"column1": 1, "column2": "value1"}]
+    base_mock_table_instance.assert_equal(expected_data)
+
+
+def test_assert_equal_dict_ordering_differs_key_order_differs(base_mock_table_instance):
+    expected_data = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
+    base_mock_table_instance._data = [{"column1": 2, "column2": "value2"}, {"column2": "value1", "column1": 1}]
+    base_mock_table_instance.assert_equal(expected_data)
+
+
 def test_assert_equal_with_non_matching_data():
     # Arrange
     data_instance = TestData([{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}])

@@ -123,7 +123,7 @@ class BaseMockTable:
             snippet = "\nUNION ALL\nSELECT ".join([self._to_sql_row(row_data) for row_data in self._data])
         return f"SELECT {snippet}"
 
-    def assert_equal(self, expected: [dict], ignore_missing_keys=False):
+    def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
         """
         Assert that the class data matches the expected data.
 
@@ -133,9 +133,13 @@ class BaseMockTable:
             expected (list of dicts): Expected data to compare the class data against
             ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
                 list of dictionaries of the `expected` argument.
+            ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
         """
         data = self._data
         if ignore_missing_keys:
             keys_to_keep = set(key for dictionary in expected for key in dictionary.keys())
             data = [{key: value for key, value in dictionary.items() if key in keys_to_keep} for dictionary in data]
+        if ignore_order:
+            data = sorted(data, key=lambda d: sorted(d.items()))
+            expected = sorted(expected, key=lambda d: sorted(d.items()))
         assert expected == data
