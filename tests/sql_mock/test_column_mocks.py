@@ -51,6 +51,19 @@ def test_to_sql_without_value():
     assert sql == "cast('OpenAI' AS String) AS company"
 
 
+def test_to_sql_with_none_for_nullable_column():
+    """
+    ...then it should return the SQL cast expression using the default value.
+    """
+
+    class ColumnTestMock(ColumnMock):
+        dtype = "String"
+
+    column = ColumnTestMock(default="OpenAI", nullable=True)
+    sql = column.to_sql("company", value=None)
+    assert sql == "cast(NULL AS String) AS company"
+
+
 def test_to_sql_without_value_and_no_default():
     """
     ...then it should return the SQL cast expression using the default value.

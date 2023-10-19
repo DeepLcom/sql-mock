@@ -1,6 +1,7 @@
 from jinja2 import Template
 
 from sql_mock.column_mocks import ColumnMock
+from sql_mock.constants import NO_INPUT
 
 
 class BaseMockTable:
@@ -102,7 +103,7 @@ class BaseMockTable:
         """
         return ", ".join(
             [
-                col.to_sql(column_name=column_name, value=row_data.get(column_name))
+                col.to_sql(column_name=column_name, value=row_data.get(column_name, NO_INPUT))
                 for column_name, col in self._columns.items()
             ]
         )
