@@ -1,4 +1,4 @@
-from sql_mock.constants import NO_INPUT
+from sql_mock.constants import NO_INPUT, NoInput
 
 
 class ColumnMock:
@@ -29,7 +29,7 @@ class ColumnMock:
 
     def to_sql(self, column_name: str, value=NO_INPUT) -> str:
         # Note: We compare against NO_INPUT instead of checking for None since None could be a valid input for nullable columns
-        val = value if value != NO_INPUT else self.default
+        val = value if not isinstance(value, NoInput) else self.default
         # In case the val is None, we convert it to NULL
         if val is None:
             return f"cast(NULL AS {self.dtype}) AS {column_name}"

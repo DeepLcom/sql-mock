@@ -1,1 +1,5 @@
-NO_INPUT = "NO INPUT PROVIDED"
+class NoInput:
+    pass
+
+
+NO_INPUT = NoInput()
