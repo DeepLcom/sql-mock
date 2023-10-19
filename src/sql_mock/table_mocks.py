@@ -4,6 +4,10 @@ from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
 
 
+def get_keys_from_list_of_dicts(data: list[dict]) -> set[str]:
+    return set(key for dictionary in data for key in dictionary.keys())
+
+
 class BaseMockTable:
     """
     Represents a base class for creating mock database tables for testing.
@@ -26,6 +30,15 @@ class BaseMockTable:
         self._columns = {
             field: getattr(self, field) for field in dir(self) if isinstance(getattr(self, field), ColumnMock)
         }
+
+        if data is not None:
+            provided_keys = get_keys_from_list_of_dicts(data)
+            not_existing_fields = [key for key in provided_keys if key not in self._columns.keys()]
+            if not_existing_fields:
+                raise ValueError(
+                    f"Fields provided that are not part of the table's fields. Non existing fields: {not_existing_fields}"
+                )
+
         self._data = [] if data is None else data
 
     @classmethod
@@ -138,7 +151,7 @@ class BaseMockTable:
         """
         data = self._data
         if ignore_missing_keys:
-            keys_to_keep = set(key for dictionary in expected for key in dictionary.keys())
+            keys_to_keep = get_keys_from_list_of_dicts(expected)
             data = [{key: value for key, value in dictionary.items() if key in keys_to_keep} for dictionary in data]
         if ignore_order:
             data = sorted(data, key=lambda d: sorted(d.items()))

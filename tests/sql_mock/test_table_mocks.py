@@ -34,6 +34,12 @@ def test_init():
     assert instance._data == []
 
 
+def test_wrong_fields_prodivded_to_model():
+    """...then it should raise a validation error"""
+    with pytest.raises(ValueError):
+        MockTestTable(data=[{"not_existing_key": 1}])
+
+
 # Test the from_inputs method
 def test_from_inputs(mocker):
     query = "SELECT * FROM some_table"
