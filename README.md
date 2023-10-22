@@ -22,12 +22,14 @@ Before diving into specific database scenarios, let's start with a simplified ex
 2. Using SQL Mock, you define mock tables. You can use the built-in column types provided by SQL Mock. Available column types include `Int`, `String`, `Date`, and more. Each database type has their own column types. Define your tables by subclassing a mock table class that fits your database (e.g. `BigQueryMockTable`) and specifying the column types along with default values. In our example we use the `ClickhouseTableMock` class
     ```python
     from sql_mock.clickhouse import column_mocks as col
-    from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
+    from sql_mock.clickhouse.table_mocks import ClickHouseTableMock, table_meta
 
+    @table_meta(table_ref='data.table1)
     class Table(ClickHouseTableMock):
         id = col.Int(default=1)
         name = col.String(default='Peter')
-
+    
+    @table_meta(table_ref='data.result_table')
     class ResultTable(ClickhouseTableMock):
         id = col.Int(default=1)
     ```
@@ -40,13 +42,13 @@ Before diving into specific database scenarios, let's start with a simplified ex
         {'id': 3}, # This will use defaults for the name
     ]
 
-    table_input_data = Table(data=user_data)
+    input_table_mock = Table.from_dicts(user_data)
     ```
 
 
 4. **Getting results for a table mock:** Use the `from_inputs` method of the table mock object to generate mock query results based on your mock data.
     ```python
-    res = ResultTable.from_inputs(query='SELECT id FROM data.table1', input_data={'data.table1': table_input_data})
+    res = ResultTable.from_mocks(query='SELECT id FROM data.table1', input_data=[input_table_mock])
     ```
 
 5. Behind the scene SQL Mock replaces table references (e.g. `data.table1`) in your query with Common Table Expressions (CTEs) filled with dummy data. It can roughly be compared to something like this:

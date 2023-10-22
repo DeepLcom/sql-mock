@@ -5,8 +5,10 @@ from pydantic import ValidationError
 
 from sql_mock.clickhouse.column_mocks import Int
 from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
+from sql_mock.table_mocks import table_meta
 
 
+@table_meta(table_ref="mock_test_table")
 class MockTestTable(ClickHouseTableMock):
     id = Int(default=1)
 
@@ -29,7 +31,7 @@ def test_init_with_environment_variables(patch_os_environment_variables):
     """
     ...then the env vars should be used to set the attributes
     """
-    table = ClickHouseTableMock()
+    table = MockTestTable()
     assert table.settings.host == "test_host"
     assert table.settings.user == "test_user"
     assert table.settings.password == "test_password"
@@ -46,7 +48,7 @@ def test_init_with_missing_configs(mocker):
             {},
             clear=True,
         )
-        ClickHouseTableMock()
+        MockTestTable()
 
 
 def test_get_results(mocker):
@@ -60,6 +62,6 @@ def test_get_results(mocker):
     mock_client.return_value.__enter__.return_value.query_dataframe.return_value = mock_dataframe
 
     table = ClickHouseTableMock()
-    result = table.from_inputs(query="SELECT foo FROM bar", input_data={"foo.bar": MockTestTable()})
+    result = table.from_mocks(query="SELECT foo FROM bar", input_data=[MockTestTable()])
 
     result.assert_equal(mock_query_result)

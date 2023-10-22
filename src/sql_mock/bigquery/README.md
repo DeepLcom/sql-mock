@@ -10,17 +10,22 @@ Ensure you have the `GOOGLE_APPLICATION_CREDENTIALS` environment variable correc
 import datetime
 from sql_mock.bigquery import column_mocks as col
 from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.table_mocks import table_meta
 
 # Define mock tables for your data model that inherit from BigQueryMockTable
+@table_meta(table_ref='data.users')
 class UserTable(BigQueryMockTable):
     user_id = col.Int(default=1)
     user_name = col.String(default='Mr. T')
 
+
+@table_meta(table_ref='data.subscriptions')
 class SubscriptionTable(BigQueryMockTable):
     subscription_id = col.Int(default=1)
     period_start_date = col.Date(default=datetime.date(2023, 9, 5))
     period_end_date = col.Date(default=datetime.date(2023, 9, 5))
     user_id = col.Int(default=1)
+
 
 # Define a mock table for your expected results
 class SubscriptionCountTable(BigQueryMockTable):
@@ -38,14 +43,12 @@ GROUP BY user_id
 """
 
 # Create mock data for the 'data.users' and 'data.subscriptions' tables
-users = UserTable(data=[{'user_id': 1}, {'user_id': 2}])
-subscriptions = SubscriptionTable(
-    data=[
-        {'subscription_id': 1, 'user_id': 1},
-        {'subscription_id': 2, 'user_id': 1},
-        {'subscription_id': 2, 'user_id': 2},
-    ]
-)
+users = UserTable.from_dicts([{'user_id': 1}, {'user_id': 2}])
+subscriptions = SubscriptionTable.from_dicts([
+    {'subscription_id': 1, 'user_id': 1},
+    {'subscription_id': 2, 'user_id': 1},
+    {'subscription_id': 2, 'user_id': 2},
+])
 
 # Define your expected results
 expected = [
@@ -54,12 +57,9 @@ expected = [
 ]
 
 # Simulate the SQL query using SQL Mock
-res = SubscriptionCountTable.from_inputs(
+res = SubscriptionCountTable.from_mocks(
     query=query, 
-    input_data={
-        'data.users': users, 
-        'data.subscriptions': subscriptions
-    }
+    input_data=[users, subscriptions]
 )
 
 # Assert the results
