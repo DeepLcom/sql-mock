@@ -17,6 +17,7 @@ int_col = IntTestColumn(default=1)
 string_col = StringTestColumn(default="hey")
 
 
+@table_meta(table_ref="mock_test_table")
 class MockTestTable(BaseMockTable):
     col1 = int_col
     col2 = string_col
@@ -125,7 +126,9 @@ def test_to_sql_model_no_data_provided():
     mock_table = MockTestTable(mock_data)
     sql_model = mock_table.as_sql_input()
 
-    expected_sql_model = "SELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 WHERE FALSE"
+    expected_sql_model = (
+        "mock_test_table AS (\n" "SELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 WHERE FALSE\n" ")"
+    )
     assert sql_model == expected_sql_model
 
 
@@ -135,7 +138,9 @@ def test_to_sql_model_single_row_provided():
     mock_table = MockTestTable(mock_data)
     sql_model = mock_table.as_sql_input()
 
-    expected_sql_model = "SELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2"
+    expected_sql_model = (
+        "mock_test_table AS (\n" "SELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n" ")"
+    )
     assert sql_model == expected_sql_model
 
 
@@ -146,9 +151,11 @@ def test_to_sql_model_multiple_provided():
     sql_model = mock_table.as_sql_input()
 
     expected_sql_model = (
+        "mock_test_table AS (\n"
         "SELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n"
         "UNION ALL\n"
-        "SELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2"
+        "SELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2\n"
+        ")"
     )
     assert sql_model == expected_sql_model
 

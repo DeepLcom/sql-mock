@@ -94,11 +94,7 @@ class BaseMockTable:
 
     def _generate_input_data_cte_snippet(self):
         # Convert instances into SQL snippets that serve as input to a CTE
-        table_ctes = []
-        for mock_table in self._input_data:
-            table_query = mock_table.as_sql_input()
-            table_ctes.append(f"{mock_table._table_ref} AS (\n{table_query}\n)")
-
+        table_ctes = [mock_table.as_sql_input() for mock_table in self._input_data]
         return ",\n".join(table_ctes)
 
     def _generate_query(
@@ -162,7 +158,7 @@ class BaseMockTable:
 
     def as_sql_input(self):
         """
-        Generate a UNION ALL SQL that combines data from all rows.
+        Generate a UNION ALL SQL CTE that combines data from all rows.
 
         Returns:
             str: A SQL query that combines data from all rows.
@@ -174,7 +170,7 @@ class BaseMockTable:
             snippet += " WHERE FALSE"
         else:
             snippet = "\nUNION ALL\nSELECT ".join([self._to_sql_row(row_data) for row_data in self._data])
-        return f"SELECT {snippet}"
+        return f"{self._table_ref} AS (\n" f"SELECT {snippet}\n" ")"
 
     def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
         """
