@@ -6,8 +6,10 @@ from pydantic import ValidationError
 
 from sql_mock.bigquery.column_mocks import Int
 from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.table_mocks import table_meta
 
 
+@table_meta(table_ref="mock_test_table")
 class MockTestTable(BigQueryMockTable):
     id = Int(default=1)
 
@@ -25,7 +27,7 @@ def patch_os_environment_variables(mocker):
 
 def test_init_with_environment_variables(mocker):
     """...then the env vars should be used to set the attributes"""
-    table = BigQueryMockTable()
+    table = MockTestTable()
     assert table.settings.google_application_credentials == "example.json"
 
 
@@ -37,7 +39,7 @@ def test_init_with_missing_configs(mocker):
         clear=True,
     )
     with pytest.raises(ValidationError):
-        BigQueryMockTable()
+        MockTestTable()
 
 
 def test_get_results(mocker):
@@ -55,7 +57,7 @@ def test_get_results(mocker):
     query_job_instance = mock_client.query.return_value
     query_job_instance.result.return_value = mock_query_job_result
 
-    result = BigQueryMockTable.from_inputs(query="SELECT 1", input_data={"foo.bar": MockTestTable(data=[])})
+    result = BigQueryMockTable.from_mocks(query="SELECT 1", input_data=[MockTestTable(data=[])])
 
     # Assert the result matches the expected mock result
     result.assert_equal(mock_query_job_result)

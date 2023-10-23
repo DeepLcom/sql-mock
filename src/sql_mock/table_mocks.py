@@ -2,10 +2,30 @@ from jinja2 import Template
 
 from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
+from sql_mock.exceptions import ValidationError
 
 
 def get_keys_from_list_of_dicts(data: list[dict]) -> set[str]:
     return set(key for dictionary in data for key in dictionary.keys())
+
+
+def table_meta(table_ref):
+    """Decorator that is used to define MockTable metadata"""
+
+    def decorator(cls):
+        cls._table_ref = table_ref
+        return cls
+
+    return decorator
+
+
+def validate_input_mocks(table_mocks: list["BaseMockTable"]):
+    # Check that each input table mock has a _table_ref defined
+    missing_table_refs = [type(mock_table).__name__ for mock_table in table_mocks if not mock_table._table_ref]
+    if missing_table_refs:
+        missing_table_ref_str = ",".join(missing_table_refs)
+        msg = f"If you want to use a MockTable instance as input, you need to provide a table_reference using the table_meta decorator. Missing table refs for models: {missing_table_ref_str}"
+        raise ValidationError(msg)
 
 
 class BaseMockTable:
@@ -16,9 +36,21 @@ class BaseMockTable:
     col1 = Int(default=1)
 
     Attributes:
+        _table_ref (string) : String that represents the table reference to the original table.
         _columns (dict): An auto-generated dictionary of column names and corresponding ColumnMock instances.
-        _data (list): An auto-generated list of dictionaries representing rows of data based on the inputs in __init__.
+        _data (list): An auto-generated list of dictionaries representing rows of data.
+        _input_data (list): An auto-generated list of dictonaries representing the upstream model input data
+        _rendered_query (string): The fully rendered query based on jinja keyword arguments provided
     """
+
+    # Metadata that needs to be provided by the table_meta decorator
+    _table_ref = None
+
+    # Auto generated
+    _columns = None
+    _data = None
+    _input_data = None
+    _rendered_query = None
 
     def __init__(self, data: list[dict] = None) -> None:
         """
@@ -42,7 +74,13 @@ class BaseMockTable:
         self._data = [] if data is None else data
 
     @classmethod
-    def from_inputs(cls, query, input_data: dict[str, "BaseMockTable"] = None, query_template_kwargs: dict = None):
+    def from_dicts(cls, data: list[dict] = None):
+        return cls(data=data)
+
+    @classmethod
+    def from_mocks(cls, query, input_data: list["BaseMockTable"] = None, query_template_kwargs: dict = None):
+        validate_input_mocks(input_data)
+
         instance = cls(data=[])
         query_template = Template(query)
 
@@ -56,11 +94,7 @@ class BaseMockTable:
 
     def _generate_input_data_cte_snippet(self):
         # Convert instances into SQL snippets that serve as input to a CTE
-        table_ctes = []
-        for table_name, table_mock in self._input_data.items():
-            table_query = table_mock.as_sql_input()
-            table_ctes.append(f"{table_name} AS (\n{table_query}\n)")
-
+        table_ctes = [mock_table.as_sql_input() for mock_table in self._input_data]
         return ",\n".join(table_ctes)
 
     def _generate_query(
@@ -89,8 +123,9 @@ class BaseMockTable:
         )
 
         # Replace orignal table references to point them to the mocked data
-        for table_name in self._input_data.keys():
-            query = query.replace(table_name, table_name.replace(".", "__"))
+        for mock_table in self._input_data:
+            new_reference = mock_table._table_ref.replace(".", "__")
+            query = query.replace(mock_table._table_ref, new_reference)
 
         # Store last query for debugging
         self._last_query = query
@@ -123,7 +158,7 @@ class BaseMockTable:
 
     def as_sql_input(self):
         """
-        Generate a UNION ALL SQL that combines data from all rows.
+        Generate a UNION ALL SQL CTE that combines data from all rows.
 
         Returns:
             str: A SQL query that combines data from all rows.
@@ -135,7 +170,7 @@ class BaseMockTable:
             snippet += " WHERE FALSE"
         else:
             snippet = "\nUNION ALL\nSELECT ".join([self._to_sql_row(row_data) for row_data in self._data])
-        return f"SELECT {snippet}"
+        return f"{self._table_ref} AS (\n" f"SELECT {snippet}\n" ")"
 
     def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
         """

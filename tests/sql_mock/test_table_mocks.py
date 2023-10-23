@@ -1,7 +1,8 @@
 import pytest
 
 from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable
+from sql_mock.exceptions import ValidationError
+from sql_mock.table_mocks import BaseMockTable, table_meta
 
 
 class IntTestColumn(ColumnMock):
@@ -16,6 +17,7 @@ int_col = IntTestColumn(default=1)
 string_col = StringTestColumn(default="hey")
 
 
+@table_meta(table_ref="mock_test_table")
 class MockTestTable(BaseMockTable):
     col1 = int_col
     col2 = string_col
@@ -24,7 +26,11 @@ class MockTestTable(BaseMockTable):
 # Create a fixture for an instance of BaseMockTable
 @pytest.fixture
 def base_mock_table_instance():
-    return BaseMockTable()
+    @table_meta(table_ref="base_mock_table")
+    class MockTable(BaseMockTable):
+        pass
+
+    return MockTable()
 
 
 # Test the __init__ method
@@ -41,18 +47,18 @@ def test_wrong_fields_prodivded_to_model():
 
 
 # Test the from_inputs method
-def test_from_inputs(mocker):
+def test_from_inputs(mocker, base_mock_table_instance):
     query = "SELECT * FROM some_table"
-    input_data = {"some_table": base_mock_table_instance}
+    input_data = [base_mock_table_instance]
     query_template_kwargs = {}
 
     # Mock the _get_results method to return a simple list of dicts
     expected_results = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
     mocker.patch.object(BaseMockTable, "_get_results", return_value=expected_results)
-    instance = BaseMockTable.from_inputs(query, input_data, query_template_kwargs)
+    instance = MockTestTable.from_mocks(query, input_data, query_template_kwargs)
 
-    assert isinstance(instance, BaseMockTable)
-    assert isinstance(instance._input_data, dict)
+    assert isinstance(instance, MockTestTable)
+    assert isinstance(instance._input_data, list)
     assert isinstance(instance._rendered_query, str)
     assert isinstance(instance._data, list)
     assert instance._data == expected_results
@@ -60,16 +66,16 @@ def test_from_inputs(mocker):
 
 # Test the _generate_input_data_cte_snippet method
 def test_generate_input_data_cte_snippet(base_mock_table_instance):
-    base_mock_table_instance._input_data = {"table1": base_mock_table_instance}
+    base_mock_table_instance._input_data = [base_mock_table_instance]
     snippet = base_mock_table_instance._generate_input_data_cte_snippet()
     assert isinstance(snippet, str)
-    assert "table1 AS (" in snippet
+    assert "base_mock_table AS (" in snippet
 
 
 # Test the _generate_query method
 def test_generate_query(base_mock_table_instance):
-    base_mock_table_instance._input_data = {"table1": base_mock_table_instance}
-    base_mock_table_instance._rendered_query = "SELECT * FROM table1"
+    base_mock_table_instance._input_data = [base_mock_table_instance]
+    base_mock_table_instance._rendered_query = "SELECT * FROM base_mock_table"
     query = base_mock_table_instance._generate_query()
     assert isinstance(query, str)
     assert "WITH" in query
@@ -120,7 +126,9 @@ def test_to_sql_model_no_data_provided():
     mock_table = MockTestTable(mock_data)
     sql_model = mock_table.as_sql_input()
 
-    expected_sql_model = "SELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 WHERE FALSE"
+    expected_sql_model = (
+        "mock_test_table AS (\n" "SELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 WHERE FALSE\n" ")"
+    )
     assert sql_model == expected_sql_model
 
 
@@ -130,7 +138,9 @@ def test_to_sql_model_single_row_provided():
     mock_table = MockTestTable(mock_data)
     sql_model = mock_table.as_sql_input()
 
-    expected_sql_model = "SELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2"
+    expected_sql_model = (
+        "mock_test_table AS (\n" "SELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n" ")"
+    )
     assert sql_model == expected_sql_model
 
 
@@ -141,9 +151,11 @@ def test_to_sql_model_multiple_provided():
     sql_model = mock_table.as_sql_input()
 
     expected_sql_model = (
+        "mock_test_table AS (\n"
         "SELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n"
         "UNION ALL\n"
-        "SELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2"
+        "SELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2\n"
+        ")"
     )
     assert sql_model == expected_sql_model
 
@@ -205,3 +217,32 @@ def test_assert_equal_with_ignored_missing_keys_and_non_matching_data():
     # Act & Assert
     with pytest.raises(AssertionError):
         data_instance.assert_equal(expected_data, ignore_missing_keys=True)
+
+
+# Test validate input mocks function
+def test_validate_input_mocks_no_table_ref_provided(mocker):
+    """...then a validation error should be raised"""
+
+    class NoTableRefMock(BaseMockTable):
+        pass
+
+    # Patch _get_results that we don't need to implement it
+    mocker.patch.object(BaseMockTable, "_get_results", return_value=[])
+
+    with pytest.raises(ValidationError):
+        BaseMockTable.from_mocks(query="SELECT 1", input_data=[NoTableRefMock()])
+
+
+def test_validate_input_mocks_with_table_ref_provided(mocker):
+    """...then a validation error should be raised"""
+
+    @table_meta(table_ref="some_table")
+    class TableRefMock(BaseMockTable):
+        def _get_results(self):
+            return []
+
+    # Patch _get_results that we don't need to implement it
+    mocker.patch.object(BaseMockTable, "_get_results", return_value=[])
+
+    # Should not raise an error
+    BaseMockTable.from_mocks(query="SELECT 1", input_data=[TableRefMock()])
