@@ -1,10 +1,12 @@
 
 [tool.poetry]
 name = "sql_mock"
-version = "0.2.0"
+version = "0.1.0"
 description = "Simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios. It provides a consistent and convenient way to test the execution of your query without the need to process a massive amount of data."
+repository = "https://github.com/DeepLcom/sql-mock"
 readme = "README.md"
-authors = ["Thomas Schmidt <thomas.heinz.schmidt@gmail.com>"]
+authors = ["DeepL SE", "Thomas Schmidt <thomas.heinz.schmidt@gmail.com>"]
+license = "MIT"
 
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -29,6 +31,9 @@ classifiers = [
 packages = [
     { include = "sql_mock", from = "src" },
 ]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/DeepLcom/sql-mock/issues"
 
 [tool.poetry.dependencies]
 python = "^3.9"

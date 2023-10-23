@@ -1,10 +1,36 @@
 # SQL Mock: Python Library for Mocking SQL Queries with Dictionary Inputs
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blueviolet.svg)](https://github.com/DeepLcom/sql-mock/blob/main/LICENSE)
+
 The primary purpose of this library is to simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios. It provides a consistent and convenient way to test the execution of your query without the need to process a massive amount of data.
 
 The library currently supports the following databases. Database specific documentations are provided in the links:
 * [BigQuery](src/sql_mock/bigquery/README.md)
 * [Clickhouse](src/sql_mock/clickhouse/README.md)
+
+## Installation
+
+The library can be installed from [PyPI][pypi-project] using pip:
+
+```shell
+pip install --upgrade sql-mock
+```
+
+To install database specific versions, you can use the following:
+```shell
+# BigQuery
+pip install --upgrade sql-mock[bigquery]
+
+# Clickhouse
+pip install --upgrade sql-mock[clickhouse]
+```
+
+If you need to modify this source code, install the dependencies using poetry:
+
+```shell
+poetry install --all-extras
+```
+
 
 ## Usage
 
