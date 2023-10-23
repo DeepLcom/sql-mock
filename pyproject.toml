@@ -2,9 +2,30 @@
 [tool.poetry]
 name = "sql_mock"
 version = "0.2.0"
-description = ""
+description = "Simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios. It provides a consistent and convenient way to test the execution of your query without the need to process a massive amount of data."
 readme = "README.md"
-authors = ["DAP <thomas.heinz.schmidt@gmail.com>"]
+authors = ["Thomas Schmidt <thomas.heinz.schmidt@gmail.com>"]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
+]
+
 packages = [
     { include = "sql_mock", from = "src" },
 ]
