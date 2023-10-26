@@ -22,9 +22,9 @@ def test_multiple_geeks_with_visits_some_without():
     )
 
     expected = [
-        {"data_geek_id": geek_id_1, "visit_count": 2},
-        {"data_geek_id": geek_id_2, "visit_count": 1},
-        {"data_geek_id": geek_id_3, "visit_count": 0},  # geek 3 should also have a count of 0
+        {"data_geek_id": geek_id_1, "visit_count": 2, "name": "Thorsten Schön"},
+        {"data_geek_id": geek_id_2, "visit_count": 1, "name": "Thomas Schmidt"},
+        {"data_geek_id": geek_id_3, "visit_count": 0, "name": "Data Geek"},  # geek 3 should also have a count of 0
     ]
 
     res = VisitCounts.from_mocks(query=query, input_data=[geeks, visits])
@@ -42,14 +42,23 @@ def test_some_visits_prior_to_2023():
 
     visits = MeetupVisits.from_dicts(
         [
-            {"data_geek_id": geek_id_1, "date": "2022-10-26"},  # Prior 2023 - should be excluded
-            {"data_geek_id": geek_id_1, "date": "2023-01-01"},  # Edge case
-            {"data_geek_id": geek_id_1, "date": "2023-09-05"},
+            {
+                "data_geek_id": geek_id_1,
+                "date": "2022-10-26",  # Prior 2023 - should be excluded
+            },
+            {
+                "data_geek_id": geek_id_1,
+                "date": "2023-01-01",  # Edge case
+            },
+            {
+                "data_geek_id": geek_id_1,
+                "date": "2023-09-05",
+            },
         ]
     )
 
     expected = [
-        {"data_geek_id": geek_id_1, "visit_count": 2},
+        {"data_geek_id": geek_id_1, "visit_count": 2, "name": "Data Geek"},
     ]
 
     res = VisitCounts.from_mocks(query=query, input_data=[geeks, visits])

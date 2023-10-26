@@ -18,4 +18,5 @@ class MeetupVisits(BigQueryMockTable):
 @table_meta(table_ref="data.visit_counts")
 class VisitCounts(BigQueryMockTable):
     data_geek_id = col.Int(default=1)
+    name = col.String(default="Data Geek")
     visit_count = col.Int(default=0)
