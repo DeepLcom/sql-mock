@@ -34,6 +34,7 @@ packages = [
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/DeepLcom/sql-mock/issues"
+"Changelog" = "https://github.com/DeepLcom/sql-mock/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"

@@ -57,7 +57,9 @@ def test_from_inputs(mocker, base_mock_table_instance):
     # Mock the _get_results method to return a simple list of dicts
     expected_results = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
     mocker.patch.object(BaseMockTable, "_get_results", return_value=expected_results)
-    instance = MockTestTable.from_mocks(query, input_data, query_template_kwargs)
+    instance = MockTestTable.from_mocks(
+        query=query, input_data=input_data, query_template_kwargs=query_template_kwargs
+    )
 
     assert isinstance(instance, MockTestTable)
     assert isinstance(instance._sql_mock_data.input_data, list)
