@@ -8,6 +8,7 @@ class ColumnMock:
     Attributes:
         dtype (str): The data type of the column.
         default: The default value for the column.
+        nullable: Indicator whether the column can be null
     """
 
     dtype = None
