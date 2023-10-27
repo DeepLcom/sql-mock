@@ -29,7 +29,7 @@ def table_meta(table_ref):
     """Decorator that is used to define MockTable metadata"""
 
     def decorator(cls):
-        cls.Meta = MockTableMeta(table_ref=table_ref)
+        cls._sql_mock_meta = MockTableMeta(table_ref=table_ref)
         return cls
 
     return decorator
@@ -38,7 +38,9 @@ def table_meta(table_ref):
 def validate_input_mocks(table_mocks: list["BaseMockTable"]):
     # Check that each input table mock has a _table_ref defined
     missing_table_refs = [
-        type(mock_table).__name__ for mock_table in table_mocks if not getattr(mock_table.Meta, "table_ref", False)
+        type(mock_table).__name__
+        for mock_table in table_mocks
+        if not getattr(mock_table._sql_mock_meta, "table_ref", False)
     ]
     if missing_table_refs:
         missing_table_ref_str = ",".join(missing_table_refs)
@@ -67,9 +69,12 @@ class BaseMockTable:
     col1 = Int(default=1)
 
     Attributes:
-        SQLMockData: Class that stores data which is for processing. This is automatcially created on instantiation.
-        Meta (MockTableMeta): A class attribute to store table metadata. It is created using the `table_meta` decorator.
+        _sql_mock_data (SQLMockData): A class that stores data which is for processing. This is automatcially created on instantiation.
+        _sql_mock_meta (MockTableMeta): A class attribute to store table metadata. It is created using the `table_meta` decorator.
     """
+
+    _sql_mock_meta: MockTableMeta = None
+    _sql_mock_data: SQLMockData = None
 
     def __init__(self, data: list[dict] = None) -> None:
         """
@@ -79,21 +84,21 @@ class BaseMockTable:
             data (list[dict]): A list of dictionaries representing rows of data.
         """
         # Create a data class instance to avoid collision with column names of the table we want to mock
-        self.SQLMockData = SQLMockData()
+        self._sql_mock_data = SQLMockData()
 
-        self.SQLMockData.columns = {
+        self._sql_mock_data.columns = {
             field: getattr(self, field) for field in dir(self) if isinstance(getattr(self, field), ColumnMock)
         }
 
         if data is not None:
             provided_keys = get_keys_from_list_of_dicts(data)
-            not_existing_fields = [key for key in provided_keys if key not in self.SQLMockData.columns.keys()]
+            not_existing_fields = [key for key in provided_keys if key not in self._sql_mock_data.columns.keys()]
             if not_existing_fields:
                 raise ValueError(
                     f"Fields provided that are not part of the table's fields. Non existing fields: {not_existing_fields}"
                 )
 
-        self.SQLMockData.data = [] if data is None else data
+        self._sql_mock_data.data = [] if data is None else data
 
     @classmethod
     def from_dicts(cls, data: list[dict] = None):
@@ -107,16 +112,16 @@ class BaseMockTable:
         query_template = Template(query)
 
         # Assign instance attributes
-        instance.SQLMockData.input_data = input_data
-        instance.SQLMockData.rendered_query = query_template.render(query_template_kwargs or {})
+        instance._sql_mock_data.input_data = input_data
+        instance._sql_mock_data.rendered_query = query_template.render(query_template_kwargs or {})
 
-        instance.SQLMockData.data = instance._get_results()
+        instance._sql_mock_data.data = instance._get_results()
 
         return instance
 
     def _generate_input_data_cte_snippet(self):
         # Convert instances into SQL snippets that serve as input to a CTE
-        table_ctes = [mock_table.as_sql_input() for mock_table in self.SQLMockData.input_data]
+        table_ctes = [mock_table.as_sql_input() for mock_table in self._sql_mock_data.input_data]
         return ",\n".join(table_ctes)
 
     def _generate_query(
@@ -137,22 +142,22 @@ class BaseMockTable:
         )
         input_data_ctes = self._generate_input_data_cte_snippet()
         casted_result_fields = ",\n".join(
-            [col.cast_field(column_name=column_name) for column_name, col in self.SQLMockData.columns.items()]
+            [col.cast_field(column_name=column_name) for column_name, col in self._sql_mock_data.columns.items()]
         )
 
         query = query_template.format(
             input_data_ctes=input_data_ctes,
-            result_query=indent(self.SQLMockData.rendered_query, "\t"),
+            result_query=indent(self._sql_mock_data.rendered_query, "\t"),
             casted_result_fields=indent(casted_result_fields, "\t"),
         )
 
         # Replace orignal table references to point them to the mocked data
-        for mock_table in self.SQLMockData.input_data:
-            new_reference = mock_table.Meta.table_ref.replace(".", "__")
-            query = query.replace(mock_table.Meta.table_ref, new_reference)
+        for mock_table in self._sql_mock_data.input_data:
+            new_reference = mock_table._sql_mock_meta.table_ref.replace(".", "__")
+            query = query.replace(mock_table._sql_mock_meta.table_ref, new_reference)
 
         # Store last query for debugging
-        self.SQLMockData.last_query = query
+        self._sql_mock_data.last_query = query
         return query
 
     def _get_results(self) -> list[dict]:
@@ -176,7 +181,7 @@ class BaseMockTable:
         return ", ".join(
             [
                 col.to_sql(column_name=column_name, value=row_data.get(column_name, NO_INPUT))
-                for column_name, col in self.SQLMockData.columns.items()
+                for column_name, col in self._sql_mock_data.columns.items()
             ]
         )
 
@@ -188,16 +193,18 @@ class BaseMockTable:
             str: A SQL query that combines data from all rows.
         """
         # Convert the instance into a SQL snippet for CTE input
-        if len(self.SQLMockData.data) == 0:
+        if len(self._sql_mock_data.data) == 0:
             # Populate default values row with a WHERE FALSE statement to simulate no rows for the model
             snippet = self._to_sql_row({})
             snippet += " WHERE FALSE"
         else:
-            snippet = "\nUNION ALL\nSELECT ".join([self._to_sql_row(row_data) for row_data in self.SQLMockData.data])
+            snippet = "\nUNION ALL\nSELECT ".join(
+                [self._to_sql_row(row_data) for row_data in self._sql_mock_data.data]
+            )
 
         # Indent whole CTE content for better query readability
         snippet = indent(f"SELECT {snippet}", "\t")
-        return f"{self.Meta.table_ref} AS (\n{snippet}\n)"
+        return f"{self._sql_mock_meta.table_ref} AS (\n{snippet}\n)"
 
     def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
         """
@@ -211,7 +218,7 @@ class BaseMockTable:
                 list of dictionaries of the `expected` argument.
             ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
         """
-        data = self.SQLMockData.data
+        data = self._sql_mock_data.data
         if ignore_missing_keys:
             keys_to_keep = get_keys_from_list_of_dicts(expected)
             data = [{key: value for key, value in dictionary.items() if key in keys_to_keep} for dictionary in data]
@@ -220,5 +227,5 @@ class BaseMockTable:
             expected = sorted(expected, key=lambda d: sorted(d.items()))
         assert expected == data
 
-    class Meta(MockTableMeta):
+    class _sql_mock_meta(MockTableMeta):
         pass

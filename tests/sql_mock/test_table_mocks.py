@@ -38,8 +38,8 @@ def base_mock_table_instance():
 # Test the __init__ method
 def test_init():
     instance = MockTestTable()
-    assert instance.SQLMockData.columns == {"col1": int_col, "col2": string_col}
-    assert instance.SQLMockData.data == []
+    assert instance._sql_mock_data.columns == {"col1": int_col, "col2": string_col}
+    assert instance._sql_mock_data.data == []
 
 
 def test_wrong_fields_prodivded_to_model():
@@ -60,15 +60,15 @@ def test_from_inputs(mocker, base_mock_table_instance):
     instance = MockTestTable.from_mocks(query, input_data, query_template_kwargs)
 
     assert isinstance(instance, MockTestTable)
-    assert isinstance(instance.SQLMockData.input_data, list)
-    assert isinstance(instance.SQLMockData.rendered_query, str)
-    assert isinstance(instance.SQLMockData.data, list)
-    assert instance.SQLMockData.data == expected_results
+    assert isinstance(instance._sql_mock_data.input_data, list)
+    assert isinstance(instance._sql_mock_data.rendered_query, str)
+    assert isinstance(instance._sql_mock_data.data, list)
+    assert instance._sql_mock_data.data == expected_results
 
 
 # Test the _generate_input_data_cte_snippet method
 def test_generate_input_data_cte_snippet(base_mock_table_instance):
-    base_mock_table_instance.SQLMockData.input_data = [base_mock_table_instance]
+    base_mock_table_instance._sql_mock_data.input_data = [base_mock_table_instance]
     snippet = base_mock_table_instance._generate_input_data_cte_snippet()
     assert isinstance(snippet, str)
     assert "base_mock_table AS (" in snippet
@@ -77,12 +77,12 @@ def test_generate_input_data_cte_snippet(base_mock_table_instance):
 # Test the _generate_query method
 def test_generate_query():
     mock_table_instance = MockTestTable.from_dicts([])
-    mock_table_instance.SQLMockData.input_data = [mock_table_instance]
-    mock_table_instance.SQLMockData.rendered_query = "SELECT * FROM base_mock_table"
+    mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
+    mock_table_instance._sql_mock_data.rendered_query = "SELECT * FROM base_mock_table"
     query = mock_table_instance._generate_query()
     expected = dedent(
         f"""
-    WITH {mock_table_instance.Meta.table_ref} AS (
+    WITH {mock_table_instance._sql_mock_meta.table_ref} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 WHERE FALSE
     ),
 
@@ -106,13 +106,13 @@ def test_generate_query():
 # Test the as_sql_input method
 def test_as_sql_input():
     mock_table_instance = MockTestTable()
-    mock_table_instance.SQLMockData.data = [
+    mock_table_instance._sql_mock_data.data = [
         {"col1": 1, "col2": "value1"},
         {"col1": 2, "col2": "value2"},
     ]
     sql_input = mock_table_instance.as_sql_input()
     expected = (
-        f"{mock_table_instance.Meta.table_ref} AS (\n"
+        f"{mock_table_instance._sql_mock_meta.table_ref} AS (\n"
         "\tSELECT cast('1' AS Integer) AS col1, cast('value1' AS String) AS col2\n"
         "\tUNION ALL\n"
         "\tSELECT cast('2' AS Integer) AS col1, cast('value2' AS String) AS col2\n"
@@ -124,7 +124,7 @@ def test_as_sql_input():
 # Test the assert_equal method
 def test_assert_equal(base_mock_table_instance):
     expected_data = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
-    base_mock_table_instance.SQLMockData.data = expected_data
+    base_mock_table_instance._sql_mock_data.data = expected_data
     base_mock_table_instance.assert_equal(expected_data)
 
 
@@ -221,7 +221,7 @@ def test_assert_equal_with_ignored_missing_keys():
 
 def test_assert_equal_dict_ordering_differs_key_order_matches(base_mock_table_instance):
     expected_data = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
-    base_mock_table_instance.SQLMockData.data = [
+    base_mock_table_instance._sql_mock_data.data = [
         {"column1": 2, "column2": "value2"},
         {"column1": 1, "column2": "value1"},
     ]
@@ -230,7 +230,7 @@ def test_assert_equal_dict_ordering_differs_key_order_matches(base_mock_table_in
 
 def test_assert_equal_dict_ordering_differs_key_order_differs(base_mock_table_instance):
     expected_data = [{"column1": 1, "column2": "value1"}, {"column1": 2, "column2": "value2"}]
-    base_mock_table_instance.SQLMockData.data = [
+    base_mock_table_instance._sql_mock_data.data = [
         {"column1": 2, "column2": "value2"},
         {"column2": "value1", "column1": 1},
     ]
