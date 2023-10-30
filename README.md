@@ -115,7 +115,7 @@ Before diving into specific database scenarios, let's start with a simplified ex
 
 ### Defining your table mocks
 
-When you want to provide mocked data to test your SQL model, you need to create MockTable classes for all upstream input data, as well as for the model you want to test. Those mock tables can be created by inheriting from a `BaseMockTable` class for the database provider you are using (e.g. `BigQueryMockTable`).
+When you want to provide mocked data to test your SQL model, you need to create MockTable classes for all upstream data that your model uses, as well as for the model you want to test. Those mock tables can be created by inheriting from a `BaseMockTable` class for the database provider you are using (e.g. `BigQueryMockTable`).
 
 **We recommend to have a central `model.py` file where you create those models that you can easily reuse them across your tests**
 

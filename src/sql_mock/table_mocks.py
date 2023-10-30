@@ -244,6 +244,3 @@ class BaseMockTable:
             data = sorted(data, key=lambda d: sorted(d.items()))
             expected = sorted(expected, key=lambda d: sorted(d.items()))
         assert expected == data
-
-    class _sql_mock_meta(MockTableMeta):
-        pass
