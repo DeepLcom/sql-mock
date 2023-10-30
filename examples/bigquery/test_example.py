@@ -4,15 +4,6 @@ from sql_mock.bigquery import column_mocks as col
 from sql_mock.bigquery.table_mocks import BigQueryMockTable
 from sql_mock.table_mocks import table_meta
 
-query = """
-SELECT
-    count(*) AS subscription_count,
-    user_id
-FROM data.users
-LEFT JOIN data.subscriptions USING(user_id)
-GROUP BY user_id
-"""
-
 
 @table_meta(table_ref="data.users")
 class UserTable(BigQueryMockTable):
@@ -28,6 +19,7 @@ class SubscriptionTable(BigQueryMockTable):
     user_id = col.Int(default=1)
 
 
+@table_meta(query_path="./examples/test_query.sql")
 class SubscriptionCountTable(BigQueryMockTable):
     subscription_count = col.Int(default=1)
     user_id = col.Int(default=1)
@@ -45,6 +37,6 @@ def test_something():
 
     expected = [{"user_id": 1, "subscription_count": 2}, {"user_id": 2, "subscription_count": 1}]
 
-    res = SubscriptionCountTable.from_mocks(query=query, input_data=[users, subscriptions])
+    res = SubscriptionCountTable.from_mocks(input_data=[users, subscriptions])
 
     res.assert_equal(expected)

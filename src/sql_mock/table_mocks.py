@@ -20,16 +20,24 @@ class MockTableMeta(BaseModel):
 
     Attributes:
         table_ref (string) : String that represents the table reference to the original table.
+        query (string): Srting of the SQL query (can be in Jinja format).
     """
 
     table_ref: str = None
+    query: str = None
 
 
-def table_meta(table_ref):
+def table_meta(table_ref: str = "", query_path: str = None):
     """Decorator that is used to define MockTable metadata"""
 
     def decorator(cls):
-        cls._sql_mock_meta = MockTableMeta(table_ref=table_ref)
+        mock_meta_kwargs = {"table_ref": table_ref}
+
+        if query_path:
+            with open(query_path) as f:
+                mock_meta_kwargs["query"] = f.read()
+
+        cls._sql_mock_meta = MockTableMeta(**mock_meta_kwargs)
         return cls
 
     return decorator
@@ -105,11 +113,21 @@ class BaseMockTable:
         return cls(data=data)
 
     @classmethod
-    def from_mocks(cls, query, input_data: list["BaseMockTable"] = None, query_template_kwargs: dict = None):
+    def from_mocks(
+        cls, input_data: list["BaseMockTable"] = None, query_template_kwargs: dict = None, query: str = None
+    ):
+        """
+        Instantiate the mock table from input mocks. This runs the tables query with static data provided by the input mocks.
+
+        Arguments:
+            input_data: List of MockTable instances that hold static data that should be used as inputs.
+            query_template_kwargs: Dictionary of Jinja template key-value pairs that should be used to render the query.
+            query: String of the SQL query that is used to generate the model. Can be a Jinja template. If provided, it overwrites the query on cls._sql_mock_meta.query.
+        """
         validate_input_mocks(input_data)
 
         instance = cls(data=[])
-        query_template = Template(query)
+        query_template = Template(query or cls._sql_mock_meta.query)
 
         # Assign instance attributes
         instance._sql_mock_data.input_data = input_data
@@ -226,6 +244,3 @@ class BaseMockTable:
             data = sorted(data, key=lambda d: sorted(d.items()))
             expected = sorted(expected, key=lambda d: sorted(d.items()))
         assert expected == data
-
-    class _sql_mock_meta(MockTableMeta):
-        pass
