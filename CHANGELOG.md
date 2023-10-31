@@ -12,8 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] 
 
 ### Added 
+* Now you can also pass a `query` to the `table_meta`. The `query_path` will overwrite a `query` in case both are provided
+* New method `assert_cte_equal` that allows to check the output of a specific CTE in the query you want to test.
 
 ### Changed
+
+* The `_get_results` method now accepts a `query` instead of needing to load the query within the method. In case you created custom Mock Table classes, you need to take this into account.
+
 
 ## [0.2.0] 
 

@@ -13,8 +13,7 @@ class ClickHouseTableMock(BaseMockTable):
         self.settings = ClickHouseSettings()
         super().__init__(*args, **kwargs)
 
-    def _get_results(self) -> list[dict]:
-        query = self._generate_query()
+    def _get_results(self, query: str) -> list[dict]:
         with Client(
             host=self.settings.host, user=self.settings.user, password=self.settings.password, port=self.settings.port
         ) as client:
