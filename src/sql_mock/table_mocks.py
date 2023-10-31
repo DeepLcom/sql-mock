@@ -1,6 +1,7 @@
 from textwrap import dedent, indent
 from typing import Type
 
+import sqlglot
 from jinja2 import Template
 from pydantic import BaseModel
 
@@ -11,6 +12,48 @@ from sql_mock.exceptions import ValidationError
 
 def get_keys_from_list_of_dicts(data: list[dict]) -> set[str]:
     return set(key for dictionary in data for key in dictionary.keys())
+
+
+def replace_original_table_references(query: str, mock_tables: list["BaseMockTable"]):
+    """
+    Replace orignal table references to point them to the mocked data
+
+    Args:
+        query (str): Original SQL query
+        mock_tables (list[BaseMockTable]): List of BaseMockTable instances that are used as input
+    """
+    for mock_table in mock_tables:
+        new_reference = mock_table._sql_mock_meta.table_ref.replace(".", "__")
+        query = query.replace(mock_table._sql_mock_meta.table_ref, new_reference)
+    return query
+
+
+def select_from_cte(query: str, cte_name: str):
+    """
+    If selecting from a CTE, we need to replace the the final SELECT statement
+    with a SELECT * FROM select_cte
+
+    Args:
+        query (str): Original SQL query
+        cte_name (str): Name of the CTE to select from
+    """
+    ast = sqlglot.parse_one(query)
+
+    # Check whether the cte exists, if not raise an error
+    cte_exists = any(cte.alias == cte_name for cte in ast.find_all(sqlglot.exp.CTE))
+    if not cte_exists:
+        raise ValueError(f"CTE with name {cte_name} does not exist in query")
+
+    root_select_statement = ast.find(sqlglot.exp.Select)
+    # Remove all columns from root select statement
+    for col in root_select_statement.find_all((sqlglot.exp.Column, sqlglot.exp.Star)):
+        # Only drop columns from the root select statement
+        if col.parent == root_select_statement:
+            col.pop()
+
+    # Change the final select statement to SELECT * FROM <cte_name>
+    adjusted_query = ast.select("*").from_(cte_name).sql(pretty=True)
+    return adjusted_query
 
 
 class MockTableMeta(BaseModel):
@@ -27,8 +70,15 @@ class MockTableMeta(BaseModel):
     query: str = None
 
 
-def table_meta(table_ref: str = "", query_path: str = None):
-    """Decorator that is used to define MockTable metadata"""
+def table_meta(table_ref: str = "", query_path: str = None, query: str = None):
+    """
+    Decorator that is used to define MockTable metadata
+
+    Args:
+        table_ref (string) : String that represents the table reference to the original table.
+        query_path (string): Path to a SQL query file that should be used to generate the model. Can be a Jinja template. Note only one of query_path or query can be provided.
+        query (string): Srting of the SQL query (can be in Jinja format). Note only one of query_path or query can be provided.
+    """
 
     def decorator(cls):
         mock_meta_kwargs = {"table_ref": table_ref}
@@ -36,6 +86,8 @@ def table_meta(table_ref: str = "", query_path: str = None):
         if query_path:
             with open(query_path) as f:
                 mock_meta_kwargs["query"] = f.read()
+        elif query:
+            mock_meta_kwargs["query"] = query
 
         cls._sql_mock_meta = MockTableMeta(**mock_meta_kwargs)
         return cls
@@ -133,8 +185,6 @@ class BaseMockTable:
         instance._sql_mock_data.input_data = input_data
         instance._sql_mock_data.rendered_query = query_template.render(query_template_kwargs or {})
 
-        instance._sql_mock_data.data = instance._get_results()
-
         return instance
 
     def _generate_input_data_cte_snippet(self):
@@ -144,6 +194,7 @@ class BaseMockTable:
 
     def _generate_query(
         self,
+        cte_to_select: str = None,
     ):
         query_template = dedent(
             """
@@ -154,36 +205,36 @@ class BaseMockTable:
         )
 
         SELECT
-        {casted_result_fields}
+        {final_columns_to_select}
         FROM result
         """
         )
         input_data_ctes = self._generate_input_data_cte_snippet()
-        casted_result_fields = ",\n".join(
-            [col.cast_field(column_name=column_name) for column_name, col in self._sql_mock_data.columns.items()]
-        )
+        result_query = self._sql_mock_data.rendered_query
+
+        if cte_to_select is not None:
+            result_query = select_from_cte(result_query, cte_to_select)
+            final_columns_to_select = "*"
+        else:
+            final_columns_to_select = ",\n".join(
+                [col.cast_field(column_name=column_name) for column_name, col in self._sql_mock_data.columns.items()]
+            )
 
         query = query_template.format(
             input_data_ctes=input_data_ctes,
-            result_query=indent(self._sql_mock_data.rendered_query, "\t"),
-            casted_result_fields=indent(casted_result_fields, "\t"),
+            result_query=indent(result_query, "\t"),
+            final_columns_to_select=indent(final_columns_to_select, "\t"),
         )
 
-        # Replace orignal table references to point them to the mocked data
-        for mock_table in self._sql_mock_data.input_data:
-            new_reference = mock_table._sql_mock_meta.table_ref.replace(".", "__")
-            query = query.replace(mock_table._sql_mock_meta.table_ref, new_reference)
-
+        query = replace_original_table_references(query, mock_tables=self._sql_mock_data.input_data)
         # Store last query for debugging
         self._sql_mock_data.last_query = query
         return query
 
-    def _get_results(self) -> list[dict]:
+    def _get_results(self, query: str) -> list[dict]:
         """
         This method needs to be implemented for database specific Table Mocks
         """
-        # This is how you can get the fully rendered test query:
-        # query = self._generate_query()
         raise NotImplementedError("Child classes need to implement this method")
 
     def _to_sql_row(self, row_data: dict) -> str:
@@ -224,19 +275,19 @@ class BaseMockTable:
         snippet = indent(f"SELECT {snippet}", "\t")
         return f"{self._sql_mock_meta.table_ref} AS (\n{snippet}\n)"
 
-    def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
+    def _assert_equal(
+        self, data: [dict], expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True
+    ):
         """
-        Assert that the class data matches the expected data.
-
-        This is a helper function that can be used for tests.
+        Assert that the provided data matches the expected data.
 
         Args:
+            data (list of dicts): Actual result data to compare the class data against
             expected (list of dicts): Expected data to compare the class data against
             ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
                 list of dictionaries of the `expected` argument.
             ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
         """
-        data = self._sql_mock_data.data
         if ignore_missing_keys:
             keys_to_keep = get_keys_from_list_of_dicts(expected)
             data = [{key: value for key, value in dictionary.items() if key in keys_to_keep} for dictionary in data]
@@ -244,3 +295,38 @@ class BaseMockTable:
             data = sorted(data, key=lambda d: sorted(d.items()))
             expected = sorted(expected, key=lambda d: sorted(d.items()))
         assert expected == data
+
+    def assert_cte_equal(
+        self, cte_name, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True
+    ):
+        """
+        Assert that a CTE within the table mock's query equals the provided expected data.
+
+        Args:
+            cte_name (str): Name of the CTE that should be compared against the expected results
+            expected (list of dicts): Expected data to compare the class data against
+            ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
+                list of dictionaries of the `expected` argument.
+            ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
+        """
+        query = self._generate_query(cte_to_select=cte_name)
+        data = self._get_results(query)
+        self._assert_equal(
+            data=data, expected=expected, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
+        )
+
+    def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
+        """
+        Assert that the result of the table mock's query equals the provided expected data.
+
+        Args:
+            expected (list of dicts): Expected data to compare the class data against
+            ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
+                list of dictionaries of the `expected` argument.
+            ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
+        """
+        query = self._generate_query()
+        data = self._get_results(query)
+        self._assert_equal(
+            data=data, expected=expected, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
+        )

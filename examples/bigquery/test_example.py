@@ -20,8 +20,7 @@ class SubscriptionTable(BigQueryMockTable):
 
 
 @table_meta(query_path="./examples/test_query.sql")
-class SubscriptionCountTable(BigQueryMockTable):
-    subscription_count = col.Int(default=1)
+class MultipleSubscriptionUsersTable(BigQueryMockTable):
     user_id = col.Int(default=1)
 
 
@@ -35,8 +34,18 @@ def test_something():
         ]
     )
 
-    expected = [{"user_id": 1, "subscription_count": 2}, {"user_id": 2, "subscription_count": 1}]
+    subscriptions_per_user__expected = [
+        {"user_id": 1, "subscription_count": 2},
+        {"user_id": 2, "subscription_count": 1},
+    ]
+    users_with_multiple_subs__expected = [{"user_id": 1, "subscription_count": 2}]
+    end_result__expected = [{"user_id": 1}]
 
-    res = SubscriptionCountTable.from_mocks(input_data=[users, subscriptions])
+    res = MultipleSubscriptionUsersTable.from_mocks(input_data=[users, subscriptions])
 
-    res.assert_equal(expected)
+    # Check the results of the subscriptions_per_user CTE
+    res.assert_cte_equal("subscriptions_per_user", subscriptions_per_user__expected)
+    # Check the results of the users_with_multiple_subs CTE
+    res.assert_cte_equal("users_with_multiple_subs", users_with_multiple_subs__expected)
+    # Check the end result
+    res.assert_equal(end_result__expected)
