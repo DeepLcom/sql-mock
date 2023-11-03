@@ -19,7 +19,7 @@ release = "0.3.0"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinx.ext.napoleon", "myst_parser"]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary", "sphinx.ext.napoleon", "myst_parser", "sphinx_sitemap"]
 
 templates_path = ["_templates"]
 exclude_patterns = []
@@ -38,6 +38,7 @@ autosummary_generate = True
 
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
+html_extra_path = ["_static"]
 html_sidebars = {
     "**": [
         "globaltoc.html",
@@ -53,3 +54,4 @@ html_context = {
     "github_version": "master",  # Version
     "conf_py_path": "/docsource/",  # Path in the checkout to the docs root
 }
+html_baseurl = "https://deeplcom.github.io/sql-mock/"

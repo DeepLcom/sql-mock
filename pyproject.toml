@@ -47,6 +47,7 @@ clickhouse-driver = {extras = ["numpy"], version = "^0.2.6", optional = true}
 # Google Bigquery specific
 google-cloud-bigquery = {version ="^3.11.4", optional = true}
 sqlglot = "^18.17.0"
+sphinx-sitemap = "^2.5.1"
 
 [tool.poetry.extras]
 bigquery = ["google-cloud-bigquery"]
