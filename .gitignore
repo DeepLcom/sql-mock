@@ -161,3 +161,9 @@ cython_debug/
 
 # Google cloud test credentials
 google-cloud-credentials.json
+
+# Jupyter notebooks
+*.ipynb
+
+# MAC
+.DS_Store

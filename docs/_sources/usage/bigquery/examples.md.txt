@@ -1,37 +1,32 @@
+```{toctree}
+:maxdepth: 2
+```
 
-
-# Using SQL Mock with ClickHouse
-
-## Settings:
-
-You need to provide the following environment variables: 
-* `SQL_MOCK_CLICKHOUSE_HOST`: Host of your Clickhouse instance
-* `SQL_MOCK_CLICKHOUSE_USER`: User you want to use for the connection
-* `SQL_MOCK_CLICKHOUSE_PASSWORD`: Password of your user
-* `SQL_MOCK_CLICKHOUSE_PORT`: Port of your Clickhouse instance
-
-## Example: Testing Subscription Counts in ClickHouse
+# Example: Testing Subscription Counts in BigQuery
 
 ```python
-from sql_mock.clickhouse import column_mocks as col
-from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
+import datetime
+from sql_mock.bigquery import column_mocks as col
+from sql_mock.bigquery.table_mocks import BigQueryMockTable
 from sql_mock.table_mocks import table_meta
 
-# Define mock tables for your data model that inherit from ClickHouseTableMock
+# Define mock tables for your data model that inherit from BigQueryMockTable
 @table_meta(table_ref='data.users')
-class UserTable(ClickHouseTableMock):
+class UserTable(BigQueryMockTable):
     user_id = col.Int(default=1)
-    user_name = col.String(default="Mr. T")
+    user_name = col.String(default='Mr. T')
+
 
 @table_meta(table_ref='data.subscriptions')
-class SubscriptionTable(ClickHouseTableMock):
+class SubscriptionTable(BigQueryMockTable):
     subscription_id = col.Int(default=1)
     period_start_date = col.Date(default=datetime.date(2023, 9, 5))
     period_end_date = col.Date(default=datetime.date(2023, 9, 5))
     user_id = col.Int(default=1)
 
+
 # Define a mock table for your expected results
-class SubscriptionCountTable(ClickHouseTableMock):
+class SubscriptionCountTable(BigQueryMockTable):
     subscription_count = col.Int(default=1)
     user_id = col.Int(default=1)
 
@@ -60,7 +55,10 @@ expected = [
 ]
 
 # Simulate the SQL query using SQL Mock
-res = SubscriptionCountTable.from_mocks(query=query, input_data=[users, subscriptions])
+res = SubscriptionCountTable.from_mocks(
+    query=query, 
+    input_data=[users, subscriptions]
+)
 
 # Assert the results
 res.assert_equal(expected)

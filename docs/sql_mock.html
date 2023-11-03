@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sql_mock package &mdash; SQL Mock 0.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=e259d695"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sql_mock.bigquery package" href="sql_mock.bigquery.html" />
+    <link rel="prev" title="sql_mock" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SQL Mock
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage/defining_table_mocks.html">Defining table mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/your_sql_query_to_test.html">Your SQL query to test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/result_assertion.html">Result assertion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Database Specifics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage/bigquery/index.html">BigQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/clickhouse/index.html">Clickhouse</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sql_mock package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html">sql_mock.bigquery package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html">sql_mock.clickhouse package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sql_mock.column_mocks">sql_mock.column_mocks module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.column_mocks.ColumnMock"><code class="docutils literal notranslate"><span class="pre">ColumnMock</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sql_mock.constants">sql_mock.constants module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.constants.NoInput"><code class="docutils literal notranslate"><span class="pre">NoInput</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sql_mock.exceptions">sql_mock.exceptions module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.exceptions.ValidationError"><code class="docutils literal notranslate"><span class="pre">ValidationError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sql_mock.table_mocks">sql_mock.table_mocks module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.BaseMockTable"><code class="docutils literal notranslate"><span class="pre">BaseMockTable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.MockTableMeta"><code class="docutils literal notranslate"><span class="pre">MockTableMeta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.SQLMockData"><code class="docutils literal notranslate"><span class="pre">SQLMockData</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.get_keys_from_list_of_dicts"><code class="docutils literal notranslate"><span class="pre">get_keys_from_list_of_dicts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.replace_original_table_references"><code class="docutils literal notranslate"><span class="pre">replace_original_table_references()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.select_from_cte"><code class="docutils literal notranslate"><span class="pre">select_from_cte()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.table_meta"><code class="docutils literal notranslate"><span class="pre">table_meta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sql_mock.table_mocks.validate_input_mocks"><code class="docutils literal notranslate"><span class="pre">validate_input_mocks()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sql_mock">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SQL Mock</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">sql_mock</a></li>
+      <li class="breadcrumb-item active">sql_mock package</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/DeepLcom/sql-mock/blob/master/docsource/sql_mock.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sql-mock-package">
+<h1>sql_mock package<a class="headerlink" href="#sql-mock-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sql_mock.bigquery.html">sql_mock.bigquery package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#module-sql_mock.bigquery.column_mocks">sql_mock.bigquery.column_mocks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.BigQueryColumnMock"><code class="docutils literal notranslate"><span class="pre">BigQueryColumnMock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date"><code class="docutils literal notranslate"><span class="pre">Date</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date.dtype"><code class="docutils literal notranslate"><span class="pre">Date.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Decimal"><code class="docutils literal notranslate"><span class="pre">Decimal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Float"><code class="docutils literal notranslate"><span class="pre">Float</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Float.dtype"><code class="docutils literal notranslate"><span class="pre">Float.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Int"><code class="docutils literal notranslate"><span class="pre">Int</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Int.dtype"><code class="docutils literal notranslate"><span class="pre">Int.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.String"><code class="docutils literal notranslate"><span class="pre">String</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.String.dtype"><code class="docutils literal notranslate"><span class="pre">String.dtype</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#module-sql_mock.bigquery.settings">sql_mock.bigquery.settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings"><code class="docutils literal notranslate"><span class="pre">BigQuerySettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings.google_application_credentials"><code class="docutils literal notranslate"><span class="pre">BigQuerySettings.google_application_credentials</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings.model_config"><code class="docutils literal notranslate"><span class="pre">BigQuerySettings.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings.model_fields"><code class="docutils literal notranslate"><span class="pre">BigQuerySettings.model_fields</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#module-sql_mock.bigquery.table_mocks">sql_mock.bigquery.table_mocks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.table_mocks.BigQueryMockTable"><code class="docutils literal notranslate"><span class="pre">BigQueryMockTable</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#module-sql_mock.bigquery">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sql_mock.clickhouse.html">sql_mock.clickhouse package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#module-sql_mock.clickhouse.column_mocks">sql_mock.clickhouse.column_mocks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Boolean"><code class="docutils literal notranslate"><span class="pre">Boolean</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Boolean.dtype"><code class="docutils literal notranslate"><span class="pre">Boolean.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.ClickhouseColumnMock"><code class="docutils literal notranslate"><span class="pre">ClickhouseColumnMock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Date"><code class="docutils literal notranslate"><span class="pre">Date</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Date.dtype"><code class="docutils literal notranslate"><span class="pre">Date.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Datetime"><code class="docutils literal notranslate"><span class="pre">Datetime</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Datetime.dtype"><code class="docutils literal notranslate"><span class="pre">Datetime.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Datetime64"><code class="docutils literal notranslate"><span class="pre">Datetime64</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Datetime64.dtype"><code class="docutils literal notranslate"><span class="pre">Datetime64.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Decimal"><code class="docutils literal notranslate"><span class="pre">Decimal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Float"><code class="docutils literal notranslate"><span class="pre">Float</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Float.dtype"><code class="docutils literal notranslate"><span class="pre">Float.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Int"><code class="docutils literal notranslate"><span class="pre">Int</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Int.dtype"><code class="docutils literal notranslate"><span class="pre">Int.dtype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.String"><code class="docutils literal notranslate"><span class="pre">String</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.String.dtype"><code class="docutils literal notranslate"><span class="pre">String.dtype</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#module-sql_mock.clickhouse.settings">sql_mock.clickhouse.settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.host"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings.host</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.model_config"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.model_fields"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.password"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.port"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.user"><code class="docutils literal notranslate"><span class="pre">ClickHouseSettings.user</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#module-sql_mock.clickhouse.table_mocks">sql_mock.clickhouse.table_mocks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.table_mocks.ClickHouseTableMock"><code class="docutils literal notranslate"><span class="pre">ClickHouseTableMock</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#module-sql_mock.clickhouse">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-sql_mock.column_mocks">
+<span id="sql-mock-column-mocks-module"></span><h2>sql_mock.column_mocks module<a class="headerlink" href="#module-sql_mock.column_mocks" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.column_mocks.</span></span><span class="sig-name descname"><span class="pre">ColumnMock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a mock column in a database table.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.dtype" title="Link to this definition"></a></dt>
+<dd><p>The data type of the column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.nullable">
+<span class="sig-name descname"><span class="pre">nullable</span></span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.nullable" title="Link to this definition"></a></dt>
+<dd><p>Indicator whether the column can be null</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.default">
+<span class="sig-name descname"><span class="pre">default</span></span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.default" title="Link to this definition"></a></dt>
+<dd><p>The default value for the column.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.cast_field">
+<span class="sig-name descname"><span class="pre">cast_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.cast_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">default</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">nullable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.to_sql">
+<span class="sig-name descname"><span class="pre">to_sql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value=&lt;sql_mock.constants.NoInput</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.to_sql" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sql_mock.constants">
+<span id="sql-mock-constants-module"></span><h2>sql_mock.constants module<a class="headerlink" href="#module-sql_mock.constants" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sql_mock.constants.NoInput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.constants.</span></span><span class="sig-name descname"><span class="pre">NoInput</span></span><a class="headerlink" href="#sql_mock.constants.NoInput" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-sql_mock.exceptions">
+<span id="sql-mock-exceptions-module"></span><h2>sql_mock.exceptions module<a class="headerlink" href="#module-sql_mock.exceptions" title="Link to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="sql_mock.exceptions.ValidationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.exceptions.</span></span><span class="sig-name descname"><span class="pre">ValidationError</span></span><a class="headerlink" href="#sql_mock.exceptions.ValidationError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-sql_mock.table_mocks">
+<span id="sql-mock-table-mocks-module"></span><h2>sql_mock.table_mocks module<a class="headerlink" href="#module-sql_mock.table_mocks" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">BaseMockTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a base class for creating mock database tables for testing.
+When inheriting from this class you need to add column attributes for the table you would like to mock - e.g.:</p>
+<p>col1 = Int(default=1)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable._sql_mock_data">
+<span class="sig-name descname"><span class="pre">_sql_mock_data</span></span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable._sql_mock_data" title="Link to this definition"></a></dt>
+<dd><p>A class that stores data which is for processing. This is automatcially created on instantiation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sql_mock.table_mocks.SQLMockData" title="sql_mock.table_mocks.SQLMockData">SQLMockData</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable._sql_mock_meta">
+<span class="sig-name descname"><span class="pre">_sql_mock_meta</span></span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable._sql_mock_meta" title="Link to this definition"></a></dt>
+<dd><p>A class attribute to store table metadata. It is created using the <cite>table_meta</cite> decorator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sql_mock.table_mocks.MockTableMeta" title="sql_mock.table_mocks.MockTableMeta">MockTableMeta</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable.as_sql_input">
+<span class="sig-name descname"><span class="pre">as_sql_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable.as_sql_input" title="Link to this definition"></a></dt>
+<dd><p>Generate a UNION ALL SQL CTE that combines data from all rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A SQL query that combines data from all rows.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable.assert_cte_equal">
+<span class="sig-name descname"><span class="pre">assert_cte_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">cte_name,</span> <span class="pre">expected:</span> <span class="pre">[&lt;class</span> <span class="pre">'dict'&gt;],</span> <span class="pre">ignore_missing_keys:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">ignore_order:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable.assert_cte_equal" title="Link to this definition"></a></dt>
+<dd><p>Assert that a CTE within the table mock’s query equals the provided expected data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cte_name</strong> (<em>str</em>) – Name of the CTE that should be compared against the expected results</p></li>
+<li><p><strong>expected</strong> (<em>list</em><em> of </em><em>dicts</em>) – Expected data to compare the class data against</p></li>
+<li><p><strong>ignore_missing_keys</strong> (<em>bool</em>) – If true, the comparison will only happen for the fields that are present in the
+list of dictionaries of the <cite>expected</cite> argument.</p></li>
+<li><p><strong>ignore_order</strong> (<em>bool</em>) – If true, the order of dicts / rows will be ignored for comparison.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable.assert_equal">
+<span class="sig-name descname"><span class="pre">assert_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">expected:</span> <span class="pre">[&lt;class</span> <span class="pre">'dict'&gt;],</span> <span class="pre">ignore_missing_keys:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">ignore_order:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable.assert_equal" title="Link to this definition"></a></dt>
+<dd><p>Assert that the result of the table mock’s query equals the provided expected data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expected</strong> (<em>list</em><em> of </em><em>dicts</em>) – Expected data to compare the class data against</p></li>
+<li><p><strong>ignore_missing_keys</strong> (<em>bool</em>) – If true, the comparison will only happen for the fields that are present in the
+list of dictionaries of the <cite>expected</cite> argument.</p></li>
+<li><p><strong>ignore_order</strong> (<em>bool</em>) – If true, the order of dicts / rows will be ignored for comparison.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable.from_dicts">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable.from_dicts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable.from_mocks">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_mocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sql_mock.table_mocks.BaseMockTable" title="sql_mock.table_mocks.BaseMockTable"><span class="pre">BaseMockTable</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_template_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable.from_mocks" title="Link to this definition"></a></dt>
+<dd><p>Instantiate the mock table from input mocks. This runs the tables query with static data provided by the input mocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_data</strong> – List of MockTable instances that hold static data that should be used as inputs.</p></li>
+<li><p><strong>query_template_kwargs</strong> – Dictionary of Jinja template key-value pairs that should be used to render the query.</p></li>
+<li><p><strong>query</strong> – String of the SQL query that is used to generate the model. Can be a Jinja template. If provided, it overwrites the query on cls._sql_mock_meta.query.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.MockTableMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">MockTableMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.MockTableMeta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class to store metadata of BaseMockTable instances which is used during processing.
+We use this class to avoid collision with field names of the table we want to mock.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.MockTableMeta.table_ref">
+<span class="sig-name descname"><span class="pre">table_ref</span></span><a class="headerlink" href="#sql_mock.table_mocks.MockTableMeta.table_ref" title="Link to this definition"></a></dt>
+<dd><p>String that represents the table reference to the original table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.MockTableMeta.query">
+<span class="sig-name descname"><span class="pre">query</span></span><a class="headerlink" href="#sql_mock.table_mocks.MockTableMeta.query" title="Link to this definition"></a></dt>
+<dd><p>Srting of the SQL query (can be in Jinja format).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.MockTableMeta.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#sql_mock.table_mocks.MockTableMeta.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.MockTableMeta.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'query':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False),</span> <span class="pre">'table_ref':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False)}</span></em><a class="headerlink" href="#sql_mock.table_mocks.MockTableMeta.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">table_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">SQLMockData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sql_mock.column_mocks.ColumnMock" title="sql_mock.column_mocks.ColumnMock"><span class="pre">ColumnMock</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rendered_query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class to store data on BaseMockTable instances which is used during processing.
+We use this class to avoid collision with field names of the table we want to mock.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.columns">
+<span class="sig-name descname"><span class="pre">columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sql_mock.column_mocks.ColumnMock" title="sql_mock.column_mocks.ColumnMock"><span class="pre">ColumnMock</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.input_data">
+<span class="sig-name descname"><span class="pre">input_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.input_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.last_query">
+<span class="sig-name descname"><span class="pre">last_query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.last_query" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'columns':</span> <span class="pre">FieldInfo(annotation=dict[str,</span> <span class="pre">Type[sql_mock.column_mocks.ColumnMock]],</span> <span class="pre">required=False),</span> <span class="pre">'data':</span> <span class="pre">FieldInfo(annotation=list[dict],</span> <span class="pre">required=False),</span> <span class="pre">'input_data':</span> <span class="pre">FieldInfo(annotation=list[dict],</span> <span class="pre">required=False),</span> <span class="pre">'last_query':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False),</span> <span class="pre">'rendered_query':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False)}</span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.model_fields" title="Link to this definition"></a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.SQLMockData.rendered_query">
+<span class="sig-name descname"><span class="pre">rendered_query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sql_mock.table_mocks.SQLMockData.rendered_query" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.get_keys_from_list_of_dicts">
+<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">get_keys_from_list_of_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sql_mock.table_mocks.get_keys_from_list_of_dicts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.replace_original_table_references">
+<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">replace_original_table_references</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_tables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sql_mock.table_mocks.BaseMockTable" title="sql_mock.table_mocks.BaseMockTable"><span class="pre">BaseMockTable</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.replace_original_table_references" title="Link to this definition"></a></dt>
+<dd><p>Replace orignal table references to point them to the mocked data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<em>str</em>) – Original SQL query</p></li>
+<li><p><strong>mock_tables</strong> (<em>list</em><em>[</em><a class="reference internal" href="#sql_mock.table_mocks.BaseMockTable" title="sql_mock.table_mocks.BaseMockTable"><em>BaseMockTable</em></a><em>]</em>) – List of BaseMockTable instances that are used as input</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.select_from_cte">
+<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">select_from_cte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cte_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.select_from_cte" title="Link to this definition"></a></dt>
+<dd><p>If selecting from a CTE, we need to replace the the final SELECT statement
+with a SELECT * FROM select_cte</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<em>str</em>) – Original SQL query</p></li>
+<li><p><strong>cte_name</strong> (<em>str</em>) – Name of the CTE to select from</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.table_meta">
+<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">table_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.table_meta" title="Link to this definition"></a></dt>
+<dd><p>Decorator that is used to define MockTable metadata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table_ref</strong> (<em>string</em>) – String that represents the table reference to the original table.</p></li>
+<li><p><strong>query_path</strong> (<em>string</em>) – Path to a SQL query file that should be used to generate the model. Can be a Jinja template. Note only one of query_path or query can be provided.</p></li>
+<li><p><strong>query</strong> (<em>string</em>) – Srting of the SQL query (can be in Jinja format). Note only one of query_path or query can be provided.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.validate_input_mocks">
+<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">validate_input_mocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_mocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sql_mock.table_mocks.BaseMockTable" title="sql_mock.table_mocks.BaseMockTable"><span class="pre">BaseMockTable</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.validate_input_mocks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-sql_mock">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sql_mock" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="sql_mock" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sql_mock.bigquery.html" class="btn btn-neutral float-right" title="sql_mock.bigquery package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, DeepL, Thomas Schmidt.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
