@@ -12,8 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] 
 
 ### Added 
+
+### Changed
+
+
+## [0.3.0] 
+
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.2.0...v0.3.0
+
+### Added 
 * Now you can also pass a `query` to the `table_meta`. The `query_path` will overwrite a `query` in case both are provided
 * New method `assert_cte_equal` that allows to check the output of a specific CTE in the query you want to test.
+* Added documentation page 
 
 ### Changed
 
@@ -37,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2023-10-26
 Initial version.
 
-[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.3.0
 [0.2.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.2.0
 [0.1.2]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.1.2

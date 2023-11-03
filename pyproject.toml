@@ -1,7 +1,7 @@
 
 [tool.poetry]
 name = "sql-mock"
-version = "0.2.0"
+version = "0.3.0"
 description = "Simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios. It provides a consistent and convenient way to test the execution of your query without the need to process a massive amount of data."
 repository = "https://github.com/DeepLcom/sql-mock"
 readme = "README.md"
