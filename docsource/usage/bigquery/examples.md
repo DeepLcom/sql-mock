@@ -1,10 +1,8 @@
-# Use SQL Mock with Google BigQuery
+```{toctree}
+:maxdepth: 2
+```
 
-## Settings:
-
-Ensure you have the `GOOGLE_APPLICATION_CREDENTIALS` environment variable correctly set to point to a service account file.
-
-## Example: Testing Subscription Counts in BigQuery
+# Example: Testing Subscription Counts in BigQuery
 
 ```python
 import datetime
