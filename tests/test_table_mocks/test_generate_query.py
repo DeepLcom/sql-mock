@@ -23,6 +23,7 @@ string_col = StringTestColumn(default="hey")
 class MockTestTable(BaseMockTable):
     col1 = int_col
     col2 = string_col
+    _sql_dialect = "bigquery"
 
 
 def test_replace_original_table_references_when_reference_exists():
@@ -74,7 +75,7 @@ def test_select_from_cte_when_cte_exists():
     # Make sure we match the query format
     expected = expected.sql(pretty=True)
 
-    assert expected == select_from_cte(query, cte_name)
+    assert expected == select_from_cte(query, cte_name, sql_dialect="bigquery")
 
 
 def test_select_from_cte_when_cte_does_not_exist():
@@ -91,7 +92,7 @@ def test_select_from_cte_when_cte_does_not_exist():
     """
 
     with pytest.raises(ValueError):
-        select_from_cte(query, cte_name)
+        select_from_cte(query, cte_name, sql_dialect="bigquery")
 
 
 # Test the _generate_query method
@@ -176,7 +177,9 @@ def test_generate_query_cte_provided(mocker):
     query = mock_table_instance._generate_query(cte_to_select=cte_to_select)
 
     # Asserts
-    mocked_select_from_cte.assert_called_once_with(original_query, cte_to_select)
+    mocked_select_from_cte.assert_called_once_with(
+        original_query, cte_to_select, sql_dialect=MockTestTable._sql_dialect
+    )
     mocked_replace_original_table_references.assert_called_once_with(
         expected_query_template_result, mock_tables=[mock_table_instance]
     )

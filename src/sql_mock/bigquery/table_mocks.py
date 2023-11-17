@@ -5,6 +5,8 @@ from sql_mock.table_mocks import BaseMockTable
 
 
 class BigQueryMockTable(BaseMockTable):
+    _sql_dialect = "bigquery"
+
     def __init__(
         self,
         *args,

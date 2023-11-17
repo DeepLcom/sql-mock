@@ -5,6 +5,8 @@ from sql_mock.table_mocks import BaseMockTable
 
 
 class ClickHouseTableMock(BaseMockTable):
+    _sql_dialect = "clickhouse"
+
     def __init__(
         self,
         *args,
