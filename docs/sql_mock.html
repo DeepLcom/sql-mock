@@ -338,6 +338,17 @@ When inheriting from this class you need to add column attributes for the table 
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable._sql_dialect">
+<span class="sig-name descname"><span class="pre">_sql_dialect</span></span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable._sql_dialect" title="Link to this definition"></a></dt>
+<dd><p>The sql dialect that the mock model uses. It will be leveraged by sqlglot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="sql_mock.table_mocks.BaseMockTable.as_sql_input">
 <span class="sig-name descname"><span class="pre">as_sql_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.BaseMockTable.as_sql_input" title="Link to this definition"></a></dt>
@@ -529,7 +540,7 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sql_mock.table_mocks.select_from_cte">
-<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">select_from_cte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cte_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.select_from_cte" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">sql_mock.table_mocks.</span></span><span class="sig-name descname"><span class="pre">select_from_cte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cte_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_dialect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.table_mocks.select_from_cte" title="Link to this definition"></a></dt>
 <dd><p>If selecting from a CTE, we need to replace the the final SELECT statement
 with a SELECT * FROM select_cte</p>
 <dl class="field-list simple">
@@ -537,6 +548,7 @@ with a SELECT * FROM select_cte</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>query</strong> (<em>str</em>) – Original SQL query</p></li>
 <li><p><strong>cte_name</strong> (<em>str</em>) – Name of the CTE to select from</p></li>
+<li><p><strong>sql_dialect</strong> (<em>str</em>) – The sql dialect to use for generating the query</p></li>
 </ul>
 </dd>
 </dl>

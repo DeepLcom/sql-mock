@@ -28,7 +28,7 @@ def replace_original_table_references(query: str, mock_tables: list["BaseMockTab
     return query
 
 
-def select_from_cte(query: str, cte_name: str):
+def select_from_cte(query: str, cte_name: str, sql_dialect: str):
     """
     If selecting from a CTE, we need to replace the the final SELECT statement
     with a SELECT * FROM select_cte
@@ -36,6 +36,7 @@ def select_from_cte(query: str, cte_name: str):
     Args:
         query (str): Original SQL query
         cte_name (str): Name of the CTE to select from
+        sql_dialect (str): The sql dialect to use for generating the query
     """
     ast = sqlglot.parse_one(query)
 
@@ -52,7 +53,7 @@ def select_from_cte(query: str, cte_name: str):
             col.pop()
 
     # Change the final select statement to SELECT * FROM <cte_name>
-    adjusted_query = ast.select("*").from_(cte_name).sql(pretty=True)
+    adjusted_query = ast.select("*").from_(cte_name).sql(pretty=True, dialect=sql_dialect)
     return adjusted_query
 
 
@@ -131,10 +132,12 @@ class BaseMockTable:
     Attributes:
         _sql_mock_data (SQLMockData): A class that stores data which is for processing. This is automatcially created on instantiation.
         _sql_mock_meta (MockTableMeta): A class attribute to store table metadata. It is created using the `table_meta` decorator.
+        _sql_dialect (str): The sql dialect that the mock model uses. It will be leveraged by sqlglot.
     """
 
     _sql_mock_meta: MockTableMeta = None
     _sql_mock_data: SQLMockData = None
+    _sql_dialect: str = None
 
     def __init__(self, data: list[dict] = None) -> None:
         """
@@ -213,7 +216,7 @@ class BaseMockTable:
         result_query = self._sql_mock_data.rendered_query
 
         if cte_to_select is not None:
-            result_query = select_from_cte(result_query, cte_to_select)
+            result_query = select_from_cte(result_query, cte_to_select, sql_dialect=self._sql_dialect)
             final_columns_to_select = "*"
         else:
             final_columns_to_select = ",\n".join(
