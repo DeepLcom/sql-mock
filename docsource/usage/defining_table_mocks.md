@@ -20,7 +20,11 @@ class Table(BigQueryMockTable):
     id = col.Int(default=1)
     name = col.String(default='Peter')
 
-@table_meta(table_ref='data.result_table', query_path='path/to/query_for_result_table.sql')
+@table_meta(
+    table_ref='data.result_table', 
+    query_path='path/to/query_for_result_table.sql', 
+    default_inputs=[Table()] # You can provide default inputs on a class level
+)
 class ResultTable(BigQueryMockTable):
     id = col.Int(default=1)
 ```
