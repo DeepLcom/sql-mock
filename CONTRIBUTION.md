@@ -80,3 +80,9 @@ Make your code changes, commit them, and create a pull request to the project's 
 ### 7. Code Formatting and Linting
 
 As part of the pre-commit hooks, code formatting and linting will be automatically checked before each commit. Be sure to address any issues reported by the hooks.
+
+### 8. Update documentation
+
+We are using sphinx to generate our documentation. 
+The documentation pages can be found in `docsource`. Go there and add / adjust the files.
+After that, we need to run `make build-docs-github` in order to populate the changes in the documentation and commit those.
