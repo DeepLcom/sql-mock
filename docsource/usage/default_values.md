@@ -53,7 +53,7 @@ subscriptions = SubscriptionTable.from_dicts(
 )
 
 # Utilizing the default inputs set in the table_meta
-res = MultipleSubscriptionUsersTable.from_mocks(input_data=[users])
+res = MultipleSubscriptionUsersTable.from_mocks(input_data=[])
 res = MultipleSubscriptionUsersTable.from_mocks(input_data=[users]) # Using only users, defaults for others
 res = MultipleSubscriptionUsersTable.from_mocks(input_data=[users, subscriptions]) # Overriding defaults
 ```
