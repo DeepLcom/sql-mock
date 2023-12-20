@@ -62,7 +62,12 @@ def test_with_defaults_for_subscriptions_table():
     In this test case we don't provide a mock for subscriptions
     because we use the class default Subscriptions([]) which translates to an empty table.
     """
-    users = UserTable.from_dicts([{"user_id": 1}, {"user_id": 2}])
+    users = UserTable.from_dicts(
+        [
+            {"user_id": 1},
+            {"user_id": 2},
+        ]
+    )
 
     subscriptions_per_user__expected = [
         {"user_id": 1, "subscription_count": 0},

@@ -32,6 +32,7 @@ It provides a consistent and convenient way to test the execution of your query 
    usage/defining_table_mocks
    usage/your_sql_query_to_test
    usage/result_assertion
+   usage/default_values
    usage/examples
 
 .. toctree::

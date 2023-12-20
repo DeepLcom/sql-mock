@@ -8,7 +8,9 @@ Testing SQL queries can often involve repetitive setup for mock tables. In SQLMo
 
 ## Utilizing Default Values in MockTable Fields
 
-Defining default values at the field level in your mock tables is straightforward. The default argument in the field definition allows you to set default values, which are particularly useful for ensuring that joins and other query functionalities operate correctly.
+Defining default values at the field level in your mock tables is straightforward.
+The default argument in the field definition allows you to set default values consistency across all test scenarios in one step. 
+They are particularly useful for ensuring that joins and other query functionalities operate correctly.
 
 Here's an example:
 
@@ -20,7 +22,7 @@ class UserTable(BigQueryMockTable):
 
 # Create instances of the UserTable with various combinations of defaults and specified values
 users = UserTable.from_dicts([
-    {}, # Uses default values --> {"user_id": 1, "user_name": "Mr. T"}
+    {}, # Left empty {} uses default values --> {"user_id": 1, "user_name": "Mr. T"}
     {"user_id": 2}, # Overrides user_id but uses default for user_name
     {"user_id": 3, "user_name": "Nala"} # No defaults used here
 ])
@@ -43,7 +45,10 @@ class MultipleSubscriptionUsersTable(BigQueryMockTable):
     user_id = col.Int(default=1)
 
 # Setting up different scenarios to demonstrate the use of defaults
-users = UserTable.from_dicts([{"user_id": 1}, {"user_id": 2}])
+users = UserTable.from_dicts([
+    {"user_id": 1}, 
+    {"user_id": 2}
+])
 subscriptions = SubscriptionTable.from_dicts(
     [
         {"subscription_id": 1, "user_id": 1},
@@ -60,6 +65,7 @@ res = MultipleSubscriptionUsersTable.from_mocks(input_data=[users, subscriptions
 
 ## When is this useful?
 
+* **Safe time and code by changing only the data you need for your test case:** You can only change single columns for the data you provide for a test case. The rest will be filled by defaults.
 * **Simplifying Happy Path Testing:** Validate basic functionality and syntax correctness of your SQL queries with minimal setup.
 * **Testing Subset Logic:** When certain tables in your query don't require data, default values can help focus on specific test scenarios.
 * **Provide reasonable defaults for joins:** In tests with numerous input tables you can specify inputs that joins between tables work. For frequent addition of new tables, defaults can prevent the need for extensive refactoring.

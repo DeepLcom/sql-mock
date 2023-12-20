@@ -19,7 +19,9 @@
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Result assertion" href="result_assertion.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,10 +50,16 @@
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="defining_table_mocks.html">Defining table mocks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="your_sql_query_to_test.html">Your SQL query to test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="result_assertion.html">Result assertion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Default values</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#utilizing-default-values-in-mocktable-fields">Utilizing Default Values in MockTable Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-mock-defaults-with-table-meta">Setting Mock Defaults with table_meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#when-is-this-useful">When is this useful?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Database Specifics</span></p>
@@ -95,7 +103,9 @@
 <p>Testing SQL queries can often involve repetitive setup for mock tables. In SQLMock, one effective way to streamline this process is by using default values. By setting reasonable defaults, you can significantly reduce the boilerplate code in your tests, especially when dealing with multiple input tables or complex queries. Let’s explore how you can efficiently implement this.</p>
 <section id="utilizing-default-values-in-mocktable-fields">
 <h2>Utilizing Default Values in MockTable Fields<a class="headerlink" href="#utilizing-default-values-in-mocktable-fields" title="Link to this heading"></a></h2>
-<p>Defining default values at the field level in your mock tables is straightforward. The default argument in the field definition allows you to set default values, which are particularly useful for ensuring that joins and other query functionalities operate correctly.</p>
+<p>Defining default values at the field level in your mock tables is straightforward.
+The default argument in the field definition allows you to set default values consistency across all test scenarios in one step.
+They are particularly useful for ensuring that joins and other query functionalities operate correctly.</p>
 <p>Here’s an example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@table_meta</span><span class="p">(</span><span class="n">table_ref</span><span class="o">=</span><span class="s2">&quot;data.users&quot;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">BigQueryMockTable</span><span class="p">):</span>
@@ -104,7 +114,7 @@
 
 <span class="c1"># Create instances of the UserTable with various combinations of defaults and specified values</span>
 <span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">([</span>
-    <span class="p">{},</span> <span class="c1"># Uses default values --&gt; {&quot;user_id&quot;: 1, &quot;user_name&quot;: &quot;Mr. T&quot;}</span>
+    <span class="p">{},</span> <span class="c1"># Left empty {} uses default values --&gt; {&quot;user_id&quot;: 1, &quot;user_name&quot;: &quot;Mr. T&quot;}</span>
     <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="c1"># Overrides user_id but uses default for user_name</span>
     <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;user_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Nala&quot;</span><span class="p">}</span> <span class="c1"># No defaults used here</span>
 <span class="p">])</span>
@@ -124,7 +134,10 @@ The Mock instances passed here, will be used as defaults in the <code class="doc
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Setting up different scenarios to demonstrate the use of defaults</span>
-<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">([{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}])</span>
+<span class="n">users</span> <span class="o">=</span> <span class="n">UserTable</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">([</span>
+    <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> 
+    <span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="p">])</span>
 <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">SubscriptionTable</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">(</span>
     <span class="p">[</span>
         <span class="p">{</span><span class="s2">&quot;subscription_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
@@ -143,6 +156,7 @@ The Mock instances passed here, will be used as defaults in the <code class="doc
 <section id="when-is-this-useful">
 <h2>When is this useful?<a class="headerlink" href="#when-is-this-useful" title="Link to this heading"></a></h2>
 <ul class="simple">
+<li><p><strong>Safe time and code by changing only the data you need for your test case:</strong> You can only change single columns for the data you provide for a test case. The rest will be filled by defaults.</p></li>
 <li><p><strong>Simplifying Happy Path Testing:</strong> Validate basic functionality and syntax correctness of your SQL queries with minimal setup.</p></li>
 <li><p><strong>Testing Subset Logic:</strong> When certain tables in your query don’t require data, default values can help focus on specific test scenarios.</p></li>
 <li><p><strong>Provide reasonable defaults for joins:</strong> In tests with numerous input tables you can specify inputs that joins between tables work. For frequent addition of new tables, defaults can prevent the need for extensive refactoring.</p></li>
@@ -153,7 +167,10 @@ The Mock instances passed here, will be used as defaults in the <code class="doc
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="result_assertion.html" class="btn btn-neutral float-left" title="Result assertion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
