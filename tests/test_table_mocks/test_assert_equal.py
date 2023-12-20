@@ -13,7 +13,7 @@ class StringTestColumn(ColumnMock):
 
 
 @table_meta(table_ref="test_data")
-class TestData(BaseMockTable):
+class MockTestTable(BaseMockTable):
     name = StringTestColumn(default="Thomas")
     age = IntTestColumn(default=0)
     city = StringTestColumn(default="Munich")
@@ -52,7 +52,7 @@ _assert_equal_successful_test_cases = [
 
 @pytest.mark.parametrize(*_assert_equal_successful_test_cases)
 def test__assert_equal_success(data, expected_data, ignore_missing_keys, ignore_order):
-    instance = TestData()
+    instance = MockTestTable()
     instance._assert_equal(
         data=data, expected=expected_data, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
     )
@@ -94,7 +94,7 @@ _assert_equal_failing_test_cases = [
 
 @pytest.mark.parametrize(*_assert_equal_failing_test_cases)
 def test__assert_equal_raises(data, expected_data, ignore_missing_keys, ignore_order):
-    instance = TestData()
+    instance = MockTestTable()
 
     with pytest.raises(AssertionError):
         instance._assert_equal(
@@ -126,7 +126,7 @@ _assert_equal_test_cases = [
 
 @pytest.mark.parametrize(*_assert_equal_test_cases)
 def test_assert_equal(mocker, ignore_missing_keys, ignore_order):
-    instance = TestData()
+    instance = MockTestTable()
     data = ([{"name": "Alice", "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],)
     mocker.patch.object(instance, "_get_results", return_value=data)
     mocker.patch.object(instance, "_generate_query", return_value="SELECT 1")  # We don't care about the query here
@@ -141,7 +141,7 @@ def test_assert_equal(mocker, ignore_missing_keys, ignore_order):
 
 @pytest.mark.parametrize(*_assert_equal_test_cases)
 def test_assert_cte_equal(mocker, ignore_missing_keys, ignore_order):
-    instance = TestData()
+    instance = MockTestTable()
     cte_name = "some_cte"
     query = "SELECT 1"
     data = ([{"name": "Alice", "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],)
