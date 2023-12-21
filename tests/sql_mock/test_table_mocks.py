@@ -23,6 +23,12 @@ class MockTestTable(BaseMockTable):
     col2 = string_col
 
 
+@table_meta(table_ref="mock_test_table_with_defaults", default_inputs=[MockTestTable([])])
+class MockTestTableWithDefaults(BaseMockTable):
+    col1 = int_col
+    col2 = string_col
+
+
 # Create a fixture for an instance of BaseMockTable
 @pytest.fixture
 def base_mock_table_instance():
@@ -57,6 +63,21 @@ def test_from_mocks(base_mock_table_instance):
     )
 
     assert isinstance(instance, MockTestTable)
+    assert instance._sql_mock_data.input_data == input_data
+    assert instance._sql_mock_data.rendered_query == query
+    assert instance._sql_mock_data.data == []
+
+
+def test_from_mocks_with_defaults(base_mock_table_instance):
+    query = "SELECT * FROM some_table"
+    input_data = [*MockTestTableWithDefaults._sql_mock_data.default_inputs, base_mock_table_instance]
+    query_template_kwargs = {}
+
+    instance = MockTestTableWithDefaults.from_mocks(
+        query=query, input_data=input_data, query_template_kwargs=query_template_kwargs
+    )
+
+    assert isinstance(instance, MockTestTableWithDefaults)
     assert instance._sql_mock_data.input_data == input_data
     assert instance._sql_mock_data.rendered_query == query
     assert instance._sql_mock_data.data == []
@@ -118,7 +139,7 @@ def test_to_sql_model_no_data_provided():
 
     expected_sql_model = (
         "mock_test_table AS (\n"
-        "\tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 WHERE FALSE\n"
+        "\tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE\n"
         ")"
     )
     assert sql_model == expected_sql_model

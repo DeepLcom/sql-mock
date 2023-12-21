@@ -1,9 +1,9 @@
 from textwrap import dedent, indent
-from typing import Type
+from typing import List, Type
 
 import sqlglot
 from jinja2 import Template
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, SkipValidation
 
 from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
@@ -71,7 +71,9 @@ class MockTableMeta(BaseModel):
     query: str = None
 
 
-def table_meta(table_ref: str = "", query_path: str = None, query: str = None):
+def table_meta(
+    table_ref: str = "", query_path: str = None, query: str = None, default_inputs: ["BaseMockTable"] = None
+):
     """
     Decorator that is used to define MockTable metadata
 
@@ -79,10 +81,12 @@ def table_meta(table_ref: str = "", query_path: str = None, query: str = None):
         table_ref (string) : String that represents the table reference to the original table.
         query_path (string): Path to a SQL query file that should be used to generate the model. Can be a Jinja template. Note only one of query_path or query can be provided.
         query (string): Srting of the SQL query (can be in Jinja format). Note only one of query_path or query can be provided.
+        default_inputs: List of default input mock instances that serve as default input if no other instance of that class is provided.
     """
 
     def decorator(cls):
         mock_meta_kwargs = {"table_ref": table_ref}
+        sql_mock_data = SQLMockData()
 
         if query_path:
             with open(query_path) as f:
@@ -90,7 +94,12 @@ def table_meta(table_ref: str = "", query_path: str = None, query: str = None):
         elif query:
             mock_meta_kwargs["query"] = query
 
+        if default_inputs:
+            validate_input_mocks(default_inputs)
+            sql_mock_data.default_inputs = default_inputs
+
         cls._sql_mock_meta = MockTableMeta(**mock_meta_kwargs)
+        cls._sql_mock_data = sql_mock_data
         return cls
 
     return decorator
@@ -115,6 +124,9 @@ class SQLMockData(BaseModel):
     We use this class to avoid collision with field names of the table we want to mock.
     """
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    default_inputs: List[SkipValidation["BaseMockTable"]] = None
     columns: dict[str, Type[ColumnMock]] = None
     data: list[dict] = None
     input_data: list[dict] = None
@@ -139,7 +151,7 @@ class BaseMockTable:
     _sql_mock_data: SQLMockData = None
     _sql_dialect: str = None
 
-    def __init__(self, data: list[dict] = None) -> None:
+    def __init__(self, data: list[dict] = None, sql_mock_data: SQLMockData = None) -> None:
         """
         Initialize a BaseMockTable instance.
 
@@ -147,7 +159,7 @@ class BaseMockTable:
             data (list[dict]): A list of dictionaries representing rows of data.
         """
         # Create a data class instance to avoid collision with column names of the table we want to mock
-        self._sql_mock_data = SQLMockData()
+        self._sql_mock_data = SQLMockData() if sql_mock_data is None else sql_mock_data
 
         self._sql_mock_data.columns = {
             field: getattr(self, field) for field in dir(self) if isinstance(getattr(self, field), ColumnMock)
@@ -180,6 +192,14 @@ class BaseMockTable:
             query: String of the SQL query that is used to generate the model. Can be a Jinja template. If provided, it overwrites the query on cls._sql_mock_meta.query.
         """
         validate_input_mocks(input_data)
+
+        # Update defaults with provided data. We use the table ref dictionaries to avoid duplicated inputs.
+        if getattr(cls._sql_mock_data, "default_inputs", None):
+            default_inputs = {
+                mock_table._sql_mock_meta.table_ref: mock_table for mock_table in cls._sql_mock_data.default_inputs
+            }
+            input_dict = {mock_table._sql_mock_meta.table_ref: mock_table for mock_table in input_data}
+            input_data = list({**default_inputs, **input_dict}.values())
 
         instance = cls(data=[])
         query_template = Template(query or cls._sql_mock_meta.query)
@@ -268,7 +288,7 @@ class BaseMockTable:
         if len(self._sql_mock_data.data) == 0:
             # Populate default values row with a WHERE FALSE statement to simulate no rows for the model
             snippet = self._to_sql_row({})
-            snippet += " WHERE FALSE"
+            snippet += " FROM (SELECT 1) WHERE FALSE"
         else:
             snippet = "\nUNION ALL\nSELECT ".join(
                 [self._to_sql_row(row_data) for row_data in self._sql_mock_data.data]

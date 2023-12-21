@@ -107,7 +107,11 @@
     <span class="nb">id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;Peter&#39;</span><span class="p">)</span>
 
-<span class="nd">@table_meta</span><span class="p">(</span><span class="n">table_ref</span><span class="o">=</span><span class="s1">&#39;data.result_table&#39;</span><span class="p">,</span> <span class="n">query_path</span><span class="o">=</span><span class="s1">&#39;path/to/query_for_result_table.sql&#39;</span><span class="p">)</span>
+<span class="nd">@table_meta</span><span class="p">(</span>
+    <span class="n">table_ref</span><span class="o">=</span><span class="s1">&#39;data.result_table&#39;</span><span class="p">,</span> 
+    <span class="n">query_path</span><span class="o">=</span><span class="s1">&#39;path/to/query_for_result_table.sql&#39;</span><span class="p">,</span> 
+    <span class="n">default_inputs</span><span class="o">=</span><span class="p">[</span><span class="n">Table</span><span class="p">()]</span> <span class="c1"># You can provide default inputs on a class level</span>
+<span class="p">)</span>
 <span class="k">class</span> <span class="nc">ResultTable</span><span class="p">(</span><span class="n">BigQueryMockTable</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
