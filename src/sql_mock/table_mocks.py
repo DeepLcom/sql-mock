@@ -299,7 +299,12 @@ class BaseMockTable:
         return f"{self._sql_mock_meta.table_ref} AS (\n{snippet}\n)"
 
     def _assert_equal(
-        self, data: [dict], expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True
+        self,
+        data: [dict],
+        expected: [dict],
+        ignore_missing_keys: bool = False,
+        ignore_order: bool = True,
+        print_query_on_fail: bool = True,
     ):
         """
         Assert that the provided data matches the expected data.
@@ -310,6 +315,7 @@ class BaseMockTable:
             ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
                 list of dictionaries of the `expected` argument.
             ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
+            print_query_on_fai (bool)l: If true, the tested query will be printed to the console output when the test fails.
         """
         if ignore_missing_keys:
             keys_to_keep = get_keys_from_list_of_dicts(expected)
@@ -317,10 +323,20 @@ class BaseMockTable:
         if ignore_order:
             data = sorted(data, key=lambda d: sorted(d.items()))
             expected = sorted(expected, key=lambda d: sorted(d.items()))
-        assert expected == data
+        try:
+            assert expected == data
+        except Exception as e:
+            if print_query_on_fail:
+                pass
+            raise e
 
     def assert_cte_equal(
-        self, cte_name, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True
+        self,
+        cte_name,
+        expected: [dict],
+        ignore_missing_keys: bool = False,
+        ignore_order: bool = True,
+        print_query_on_fail: bool = True,
     ):
         """
         Assert that a CTE within the table mock's query equals the provided expected data.
@@ -331,14 +347,25 @@ class BaseMockTable:
             ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
                 list of dictionaries of the `expected` argument.
             ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
+            print_query_on_fail (bool): If true, the tested query will be printed to the console output when the test fails.
         """
         query = self._generate_query(cte_to_select=cte_name)
         data = self._get_results(query)
         self._assert_equal(
-            data=data, expected=expected, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
+            data=data,
+            expected=expected,
+            ignore_missing_keys=ignore_missing_keys,
+            ignore_order=ignore_order,
+            print_query_on_fail=print_query_on_fail,
         )
 
-    def assert_equal(self, expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True):
+    def assert_equal(
+        self,
+        expected: [dict],
+        ignore_missing_keys: bool = False,
+        ignore_order: bool = True,
+        print_query_on_fail: bool = True,
+    ):
         """
         Assert that the result of the table mock's query equals the provided expected data.
 
@@ -347,9 +374,14 @@ class BaseMockTable:
             ignore_missing_keys (bool): If true, the comparison will only happen for the fields that are present in the
                 list of dictionaries of the `expected` argument.
             ignore_order (bool): If true, the order of dicts / rows will be ignored for comparison.
+            print_query_on_fail (bool): If true, the tested query will be printed to the console output when the test fails.
         """
         query = self._generate_query()
         data = self._get_results(query)
         self._assert_equal(
-            data=data, expected=expected, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
+            data=data,
+            expected=expected,
+            ignore_missing_keys=ignore_missing_keys,
+            ignore_order=ignore_order,
+            print_query_on_fail=print_query_on_fail,
         )

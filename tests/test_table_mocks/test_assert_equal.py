@@ -135,7 +135,11 @@ def test_assert_equal(mocker, ignore_missing_keys, ignore_order):
     instance.assert_equal(expected=data, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order)
 
     mocked_assert_equal.assert_called_once_with(
-        data=data, expected=data, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
+        data=data,
+        expected=data,
+        ignore_missing_keys=ignore_missing_keys,
+        ignore_order=ignore_order,
+        print_query_on_fail=True,
     )
 
 
@@ -156,6 +160,10 @@ def test_assert_cte_equal(mocker, ignore_missing_keys, ignore_order):
     )
 
     mocked_assert_equal.assert_called_once_with(
-        data=data, expected=data, ignore_missing_keys=ignore_missing_keys, ignore_order=ignore_order
+        data=data,
+        expected=data,
+        ignore_missing_keys=ignore_missing_keys,
+        ignore_order=ignore_order,
+        print_query_on_fail=True,
     )
     mocked_generate_query.assert_called_once_with(cte_to_select=cte_name)
