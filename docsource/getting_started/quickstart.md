@@ -14,10 +14,11 @@ Before diving into specific database scenarios, let's start with a simplified ex
    ```
 
 
-2. Using SQL Mock, you define mock tables. You can use the built-in column types provided by SQL Mock. Available column types include `Int`, `String`, `Date`, and more. Each database type has their own column types. Define your tables by subclassing a mock table class that fits your database (e.g. `BigQueryMockTable`) and specifying the column types along with default values. In our example we use the `ClickhouseTableMock` class
+2. Using SQL Mock, you define mock tables. You can use the built-in column types provided by SQL Mock. Available column types include `Int`, `String`, `Date`, and more. Each database type has their own column types. Define your tables by subclassing a mock table class that fits your database (e.g. `BigQueryMockTable`) and specifying the column types along with default values. In our example we use the `ClickHouseTableMock` class
     ```python
     from sql_mock.clickhouse import column_mocks as col
-    from sql_mock.clickhouse.table_mocks import ClickHouseTableMock, table_meta
+    from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
+    from sql_mock.table_mocks import table_meta
 
     @table_meta(table_ref='data.table1')
     class Table(ClickHouseTableMock):
@@ -25,7 +26,7 @@ Before diving into specific database scenarios, let's start with a simplified ex
         name = col.String(default='Peter')
     
     @table_meta(table_ref='data.result_table', query_path='path/to/query_for_result_table.sql')
-    class ResultTable(ClickhouseTableMock):
+    class ResultTable(ClickHouseTableMock):
         id = col.Int(default=1)
     ```
 
