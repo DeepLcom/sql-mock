@@ -40,3 +40,16 @@ class Decimal(ClickhouseColumnMock):
     def __init__(self, default, precision, scale, nullable=False) -> None:
         self.dtype = f"Decimal({precision}, {scale})"
         super().__init__(default, nullable)
+
+
+class Array(ClickhouseColumnMock):
+    use_quotes_for_casting = False
+
+    def __init__(
+        self,
+        inner_dtype,
+        default,
+        nullable=False,
+    ) -> None:
+        self.dtype = f"Array({inner_dtype})"
+        super().__init__(default, nullable)

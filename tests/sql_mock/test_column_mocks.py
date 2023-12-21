@@ -75,3 +75,17 @@ def test_to_sql_without_value_and_no_default():
     column = ColumnTestMock(default=None, nullable=True)
     sql = column.to_sql("company")
     assert sql == "cast(NULL AS String) AS company"
+
+
+def test_to_sql_not_use_quotes_for_casting():
+    """
+    ...then it should not quote the value in the cast expression.
+    """
+
+    class ColumnTestMock(ColumnMock):
+        dtype = "Integer"
+        use_quotes_for_casting = False
+
+    column = ColumnTestMock(default=3.14)
+    sql = column.to_sql("price", value=42)
+    assert sql == "cast(42 AS Integer) AS price"

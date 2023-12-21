@@ -9,11 +9,13 @@ class ColumnMock:
         dtype (str): The data type of the column.
         nullable: Indicator whether the column can be null
         default: The default value for the column.
+        use_quotes_for_casting (bool): Indicator whether the value needs to be quoted (e.g. in the final cast)
     """
 
     dtype = None
     nullable = False
     default = None
+    use_quotes_for_casting = True
 
     def __init__(self, default=None, nullable=False) -> None:
         """
@@ -34,7 +36,9 @@ class ColumnMock:
         # In case the val is None, we convert it to NULL
         if val is None:
             return f"cast(NULL AS {self.dtype}) AS {column_name}"
-        return f"cast('{val}' AS {self.dtype}) AS {column_name}"
+
+        val = f"'{val}'" if self.use_quotes_for_casting else val
+        return f"cast({val} AS {self.dtype}) AS {column_name}"
 
     def cast_field(self, column_name):
         return f"cast({column_name} AS {self.dtype}) AS {column_name}"
