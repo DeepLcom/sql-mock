@@ -53,6 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage/defining_table_mocks.html">Defining table mocks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/your_sql_query_to_test.html">Your SQL query to test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/result_assertion.html">Result assertion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/default_values.html">Default values</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/examples.html">Examples</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Database Specifics</span></p>
@@ -199,6 +200,22 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sql_mock.clickhouse.column_mocks.String.dtype">
 <span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'String'</span></em><a class="headerlink" href="#sql_mock.clickhouse.column_mocks.String.dtype" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sql_mock.clickhouse.column_mocks.StringArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sql_mock.clickhouse.column_mocks.</span></span><span class="sig-name descname"><span class="pre">StringArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.clickhouse.column_mocks.StringArray" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sql_mock.clickhouse.column_mocks.ClickhouseColumnMock" title="sql_mock.clickhouse.column_mocks.ClickhouseColumnMock"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClickhouseColumnMock</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.clickhouse.column_mocks.StringArray.dtype">
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Array(String)'</span></em><a class="headerlink" href="#sql_mock.clickhouse.column_mocks.StringArray.dtype" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sql_mock.clickhouse.column_mocks.StringArray.to_sql">
+<span class="sig-name descname"><span class="pre">to_sql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value=&lt;sql_mock.constants.NoInput</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#sql_mock.clickhouse.column_mocks.StringArray.to_sql" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
