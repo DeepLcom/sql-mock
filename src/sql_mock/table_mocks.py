@@ -4,6 +4,7 @@ from typing import List, Type
 import sqlglot
 from jinja2 import Template
 from pydantic import BaseModel, ConfigDict, SkipValidation
+from sqlglot.expressions import replace_tables
 
 from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
@@ -14,7 +15,7 @@ def get_keys_from_list_of_dicts(data: list[dict]) -> set[str]:
     return set(key for dictionary in data for key in dictionary.keys())
 
 
-def replace_original_table_references(query: str, mock_tables: list["BaseMockTable"]):
+def replace_original_table_references(query: str, mock_tables: list["BaseMockTable"], dialect: str = None):
     """
     Replace orignal table references to point them to the mocked data
 
@@ -22,10 +23,10 @@ def replace_original_table_references(query: str, mock_tables: list["BaseMockTab
         query (str): Original SQL query
         mock_tables (list[BaseMockTable]): List of BaseMockTable instances that are used as input
     """
-    for mock_table in mock_tables:
-        new_reference = mock_table._sql_mock_meta.table_ref.replace(".", "__")
-        query = query.replace(mock_table._sql_mock_meta.table_ref, new_reference)
-    return query
+    ast = sqlglot.parse_one(query, dialect=dialect)
+    mapping = {mock_table._sql_mock_meta.table_ref: mock_table.cte_name for mock_table in mock_tables}
+    res = replace_tables(expression=ast, mapping=mapping, dialect=dialect).sql(pretty=True, dialect=dialect)
+    return res
 
 
 def select_from_cte(query: str, cte_name: str, sql_dialect: str):
@@ -175,6 +176,12 @@ class BaseMockTable:
 
         self._sql_mock_data.data = [] if data is None else data
 
+    @property
+    def cte_name(self):
+        mock_meta = self._sql_mock_meta
+        if getattr(mock_meta, "table_ref", None):
+            return self._sql_mock_meta.table_ref.replace(".", "__")
+
     @classmethod
     def from_dicts(cls, data: list[dict] = None):
         return cls(data=data)
@@ -249,7 +256,9 @@ class BaseMockTable:
             final_columns_to_select=indent(final_columns_to_select, "\t"),
         )
 
-        query = replace_original_table_references(query, mock_tables=self._sql_mock_data.input_data)
+        query = replace_original_table_references(
+            query, mock_tables=self._sql_mock_data.input_data, dialect=self._sql_dialect
+        )
         # Store last query for debugging
         self._sql_mock_data.last_query = query
         return query
@@ -296,7 +305,7 @@ class BaseMockTable:
 
         # Indent whole CTE content for better query readability
         snippet = indent(f"SELECT {snippet}", "\t")
-        return f"{self._sql_mock_meta.table_ref} AS (\n{snippet}\n)"
+        return f"{self.cte_name} AS (\n{snippet}\n)"
 
     def _assert_equal(
         self, data: [dict], expected: [dict], ignore_missing_keys: bool = False, ignore_order: bool = True

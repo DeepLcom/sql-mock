@@ -30,7 +30,8 @@ def test_replace_original_table_references_when_reference_exists():
     """...then the original table reference should be replaced with the mocked table reference"""
     query = f"SELECT * FROM {MockTestTable._sql_mock_meta.table_ref}"
     mock_tables = [MockTestTable()]
-    expected = "SELECT * FROM data__mock_test_table"
+    # Note that sqlglot will add a comment with the original table name at the end
+    expected = "SELECT\n  *\nFROM data__mock_test_table /* data.mock_test_table */"
     assert expected == replace_original_table_references(query, mock_tables)
 
 
@@ -38,7 +39,7 @@ def test_replace_original_table_references_when_reference_does_not_exist():
     """...then the original reference should not be replaced"""
     query = "SELECT * FROM some_table"
     mock_tables = [MockTestTable()]
-    expected = "SELECT * FROM some_table"
+    expected = "SELECT\n  *\nFROM some_table"
     assert expected == replace_original_table_references(query, mock_tables)
 
 
@@ -114,7 +115,7 @@ def test_generate_query_no_cte_provided(mocker):
 
     expected_query_template_result = dedent(
         f"""
-    WITH {mock_table_instance._sql_mock_meta.table_ref} AS (
+    WITH {mock_table_instance.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
     ),
 
@@ -135,7 +136,7 @@ def test_generate_query_no_cte_provided(mocker):
     # Asserts
     mocked_select_from_cte.assert_not_called()
     mocked_replace_original_table_references.assert_called_once_with(
-        expected_query_template_result, mock_tables=[mock_table_instance]
+        expected_query_template_result, mock_tables=[mock_table_instance], dialect=mock_table_instance._sql_dialect
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
     assert query == mocked_replace_original_table_references.return_value
@@ -159,7 +160,7 @@ def test_generate_query_cte_provided(mocker):
 
     expected_query_template_result = dedent(
         f"""
-    WITH {mock_table_instance._sql_mock_meta.table_ref} AS (
+    WITH {mock_table_instance.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
     ),
 
@@ -181,7 +182,7 @@ def test_generate_query_cte_provided(mocker):
         original_query, cte_to_select, sql_dialect=MockTestTable._sql_dialect
     )
     mocked_replace_original_table_references.assert_called_once_with(
-        expected_query_template_result, mock_tables=[mock_table_instance]
+        expected_query_template_result, mock_tables=[mock_table_instance], dialect=mock_table_instance._sql_dialect
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
     assert query == mocked_replace_original_table_references.return_value
