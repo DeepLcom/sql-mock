@@ -136,6 +136,10 @@
 <li class="toctree-l1"><a class="reference internal" href="sql_mock.bigquery.html">sql_mock.bigquery package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sql_mock.bigquery.html#module-sql_mock.bigquery.column_mocks">sql_mock.bigquery.column_mocks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Array"><code class="docutils literal notranslate"><span class="pre">Array</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Array.use_quotes_for_casting"><code class="docutils literal notranslate"><span class="pre">Array.use_quotes_for_casting</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.BigQueryColumnMock"><code class="docutils literal notranslate"><span class="pre">BigQueryColumnMock</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date"><code class="docutils literal notranslate"><span class="pre">Date</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date.dtype"><code class="docutils literal notranslate"><span class="pre">Date.dtype</span></code></a></li>
@@ -175,6 +179,10 @@
 <li class="toctree-l1"><a class="reference internal" href="sql_mock.clickhouse.html">sql_mock.clickhouse package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sql_mock.clickhouse.html#module-sql_mock.clickhouse.column_mocks">sql_mock.clickhouse.column_mocks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Array"><code class="docutils literal notranslate"><span class="pre">Array</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Array.use_quotes_for_casting"><code class="docutils literal notranslate"><span class="pre">Array.use_quotes_for_casting</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Boolean"><code class="docutils literal notranslate"><span class="pre">Boolean</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Boolean.dtype"><code class="docutils literal notranslate"><span class="pre">Boolean.dtype</span></code></a></li>
 </ul>
@@ -203,11 +211,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.String"><code class="docutils literal notranslate"><span class="pre">String</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.String.dtype"><code class="docutils literal notranslate"><span class="pre">String.dtype</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.StringArray"><code class="docutils literal notranslate"><span class="pre">StringArray</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.StringArray.dtype"><code class="docutils literal notranslate"><span class="pre">StringArray.dtype</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.StringArray.to_sql"><code class="docutils literal notranslate"><span class="pre">StringArray.to_sql()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -267,6 +270,17 @@
 <dd><p>The default value for the column.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.use_quotes_for_casting">
+<span class="sig-name descname"><span class="pre">use_quotes_for_casting</span></span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.use_quotes_for_casting" title="Link to this definition"></a></dt>
+<dd><p>Indicator whether the value needs to be quoted (e.g. in the final cast)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.cast_field">
 <span class="sig-name descname"><span class="pre">cast_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.cast_field" title="Link to this definition"></a></dt>
@@ -290,6 +304,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="sql_mock.column_mocks.ColumnMock.to_sql">
 <span class="sig-name descname"><span class="pre">to_sql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value=&lt;sql_mock.constants.NoInput</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#sql_mock.column_mocks.ColumnMock.to_sql" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">use_quotes_for_casting</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -472,13 +491,13 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">query</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">table_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">table_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
