@@ -280,7 +280,7 @@ class BaseMockTable:
             assert expected == data
         except Exception as e:
             if print_query_on_fail:
-                pass
+                print(self._sql_mock_data.last_query)
             raise e
 
     def assert_cte_equal(
