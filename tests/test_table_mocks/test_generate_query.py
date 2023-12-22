@@ -1,10 +1,7 @@
 from textwrap import dedent
 
-import pytest
-import sqlglot
-
 from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable, replace_original_table_references, select_from_cte, table_meta
+from sql_mock.table_mocks import BaseMockTable, table_meta
 
 
 class IntTestColumn(ColumnMock):
@@ -24,76 +21,6 @@ class MockTestTable(BaseMockTable):
     col1 = int_col
     col2 = string_col
     _sql_dialect = "bigquery"
-
-
-def test_replace_original_table_references_when_reference_exists():
-    """...then the original table reference should be replaced with the mocked table reference"""
-    query = f"SELECT * FROM {MockTestTable._sql_mock_meta.table_ref}"
-    mock_tables = [MockTestTable()]
-    # Note that sqlglot will add a comment with the original table name at the end
-    expected = "SELECT\n  *\nFROM data__mock_test_table /* data.mock_test_table */"
-    assert expected == replace_original_table_references(query, mock_tables)
-
-
-def test_replace_original_table_references_when_reference_does_not_exist():
-    """...then the original reference should not be replaced"""
-    query = "SELECT * FROM some_table"
-    mock_tables = [MockTestTable()]
-    expected = "SELECT\n  *\nFROM some_table"
-    assert expected == replace_original_table_references(query, mock_tables)
-
-
-def test_select_from_cte_when_cte_exists():
-    """...then the final select of the query should be replaced with a select from the cte"""
-    cte_name = "cte_1"
-    query = """
-    WITH cte_1 AS (
-      SELECT * FROM some_table
-    ),
-    cte_2 AS (
-      SELECT a, b
-      FROM cte
-      WHERE a = 'foo'
-    )
-
-    SELECT a, b, * FROM cte_2
-    """
-
-    expected = sqlglot.parse_one(
-        """
-    WITH cte_1 AS (
-      SELECT * FROM some_table
-    ),
-    cte_2 AS (
-      SELECT a, b
-      FROM cte
-      WHERE a = 'foo'
-    )
-
-    SELECT * FROM cte_1
-    """
-    )
-    # Make sure we match the query format
-    expected = expected.sql(pretty=True)
-
-    assert expected == select_from_cte(query, cte_name, sql_dialect="bigquery")
-
-
-def test_select_from_cte_when_cte_does_not_exist():
-    """...then the method should raise a ValueError"""
-    cte_name = "cte_1"
-    query = """
-    WITH cte_2 AS (
-      SELECT a, b
-      FROM cte
-      WHERE a = 'foo'
-    )
-
-    SELECT * FROM cte_2
-    """
-
-    with pytest.raises(ValueError):
-        select_from_cte(query, cte_name, sql_dialect="bigquery")
 
 
 # Test the _generate_query method

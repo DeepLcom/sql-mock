@@ -1730,13 +1730,13 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlglot"
-version = "20.3.0"
+version = "20.4.0"
 description = "An easily customizable SQL parser and transpiler"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sqlglot-20.3.0-py3-none-any.whl", hash = "sha256:8d33ee46dbb649dd7499ad1d8f1226cc2a730e3136093440eeba0e5e319f4a1f"},
-    {file = "sqlglot-20.3.0.tar.gz", hash = "sha256:c5a2ea2a1a9958f2918aeac29e8aeb631795e482720bbde98c9ccf5ba78f7554"},
+    {file = "sqlglot-20.4.0-py3-none-any.whl", hash = "sha256:9a42135d0530de8150a2c5106e0c52abd3396d92501ebe97df7b371d20de5dc9"},
+    {file = "sqlglot-20.4.0.tar.gz", hash = "sha256:401a2933298cf66901704cf2029272d8243ee72ac47b9fd8784254401b43ee43"},
 ]
 
 [package.extras]
@@ -1851,4 +1851,4 @@ clickhouse = ["clickhouse-driver"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "4ac547ba6cc04a601159e5a2264b0366b03d808dd99ffdc1326a8f53a0e48a20"
+content-hash = "bf6bd91bff672cccf4daa37114c67e67705ffca9869325012d2796bf10198258"
