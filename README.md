@@ -52,3 +52,14 @@ If you have ideas for new features or improvements, please use the project's iss
 ### Contributing Code
 
 Find more about contributing code in the [Contribution Guidelines](./CONTRIBUTION.md)
+
+## Experimental
+
+### SQL Mock Buddy - A custom (Chat) GPT to support you
+
+We ran a small experiment to create a custom GPT for SQL Mock.
+The SQL Mock Buddy can be accessed here: https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy 
+
+SQL Mock Buddy should help you to get started quickly with SQL Mock.
+
+It is still in beta mode and you should definitely double-check its output!
