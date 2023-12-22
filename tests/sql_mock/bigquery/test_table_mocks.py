@@ -50,6 +50,7 @@ def test_get_results(mocker):
         {"column1": "value3", "column2": "value4"}
         # Add more rows as needed
     ]
+    query = "SELECT 1, 2"
 
     # Mock the Client and QueryJob classes and their methods
     mocker.patch("google.cloud.bigquery.Client")
@@ -57,7 +58,8 @@ def test_get_results(mocker):
     query_job_instance = mock_client.query.return_value
     query_job_instance.result.return_value = mock_query_job_result
 
-    result = BigQueryMockTable.from_mocks(query="SELECT 1", input_data=[MockTestTable(data=[])])
+    instance = BigQueryMockTable()
+    result = instance._get_results(query=query)
 
-    # Assert the result matches the expected mock result
-    result.assert_equal(mock_query_job_result)
+    assert result == mock_query_job_result
+    mock_client.query.assert_called_once_with(query)

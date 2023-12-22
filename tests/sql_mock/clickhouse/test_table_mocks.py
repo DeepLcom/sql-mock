@@ -57,11 +57,14 @@ def test_get_results(mocker):
     """
     mock_client = mocker.patch("sql_mock.clickhouse.table_mocks.Client")
     mock_query_result = [{"column1": "value1", "column2": 42}]
+    query = "SELECT 1, 2"
+
     mock_dataframe = mocker.MagicMock()
     mock_dataframe.to_dict.return_value = mock_query_result
     mock_client.return_value.__enter__.return_value.query_dataframe.return_value = mock_dataframe
 
-    table = ClickHouseTableMock()
-    result = table.from_mocks(query="SELECT foo FROM bar", input_data=[MockTestTable()])
+    instance = ClickHouseTableMock()
+    result = instance._get_results(query=query)
 
-    result.assert_equal(mock_query_result)
+    assert result == mock_query_result
+    mock_client.return_value.__enter__.return_value.query_dataframe.assert_called_once_with(query)
