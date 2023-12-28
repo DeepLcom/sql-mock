@@ -74,7 +74,7 @@ class TestFromMocks:
 
     def test_from_mocks_with_defaults(self, base_mock_table_instance, mocker):
         query = "SELECT * FROM some_table"
-        input_data = [*MockTestTableWithDefaults._sql_mock_data.default_inputs, base_mock_table_instance]
+        input_data = [*MockTestTableWithDefaults._sql_mock_meta.default_inputs, base_mock_table_instance]
         query_template_kwargs = {}
         mocked_validate_input_mocks_for_query = mocker.patch(
             "sql_mock.table_mocks.validate_all_input_mocks_for_query_provided"
@@ -110,7 +110,7 @@ def test_as_sql_input():
     ]
     sql_input = mock_table_instance.as_sql_input()
     expected = (
-        f"{mock_table_instance._sql_mock_data.table_ref} AS (\n"
+        f"{mock_table_instance._sql_mock_meta.table_ref} AS (\n"
         "\tSELECT cast('1' AS Integer) AS col1, cast('value1' AS String) AS col2\n"
         "\tUNION ALL\n"
         "\tSELECT cast('2' AS Integer) AS col1, cast('value2' AS String) AS col2\n"

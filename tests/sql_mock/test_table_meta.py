@@ -13,7 +13,7 @@ def test_query_path_provided(mocker):
     class TestMock(BaseMockTable):
         pass
 
-    assert TestMock._sql_mock_data.query == query
+    assert TestMock._sql_mock_meta.query == query
     mock_open.assert_called_with(query_path)
 
 
@@ -24,7 +24,7 @@ def test_no_query_path_provided():
     class TestMock(BaseMockTable):
         pass
 
-    assert TestMock._sql_mock_data.query == ""
+    assert TestMock._sql_mock_meta.query is None
 
 
 def test_table_ref_provided():
@@ -35,4 +35,4 @@ def test_table_ref_provided():
     class TestMock(BaseMockTable):
         pass
 
-    assert TestMock._sql_mock_data.table_ref == table_ref
+    assert TestMock._sql_mock_meta.table_ref == table_ref

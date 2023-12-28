@@ -48,7 +48,7 @@ class MockTestTable(BaseMockTable):
 class TestReplaceOriginalTableReference:
     def test_replace_original_table_references_when_reference_exists(self):
         """...then the original table reference should be replaced with the mocked table reference"""
-        query = f"SELECT * FROM {MockTestTable._sql_mock_data.table_ref}"
+        query = f"SELECT * FROM {MockTestTable._sql_mock_meta.table_ref}"
         mock_tables = [MockTestTable()]
         # Note that sqlglot will add a comment with the original table name at the end
         expected = "SELECT\n  *\nFROM data__mock_test_table /* data.mock_test_table */"
