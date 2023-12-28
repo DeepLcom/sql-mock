@@ -27,7 +27,7 @@ def replace_original_table_references(query: str, mock_tables: list["BaseMockTab
         dialect (str): The SQL dialect to use for parsing the query
     """
     ast = sqlglot.parse_one(query, dialect=dialect)
-    mapping = {mock_table._sql_mock_meta.table_ref: mock_table.cte_name for mock_table in mock_tables}
+    mapping = {mock_table._sql_mock_meta.table_ref: mock_table._sql_mock_meta.cte_name for mock_table in mock_tables}
     res = replace_tables(expression=ast, mapping=mapping, dialect=dialect).sql(pretty=True, dialect=dialect)
     return res
 

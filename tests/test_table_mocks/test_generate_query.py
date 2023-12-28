@@ -42,7 +42,7 @@ def test_generate_query_no_cte_provided(mocker):
 
     expected_query_template_result = dedent(
         f"""
-    WITH {mock_table_instance.cte_name} AS (
+    WITH {mock_table_instance._sql_mock_meta.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
     ),
 
@@ -87,7 +87,7 @@ def test_generate_query_cte_provided(mocker):
 
     expected_query_template_result = dedent(
         f"""
-    WITH {mock_table_instance.cte_name} AS (
+    WITH {mock_table_instance._sql_mock_meta.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
     ),
 

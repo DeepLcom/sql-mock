@@ -2,7 +2,7 @@ from sql_mock.table_mocks import BaseMockTable, table_meta
 
 
 def test_query_path_provided(mocker):
-    """...then the query should be read from the path and the result most be stored on the cls._sql_mock_meta"""
+    """...then the query should be read from the path and the result most be stored on the cls._sql_mock_data"""
     query = "SELECT bar FROM foo"
     query_path = "some_path"
     mock_open = mocker.patch("builtins.open")
@@ -18,7 +18,7 @@ def test_query_path_provided(mocker):
 
 
 def test_no_query_path_provided():
-    """...then there should not be any query string stored on the cls._sql_mock_meta"""
+    """...then there should not be any query string stored on the cls._sql_mock_data"""
 
     @table_meta(table_ref="")
     class TestMock(BaseMockTable):
@@ -28,7 +28,7 @@ def test_no_query_path_provided():
 
 
 def test_table_ref_provided():
-    """...then the table_ref should be stored on the cls._sql_mock_meta"""
+    """...then the table_ref should be stored on the cls._sql_mock_data"""
     table_ref = "some.table"
 
     @table_meta(table_ref=table_ref)
