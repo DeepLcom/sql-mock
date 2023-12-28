@@ -2,7 +2,7 @@ from textwrap import dedent, indent
 from typing import List, Type
 
 from jinja2 import Template
-from pydantic import BaseModel, ConfigDict, SkipValidation
+from pydantic import BaseModel, validator
 
 from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
@@ -69,14 +69,19 @@ class SQLMockData(BaseModel):
     We use this class to avoid collision with field names of the table we want to mock.
     """
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    default_inputs: List[SkipValidation["BaseMockTable"]] = None
+    default_inputs: List["BaseMockTable"] = None
     columns: dict[str, Type[ColumnMock]] = None
     data: list[dict] = None
     input_data: list[dict] = None
     rendered_query: str = None
     last_query: str = None
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    @validator("default_inputs", pre=True, each_item=True)
+    def skip_validation(cls, v):
+        return v
 
 
 class BaseMockTable:
@@ -280,7 +285,7 @@ class BaseMockTable:
             assert expected == data
         except Exception as e:
             if print_query_on_fail:
-                print(self._sql_mock_data.last_query)
+                pass
             raise e
 
     def assert_cte_equal(
