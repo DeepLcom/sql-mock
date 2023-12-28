@@ -27,7 +27,7 @@ def replace_original_table_references(query: str, mock_tables: list["BaseMockTab
         dialect (str): The SQL dialect to use for parsing the query
     """
     ast = sqlglot.parse_one(query, dialect=dialect)
-    mapping = {mock_table._sql_mock_meta.table_ref: mock_table.cte_name for mock_table in mock_tables}
+    mapping = {mock_table._sql_mock_data.table_ref: mock_table._sql_mock_data.cte_name for mock_table in mock_tables}
     res = replace_tables(expression=ast, mapping=mapping, dialect=dialect).sql(pretty=True, dialect=dialect)
     return res
 
@@ -105,7 +105,7 @@ def _validate_input_mocks_have_table_ref(input_mocks: List["BaseMockTable"]) -> 
     missing_table_refs = [
         type(mock_table).__name__
         for mock_table in input_mocks
-        if not getattr(mock_table._sql_mock_meta, "table_ref", False)
+        if not getattr(mock_table._sql_mock_data, "table_ref", False)
     ]
 
     if missing_table_refs:
@@ -122,7 +122,7 @@ def validate_input_mocks(input_mocks: List["BaseMockTable"]):
 def validate_all_input_mocks_for_query_provided(query: str, input_mocks: List["BaseMockTable"], dialect: str) -> None:
     missing_source_table_mocks = get_source_tables(query=query, dialect=dialect)
     for mock_table in input_mocks:
-        table_ref = getattr(mock_table._sql_mock_meta, "table_ref", None)
+        table_ref = getattr(mock_table._sql_mock_data, "table_ref", None)
         # If the table exists as mock, we can remove it from missing source tables
         try:
             missing_source_table_mocks.remove(table_ref)

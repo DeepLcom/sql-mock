@@ -110,7 +110,7 @@ def test_as_sql_input():
     ]
     sql_input = mock_table_instance.as_sql_input()
     expected = (
-        f"{mock_table_instance._sql_mock_meta.table_ref} AS (\n"
+        f"{mock_table_instance._sql_mock_data.table_ref} AS (\n"
         "\tSELECT cast('1' AS Integer) AS col1, cast('value1' AS String) AS col2\n"
         "\tUNION ALL\n"
         "\tSELECT cast('2' AS Integer) AS col1, cast('value2' AS String) AS col2\n"
