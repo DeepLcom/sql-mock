@@ -8,6 +8,7 @@ from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
 from sql_mock.helpers import (
     get_keys_from_list_of_dicts,
+    parse_table_refs,
     replace_original_table_references,
     select_from_cte,
     validate_all_input_mocks_for_query_provided,
@@ -29,7 +30,7 @@ def table_meta(
     """
 
     def decorator(cls):
-        mock_meta_kwargs = {"table_ref": table_ref}
+        mock_meta_kwargs = {"table_ref": parse_table_refs(table_ref, dialect=cls._sql_dialect)}
 
         if query_path:
             with open(query_path) as f:
@@ -341,7 +342,7 @@ class MockTableMeta(BaseModel):
     @property
     def cte_name(self):
         if getattr(self, "table_ref", None):
-            return self.table_ref.replace(".", "__")
+            return self.table_ref.replace('"', "").replace(".", "__")
 
     @validator("default_inputs", pre=True, each_item=True)
     def skip_validation(cls, v):
