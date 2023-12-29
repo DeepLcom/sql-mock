@@ -32,6 +32,12 @@ If you need to modify this source code, install the dependencies using poetry:
 poetry install --all-extras
 ```
 
+## Pydantic V1 vs. V2
+
+SQL Mock's published version supports Pydantic V2. You might run into issues when your code depends on Pydantic V1.
+We have an alternative branch you can install from that supports Pydantic V1 in the meanwhile: https://github.com/DeepLcom/sql-mock/tree/pydantic-v1
+
+
 ## Contributing
 
 We welcome contributions to improve and enhance this open-source project. Whether you want to report issues, suggest new features, or directly contribute to the codebase, your input is valuable. To ensure a smooth and collaborative experience for both contributors and maintainers, please follow these guidelines:
@@ -58,7 +64,7 @@ Find more about contributing code in the [Contribution Guidelines](./CONTRIBUTIO
 ### SQL Mock Buddy - A custom (Chat) GPT to support you
 
 We ran a small experiment to create a custom GPT for SQL Mock.
-The SQL Mock Buddy can be accessed here: https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy 
+The SQL Mock Buddy can be accessed here: [https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy](https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy) 
 
 SQL Mock Buddy should help you to get started quickly with SQL Mock.
 
