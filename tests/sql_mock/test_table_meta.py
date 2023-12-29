@@ -9,7 +9,7 @@ def test_query_path_provided(mocker):
     # Configure the mock to return the file content
     mock_open.return_value.__enter__.return_value.read.return_value = query
 
-    @table_meta(table_ref="", query_path=query_path)
+    @table_meta(table_ref="some.table", query_path=query_path)
     class TestMock(BaseMockTable):
         pass
 
@@ -20,7 +20,7 @@ def test_query_path_provided(mocker):
 def test_no_query_path_provided():
     """...then there should not be any query string stored on the cls._sql_mock_data"""
 
-    @table_meta(table_ref="")
+    @table_meta(table_ref="some.table")
     class TestMock(BaseMockTable):
         pass
 

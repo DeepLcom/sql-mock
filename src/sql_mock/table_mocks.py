@@ -8,33 +8,12 @@ from sql_mock.column_mocks import ColumnMock
 from sql_mock.constants import NO_INPUT
 from sql_mock.helpers import (
     get_keys_from_list_of_dicts,
+    parse_table_refs,
     replace_original_table_references,
     select_from_cte,
     validate_all_input_mocks_for_query_provided,
     validate_input_mocks,
 )
-
-
-class MockTableMeta(BaseModel):
-    """
-    Class to store static metadata of BaseMockTable instances which is used during processing.
-    We use this class to avoid collision with field names of the table we want to mock.
-
-    Attributes:
-        table_ref (string) : String that represents the table reference to the original table.
-        query (string): Srting of the SQL query (can be in Jinja format).
-    """
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    default_inputs: List[SkipValidation["BaseMockTable"]] = None
-    table_ref: str = None
-    query: str = None
-
-    @property
-    def cte_name(self):
-        if getattr(self, "table_ref", None):
-            return self.table_ref.replace(".", "__")
 
 
 def table_meta(
@@ -51,13 +30,13 @@ def table_meta(
     """
 
     def decorator(cls):
-        mock_meta_kwargs = {"table_ref": table_ref}
+        mock_meta_kwargs = {"table_ref": parse_table_refs(table_ref, dialect=cls._sql_dialect)}
 
         if query_path:
             with open(query_path) as f:
-                mock_meta_kwargs['query'] = f.read()
+                mock_meta_kwargs["query"] = f.read()
         elif query:
-            mock_meta_kwargs['query'] = query
+            mock_meta_kwargs["query"] = query
 
         if default_inputs:
             validate_input_mocks(default_inputs)
@@ -84,7 +63,6 @@ class SQLMockData(BaseModel):
     last_query: str = None
 
 
-
 class BaseMockTable:
     """
     Represents a base class for creating mock database tables for testing.
@@ -98,7 +76,7 @@ class BaseMockTable:
     """
 
     _sql_mock_data: SQLMockData = None
-    _sql_mock_meta: MockTableMeta = None
+    _sql_mock_meta: "MockTableMeta" = None
     _sql_dialect: str = None
 
     def __init__(self, data: list[dict] = None, sql_mock_data: SQLMockData = None) -> None:
@@ -341,3 +319,25 @@ class BaseMockTable:
             ignore_order=ignore_order,
             print_query_on_fail=print_query_on_fail,
         )
+
+
+class MockTableMeta(BaseModel):
+    """
+    Class to store static metadata of BaseMockTable instances which is used during processing.
+    We use this class to avoid collision with field names of the table we want to mock.
+
+    Attributes:
+        table_ref (string) : String that represents the table reference to the original table.
+        query (string): Srting of the SQL query (can be in Jinja format).
+    """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    default_inputs: List[SkipValidation["BaseMockTable"]] = None
+    table_ref: str = None
+    query: str = None
+
+    @property
+    def cte_name(self):
+        if getattr(self, "table_ref", None):
+            return self.table_ref.replace('"', "").replace(".", "__")

@@ -42,7 +42,7 @@ def select_from_cte(query: str, cte_name: str, sql_dialect: str):
         cte_name (str): Name of the CTE to select from
         sql_dialect (str): The sql dialect to use for generating the query
     """
-    ast = sqlglot.parse_one(query)
+    ast = sqlglot.parse_one(query, dialect=sql_dialect)
 
     # Check whether the cte exists, if not raise an error
     cte_exists = any(cte.alias == cte_name for cte in ast.find_all(sqlglot.exp.CTE))
@@ -59,6 +59,11 @@ def select_from_cte(query: str, cte_name: str, sql_dialect: str):
     # Change the final select statement to SELECT * FROM <cte_name>
     adjusted_query = ast.select("*").from_(cte_name).sql(pretty=True, dialect=sql_dialect)
     return adjusted_query
+
+
+def parse_table_refs(table_ref, dialect):
+    """Method to standardize how we parse table refs to avoid differences"""
+    return str(sqlglot.parse_one(table_ref, dialect=dialect))
 
 
 def _strip_alias_transformer(node):
