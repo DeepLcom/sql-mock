@@ -1606,13 +1606,13 @@ test = ["pytest"]
 
 [[package]]
 name = "sqlglot"
-version = "20.4.0"
+version = "20.5.0"
 description = "An easily customizable SQL parser and transpiler"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "sqlglot-20.4.0-py3-none-any.whl", hash = "sha256:9a42135d0530de8150a2c5106e0c52abd3396d92501ebe97df7b371d20de5dc9"},
-    {file = "sqlglot-20.4.0.tar.gz", hash = "sha256:401a2933298cf66901704cf2029272d8243ee72ac47b9fd8784254401b43ee43"},
+    {file = "sqlglot-20.5.0-py3-none-any.whl", hash = "sha256:df005f28ceead75b21721a32f56ec64ada24b37b9688a477c6176b68b43e3275"},
+    {file = "sqlglot-20.5.0.tar.gz", hash = "sha256:a623b4f2fd6c0e123421578fa8466f008aaa4a2a0de73c3cc59e9fb23e51c800"},
 ]
 
 [package.extras]
@@ -1643,13 +1643,13 @@ files = [
 
 [[package]]
 name = "tzdata"
-version = "2023.3"
+version = "2023.4"
 description = "Provider of IANA time zone data"
 optional = true
 python-versions = ">=2"
 files = [
-    {file = "tzdata-2023.3-py2.py3-none-any.whl", hash = "sha256:7e65763eef3120314099b6939b5546db7adce1e7d6f2e179e3df563c70511eda"},
-    {file = "tzdata-2023.3.tar.gz", hash = "sha256:11ef1e08e54acb0d4f95bdb1be05da659673de4acbd21bf9c69e94cc5e907a3a"},
+    {file = "tzdata-2023.4-py2.py3-none-any.whl", hash = "sha256:aa3ace4329eeacda5b7beb7ea08ece826c28d761cda36e747cfbf97996d39bf3"},
+    {file = "tzdata-2023.4.tar.gz", hash = "sha256:dd54c94f294765522c77399649b4fefd95522479a664a0cec87f41bebc6148c9"},
 ]
 
 [[package]]
@@ -1727,4 +1727,4 @@ clickhouse = ["clickhouse-driver"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "7c2e702501a3e9de99730f19218037a55bae17031788bdf700ee1da135d7ea96"
+content-hash = "4e9cb358ede68e9dee95f90d328a40cc440adfff6056adb61f35f6df4754db7c"

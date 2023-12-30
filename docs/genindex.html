@@ -49,6 +49,7 @@
 <p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/defining_table_mocks.html">Defining table mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/dbt.html">Use with dbt</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/your_sql_query_to_test.html">Your SQL query to test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/result_assertion.html">Result assertion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/default_values.html">Default values</a></li>
@@ -122,8 +123,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable._sql_mock_data">_sql_mock_data (sql_mock.table_mocks.BaseMockTable attribute)</a>
 </li>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable._sql_mock_meta">_sql_mock_meta (sql_mock.table_mocks.BaseMockTable attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -182,7 +181,7 @@
 </li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.columns">columns (sql_mock.table_mocks.SQLMockData attribute)</a>
 </li>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable.cte_name">cte_name (sql_mock.table_mocks.BaseMockTable property)</a>
+      <li><a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.cte_name">cte_name (sql_mock.table_mocks.MockTableMeta property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -210,7 +209,7 @@
       </ul></li>
       <li><a href="sql_mock.html#id0">default (sql_mock.column_mocks.ColumnMock attribute)</a>, <a href="sql_mock.html#sql_mock.column_mocks.ColumnMock.default">[1]</a>
 </li>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.default_inputs">default_inputs (sql_mock.table_mocks.SQLMockData attribute)</a>
+      <li><a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.default_inputs">default_inputs (sql_mock.table_mocks.MockTableMeta attribute)</a>
 </li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date.dtype">dtype (sql_mock.bigquery.column_mocks.Date attribute)</a>
 
@@ -261,10 +260,6 @@
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.get_keys_from_list_of_dicts">get_keys_from_list_of_dicts() (in module sql_mock.table_mocks)</a>
-</li>
-  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings.google_application_credentials">google_application_credentials (sql_mock.bigquery.settings.BigQuerySettings attribute)</a>
 </li>
@@ -400,17 +395,11 @@
       <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.rendered_query">rendered_query (sql_mock.table_mocks.SQLMockData attribute)</a>
 </li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.replace_original_table_references">replace_original_table_references() (in module sql_mock.table_mocks)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.select_from_cte">select_from_cte() (in module sql_mock.table_mocks)</a>
-</li>
       <li>
     sql_mock
 
@@ -549,10 +538,6 @@
 
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.html#sql_mock.table_mocks.validate_input_mocks">validate_input_mocks() (in module sql_mock.table_mocks)</a>
-</li>
-  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.exceptions.ValidationError">ValidationError</a>
 </li>

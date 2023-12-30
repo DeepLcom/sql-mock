@@ -30,6 +30,7 @@ It provides a consistent and convenient way to test the execution of your query 
    :caption: Basic Usage   
 
    usage/defining_table_mocks
+   usage/dbt
    usage/your_sql_query_to_test
    usage/result_assertion
    usage/default_values
