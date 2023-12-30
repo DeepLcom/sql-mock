@@ -52,6 +52,7 @@
 <p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/defining_table_mocks.html">Defining table mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/dbt.html">Use with dbt</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/your_sql_query_to_test.html">Your SQL query to test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/result_assertion.html">Result assertion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/default_values.html">Default values</a></li>
@@ -119,6 +120,27 @@ It provides a consistent and convenient way to test the execution of your query 
 <p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/defining_table_mocks.html">Defining table mocks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/dbt.html">Use with dbt</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage/dbt.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage/dbt.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage/dbt.html#configuration">Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#setting-the-dbt-manifest-path">Setting the dbt Manifest Path</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage/dbt.html#creating-mock-tables">Creating Mock Tables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#dbt-model-mock-table">dbt Model Mock Table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#dbt-source-mock-table">dbt Source Mock Table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#dbt-seed-mock-table">dbt Seed Mock Table</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage/dbt.html#example-testing-a-dbt-model-with-upstream-source-and-seed-data">Example: Testing a dbt Model with Upstream Source and Seed Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#step-1-define-your-source-and-seed-mock-tables">Step 1: Define Your Source and Seed Mock Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#step-2-define-your-model-mock-table">Step 2: Define Your Model Mock Table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage/dbt.html#step-3-write-your-test-case">Step 3: Write Your Test Case</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage/your_sql_query_to_test.html">Your SQL query to test</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="usage/your_sql_query_to_test.html#ways-to-provide-your-sql-query-to-be-tested">Ways to provide your SQL query to be tested</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="usage/your_sql_query_to_test.html#option-1-recommended-use-the-table-meta-decorator">Option 1 (recommended): Use the <code class="docutils literal notranslate"><span class="pre">table_meta</span></code> decorator</a></li>
