@@ -63,7 +63,7 @@ def select_from_cte(query: str, cte_name: str, sql_dialect: str):
 
 def parse_table_refs(table_ref, dialect):
     """Method to standardize how we parse table refs to avoid differences"""
-    return str(sqlglot.parse_one(table_ref, dialect=dialect))
+    return table_ref if not table_ref else str(sqlglot.parse_one(table_ref, dialect=dialect))
 
 
 def _strip_alias_transformer(node):
