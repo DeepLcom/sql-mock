@@ -15,6 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [0.4.0] 
+
+### Added 
+* You can now provide default mocks in table_meta by @Somtom in https://github.com/DeepLcom/sql-mock/pull/19
+* Add array column types by @Somtom in https://github.com/DeepLcom/sql-mock/pull/22
+* Use sqlglot for table ref replace by @Somtom in https://github.com/DeepLcom/sql-mock/pull/24
+* Error handling improvements by @Somtom in https://github.com/DeepLcom/sql-mock/pull/25
+* Add dbt support by @Somtom in https://github.com/DeepLcom/sql-mock/pull/26
+
+### Changed
+* Update SQL glot to 20.5.0 by @Somtom in https://github.com/DeepLcom/sql-mock/pull/27
+
+### Fixed
+* Fixed quickstart docs by @Somtom in https://github.com/DeepLcom/sql-mock/pull/20
+
 
 ## [0.3.1] 
 
@@ -53,7 +68,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2023-10-26
 Initial version.
 
-[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.4.0
 [0.3.1]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.3.1
 [0.3.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.3.0
 [0.2.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.2.0
