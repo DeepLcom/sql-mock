@@ -1,3 +1,5 @@
+<img src="./SQLMock_logo.png" alt="SQLMock Logo" width="250"/>
+
 # SQL Mock: Python Library for Mocking SQL Queries with Dictionary Inputs
 
 [![PyPI version](https://img.shields.io/pypi/v/sql-mock.svg)](https://pypi.org/project/sql-mock/)
