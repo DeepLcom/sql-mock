@@ -12,9 +12,11 @@ The primary purpose of this library is to simplify the testing of SQL data model
 
 A full documentation can be found [on the documentation page](https://deeplcom.github.io/sql-mock/)
 
-The library currently supports the following databases. 
+The library currently supports the following databases.
 * BigQuery
 * Clickhouse
+* Redshift
+* Snowflake
 
 ## Installation
 
@@ -26,6 +28,12 @@ pip install --upgrade "sql-mock[bigquery]"
 
 # Clickhouse
 pip install --upgrade "sql-mock[clickhouse]"
+
+# Redshift
+pip install --upgrade "sql-mock[redshift]"
+
+# Snowflake
+pip install --upgrade "sql-mock[snowflake]"
 ```
 
 If you need to modify this source code, install the dependencies using poetry:
@@ -66,7 +74,7 @@ Find more about contributing code in the [Contribution Guidelines](./CONTRIBUTIO
 ### SQL Mock Buddy - A custom (Chat) GPT to support you
 
 We ran a small experiment to create a custom GPT for SQL Mock.
-The SQL Mock Buddy can be accessed here: [https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy](https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy) 
+The SQL Mock Buddy can be accessed here: [https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy](https://chat.openai.com/g/g-FIXNcqu1l-sql-mock-buddy)
 
 SQL Mock Buddy should help you to get started quickly with SQL Mock.
 

@@ -1,3 +1,4 @@
+import json
 from sql_mock.constants import NO_INPUT, NoInput
 
 
@@ -36,6 +37,11 @@ class ColumnMock:
         # In case the val is None, we convert it to NULL
         if val is None:
             return f"cast(NULL AS {self.dtype}) AS {column_name}"
+
+        # Check if the value is a list
+        if isinstance(val, list):
+            # Convert the list to a JSON string
+            val = json.dumps(val)
 
         val = f"'{val}'" if self.use_quotes_for_casting else val
         return f"cast({val} AS {self.dtype}) AS {column_name}"
