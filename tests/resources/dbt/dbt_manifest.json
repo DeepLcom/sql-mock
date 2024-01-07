@@ -1,0 +1,536 @@
+{
+    "metadata":{
+       "dbt_schema_version":"https://schemas.getdbt.com/dbt/manifest/v11.json",
+       "dbt_version":"1.7.4",
+       "generated_at":"2023-12-28T12:23:14.131356Z",
+       "invocation_id":"33a2953c-7739-4451-b106-5005b3fbb7d4",
+       "env":{
+          
+       },
+       "project_name":"sql_mock",
+       "project_id":"7bdc11bc0f5dd7bc0117761f9502d6b0",
+       "user_id":"74953650-5c59-4b93-b2b3-a5e358c374c0",
+       "send_anonymous_usage_stats":true,
+       "adapter_type":"clickhouse"
+    },
+    "nodes":{
+       "model.sql_mock.my_first_dbt_model":{
+          "database":"",
+          "schema":"sql_mock_db",
+          "name":"my_first_dbt_model",
+          "resource_type":"model",
+          "package_name":"sql_mock",
+          "path":"example/my_first_dbt_model.sql",
+          "original_file_path":"models/example/my_first_dbt_model.sql",
+          "unique_id":"model.sql_mock.my_first_dbt_model",
+          "fqn":[
+             "sql_mock",
+             "example",
+             "my_first_dbt_model"
+          ],
+          "alias":"my_first_dbt_model",
+          "checksum":{
+             "name":"sha256",
+             "checksum":"8f5a6188069c550051ab3d45e044450f86a9ca6e1bcfd334cce9c8ef79740d48"
+          },
+          "config":{
+             "enabled":true,
+             "alias":null,
+             "schema":"example_schema",
+             "database":null,
+             "tags":[
+                
+             ],
+             "meta":{
+                
+             },
+             "group":null,
+             "materialized":"distributed_table",
+             "incremental_strategy":null,
+             "persist_docs":{
+                
+             },
+             "post-hook":[
+                
+             ],
+             "pre-hook":[
+                
+             ],
+             "quoting":{
+                
+             },
+             "column_types":{
+                
+             },
+             "full_refresh":null,
+             "unique_key":null,
+             "on_schema_change":"ignore",
+             "on_configuration_change":"apply",
+             "grants":{
+                
+             },
+             "packages":[
+                
+             ],
+             "docs":{
+                "show":true,
+                "node_color":null
+             },
+             "contract":{
+                "enforced":false,
+                "alias_types":true
+             },
+             "access":"protected",
+             "engine":"ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/{table}/{uuid}','{replica}')",
+             "sharding_key":"rand()"
+          },
+          "tags":[
+             
+          ],
+          "description":"A starter dbt model",
+          "columns":{
+             "id":{
+                "name":"id",
+                "description":"The primary key for this table",
+                "meta":{
+                   
+                },
+                "data_type":null,
+                "constraints":[
+                   
+                ],
+                "quote":null,
+                "tags":[
+                   
+                ]
+             }
+          },
+          "meta":{
+             
+          },
+          "group":null,
+          "docs":{
+             "show":true,
+             "node_color":null
+          },
+          "patch_path":"sql_mock://models/example/schema.yml",
+          "build_path":null,
+          "deferred":false,
+          "unrendered_config":{
+             "schema":"example_schema",
+             "materialized":"distributed_table",
+             "engine":"ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/{table}/{uuid}','{replica}')",
+             "sharding_key":"rand()"
+          },
+          "created_at":1703751270.463069,
+          "relation_name":"`sql_mock_db`.`my_first_dbt_model`",
+          "raw_code":"/*\n    Welcome to your first dbt model!\n    Did you know that you can also configure models directly within SQL files?\n    This will override configurations stated in dbt_project.yml\n\n    Try changing \"table\" to \"view\" below\n*/\n\nwith source_data as (\n\n    select 1 as id\n    union all\n    select null as id\n\n)\n\nselect *\nfrom source_data\n\n/*\n    Uncomment the line below to remove records with null `id` values\n*/\n\n-- where id is not null",
+          "language":"sql",
+          "refs":[
+             
+          ],
+          "sources":[
+             
+          ],
+          "metrics":[
+             
+          ],
+          "depends_on":{
+             "macros":[
+                
+             ],
+             "nodes":[
+                
+             ]
+          },
+          "compiled_path":"tests/resources/dbt/compiled_example_models/my_first_dbt_model.sql",
+          "compiled":true,
+          "compiled_code":"\n\n/*\n    Welcome to your first dbt model!\n    Did you know that you can also configure models directly within SQL files?\n    This will override configurations stated in dbt_project.yml\n\n    Try changing \"table\" to \"view\" below\n*/\n\nwith source_data as (\n\n    select 1 as id\n    union all\n    select null as id\n\n)\n\nselect *\nfrom source_data\n\n/*\n    Uncomment the line below to remove records with null `id` values\n*/\n\n-- where id is not null",
+          "extra_ctes_injected":true,
+          "extra_ctes":[
+             
+          ],
+          "contract":{
+             "enforced":false,
+             "alias_types":true,
+             "checksum":null
+          },
+          "access":"protected",
+          "constraints":[
+             
+          ],
+          "version":null,
+          "latest_version":null,
+          "deprecation_date":null
+       },
+       "model.sql_mock.my_second_dbt_model":{
+          "database":"",
+          "schema":"sql_mock_db",
+          "name":"my_second_dbt_model",
+          "resource_type":"model",
+          "package_name":"sql_mock",
+          "path":"example/my_second_dbt_model.sql",
+          "original_file_path":"models/example/my_second_dbt_model.sql",
+          "unique_id":"model.sql_mock.my_second_dbt_model",
+          "fqn":[
+             "sql_mock",
+             "example",
+             "my_second_dbt_model"
+          ],
+          "alias":"my_second_dbt_model",
+          "checksum":{
+             "name":"sha256",
+             "checksum":"4bb5c04f6ea2e92b0939316ebf7f4ad7ad142a45cc9348e74c0f56e5261f3bbc"
+          },
+          "config":{
+             "enabled":true,
+             "alias":null,
+             "schema":"example_schema",
+             "database":null,
+             "tags":[
+                
+             ],
+             "meta":{
+                
+             },
+             "group":null,
+             "materialized":"distributed_table",
+             "incremental_strategy":null,
+             "persist_docs":{
+                
+             },
+             "post-hook":[
+                
+             ],
+             "pre-hook":[
+                
+             ],
+             "quoting":{
+                
+             },
+             "column_types":{
+                
+             },
+             "full_refresh":null,
+             "unique_key":null,
+             "on_schema_change":"ignore",
+             "on_configuration_change":"apply",
+             "grants":{
+                
+             },
+             "packages":[
+                
+             ],
+             "docs":{
+                "show":true,
+                "node_color":null
+             },
+             "contract":{
+                "enforced":false,
+                "alias_types":true
+             },
+             "access":"protected",
+             "engine":"ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/{table}/{uuid}','{replica}')",
+             "sharding_key":"rand()"
+          },
+          "tags":[
+             
+          ],
+          "description":"A starter dbt model",
+          "columns":{
+             "id":{
+                "name":"id",
+                "description":"The primary key for this table",
+                "meta":{
+                   
+                },
+                "data_type":null,
+                "constraints":[
+                   
+                ],
+                "quote":null,
+                "tags":[
+                   
+                ]
+             }
+          },
+          "meta":{
+             
+          },
+          "group":null,
+          "docs":{
+             "show":true,
+             "node_color":null
+          },
+          "patch_path":"sql_mock://models/example/schema.yml",
+          "build_path":null,
+          "deferred":false,
+          "unrendered_config":{
+             "schema":"example_schema",
+             "materialized":"distributed_table",
+             "engine":"ReplicatedMergeTree('/clickhouse/tables/{shard}/{database}/{table}/{uuid}','{replica}')",
+             "sharding_key":"rand()"
+          },
+          "created_at":1703751270.46336,
+          "relation_name":"`sql_mock_db`.`my_second_dbt_model`",
+          "raw_code":"\n\n-- Use the `ref` function to select from other models\n\nselect *\nfrom {{ ref('my_first_dbt_model') }}\nwhere id = 1",
+          "language":"sql",
+          "refs":[
+             {
+                "name":"my_first_dbt_model",
+                "package":null,
+                "version":null
+             }
+          ],
+          "sources":[
+             
+          ],
+          "metrics":[
+             
+          ],
+          "depends_on":{
+             "macros":[
+                
+             ],
+             "nodes":[
+                "model.sql_mock.my_first_dbt_model"
+             ]
+          },
+          "compiled_path":"tests/resources/dbt/compiled_example_models/my_second_dbt_model.sql",
+          "compiled":true,
+          "compiled_code":"\n\n-- Use the `ref` function to select from other models\n\nselect *\nfrom `sql_mock_db`.`my_first_dbt_model`\nwhere id = 1",
+          "extra_ctes_injected":true,
+          "extra_ctes":[
+             
+          ],
+          "contract":{
+             "enforced":false,
+             "alias_types":true,
+             "checksum":null
+          },
+          "access":"protected",
+          "constraints":[
+             
+          ],
+          "version":null,
+          "latest_version":null,
+          "deprecation_date":null
+       },
+       "seed.sql_mock.country_codes":{
+          "database":"",
+          "schema":"sql_mock_db",
+          "name":"country_codes",
+          "resource_type":"seed",
+          "package_name":"sql_mock",
+          "path":"country_codes.csv",
+          "original_file_path":"seeds/country_codes.csv",
+          "unique_id":"seed.sql_mock.country_codes",
+          "fqn":[
+             "sql_mock",
+             "country_codes"
+          ],
+          "alias":"country_codes",
+          "checksum":{
+             "name":"sha256",
+             "checksum":"b54c38e4337b053b07cdc37fa5364e8f159b4e37b77d36281a8d2d11a2c09b8c"
+          },
+          "config":{
+             "enabled":true,
+             "alias":null,
+             "schema":null,
+             "database":null,
+             "tags":[
+                
+             ],
+             "meta":{
+                
+             },
+             "group":null,
+             "materialized":"seed",
+             "incremental_strategy":null,
+             "persist_docs":{
+                
+             },
+             "post-hook":[
+                
+             ],
+             "pre-hook":[
+                
+             ],
+             "quoting":{
+                
+             },
+             "column_types":{
+                
+             },
+             "full_refresh":null,
+             "unique_key":null,
+             "on_schema_change":"ignore",
+             "on_configuration_change":"apply",
+             "grants":{
+                
+             },
+             "packages":[
+                
+             ],
+             "docs":{
+                "show":true,
+                "node_color":null
+             },
+             "contract":{
+                "enforced":false,
+                "alias_types":true
+             },
+             "delimiter":",",
+             "quote_columns":null
+          },
+          "tags":[
+             
+          ],
+          "description":"",
+          "columns":{
+             
+          },
+          "meta":{
+             
+          },
+          "group":null,
+          "docs":{
+             "show":true,
+             "node_color":null
+          },
+          "patch_path":null,
+          "build_path":null,
+          "deferred":false,
+          "unrendered_config":{
+             
+          },
+          "created_at":1703766194.209625,
+          "relation_name":"`sql_mock_db`.`country_codes`",
+          "raw_code":"",
+          "root_path":"/Users/foo/dbt",
+          "depends_on":{
+             "macros":[
+                
+             ]
+          }
+       }
+    },
+    "sources":{
+       "source.sql_mock.salesforce.opportunity_events":{
+          "database":"",
+          "schema":"source_data",
+          "name":"opportunity_events",
+          "resource_type":"source",
+          "package_name":"sql_mock",
+          "path":"models/sources/source_data.yml",
+          "original_file_path":"models/sources/source_data.yml",
+          "unique_id":"source.sql_mock.source_data.opportunity_events",
+          "fqn":[
+             "sql_mock",
+             "sources",
+             "source_data",
+             "opportunity_events"
+          ],
+          "source_name":"source_data",
+          "source_description":"",
+          "loader":"",
+          "identifier":"opportunity_events",
+          "quoting":{
+             "database":null,
+             "schema":null,
+             "identifier":null,
+             "column":null
+          },
+          "loaded_at_field":"datetime",
+          "freshness":{},
+          "external":null,
+          "description":"Opportunity change events",
+          "columns":{
+             
+          },
+          "meta":{
+             
+          },
+          "source_meta":{
+             
+          },
+          "tags":[
+             
+          ],
+          "config":{
+             "enabled":true
+          },
+          "patch_path":null,
+          "unrendered_config":{
+             
+          },
+          "relation_name":"`source_data`.`opportunity_events`",
+          "created_at":1703751270.504808
+       }
+    },
+    "macros":{},
+    "docs":{
+       "doc.dbt.__overview__":{
+          "name":"__overview__",
+          "resource_type":"doc",
+          "package_name":"dbt",
+          "path":"overview.md",
+          "original_file_path":"docs/overview.md",
+          "unique_id":"doc.dbt.__overview__",
+          "block_contents":"### Welcome!\n\nWelcome to the auto-generated documentation for your dbt project!\n\n### Navigation\n\nYou can use the `Project` and `Database` navigation tabs on the left side of the window to explore the models\nin your project.\n\n#### Project Tab\nThe `Project` tab mirrors the directory structure of your dbt project. In this tab, you can see all of the\nmodels defined in your dbt project, as well as models imported from dbt packages.\n\n#### Database Tab\nThe `Database` tab also exposes your models, but in a format that looks more like a database explorer. This view\nshows relations (tables and views) grouped into database schemas. Note that ephemeral models are _not_ shown\nin this interface, as they do not exist in the database.\n\n### Graph Exploration\nYou can click the blue icon on the bottom-right corner of the page to view the lineage graph of your models.\n\nOn model pages, you'll see the immediate parents and children of the model you're exploring. By clicking the `Expand`\nbutton at the top-right of this lineage pane, you'll be able to see all of the models that are used to build,\nor are built from, the model you're exploring.\n\nOnce expanded, you'll be able to use the `--select` and `--exclude` model selection syntax to filter the\nmodels in the graph. For more information on model selection, check out the [dbt docs](https://docs.getdbt.com/docs/model-selection-syntax).\n\nNote that you can also right-click on models to interactively filter and explore the graph.\n\n---\n\n### More information\n\n- [What is dbt](https://docs.getdbt.com/docs/introduction)?\n- Read the [dbt viewpoint](https://docs.getdbt.com/docs/viewpoint)\n- [Installation](https://docs.getdbt.com/docs/installation)\n- Join the [dbt Community](https://www.getdbt.com/community/) for questions and discussion"
+       }
+    },
+    "exposures":{
+       
+    },
+    "metrics":{
+       
+    },
+    "groups":{
+       
+    },
+    "selectors":{
+       
+    },
+    "disabled":{
+       
+    },
+    "parent_map":{
+       "model.sql_mock.my_first_dbt_model":[
+          
+       ],
+       "model.sql_mock.my_second_dbt_model":[
+          "model.sql_mock.my_first_dbt_model"
+       ],
+       "seed.sql_mock.country_codes":[
+          
+       ],
+       "source.sql_mock.source_data.opportunity_events":[
+          
+       ]
+    },
+    "child_map":{
+       "model.sql_mock.my_first_dbt_model":[
+          "model.sql_mock.my_second_dbt_model"
+       ],
+       "model.sql_mock.my_second_dbt_model":[
+          
+       ],
+       "seed.sql_mock.country_codes":[
+          
+       ],
+       "source.sql_mock.source_data.opportunity_events":[
+          
+       ]
+    },
+    "group_map":{
+       
+    },
+    "saved_queries":{
+       
+    },
+    "semantic_models":{
+       
+    }
+ }

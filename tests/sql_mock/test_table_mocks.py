@@ -74,7 +74,7 @@ class TestFromMocks:
 
     def test_from_mocks_with_defaults(self, base_mock_table_instance, mocker):
         query = "SELECT * FROM some_table"
-        input_data = [*MockTestTableWithDefaults._sql_mock_data.default_inputs, base_mock_table_instance]
+        input_data = [*MockTestTableWithDefaults._sql_mock_meta.default_inputs, base_mock_table_instance]
         query_template_kwargs = {}
         mocked_validate_input_mocks_for_query = mocker.patch(
             "sql_mock.table_mocks.validate_all_input_mocks_for_query_provided"
