@@ -4,10 +4,10 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Example: Testing Subscription Counts in BigQuery &mdash; SQL Mock 0.3.0 documentation</title>
+  <title>Example: Testing Subscription Counts in ClickHouse &mdash; SQL Mock 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://deeplcom.github.io/sql-mock/usage/bigquery/examples.html" />
+    <link rel="canonical" href="https://deeplcom.github.io/sql-mock/usage/redshift/examples.html" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -20,7 +20,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Clickhouse" href="../clickhouse/index.html" />
+    <link rel="next" title="Snowflake" href="../snowflake/index.html" />
     <link rel="prev" title="Settings" href="settings.html" /> 
 </head>
 
@@ -60,13 +60,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Database Specifics</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">BigQuery</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../bigquery/index.html">BigQuery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clickhouse/index.html">Clickhouse</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Redshift</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Example: Testing Subscription Counts in BigQuery</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Example: Testing Subscription Counts in ClickHouse</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../clickhouse/index.html">Clickhouse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../redshift/index.html">Redshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../snowflake/index.html">Snowflake</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -87,10 +88,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">BigQuery</a></li>
-      <li class="breadcrumb-item active">Example: Testing Subscription Counts in BigQuery</li>
+          <li class="breadcrumb-item"><a href="index.html">Redshift</a></li>
+      <li class="breadcrumb-item active">Example: Testing Subscription Counts in ClickHouse</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/DeepLcom/sql-mock/blob/master/docsource/usage/bigquery/examples.md" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/DeepLcom/sql-mock/blob/master/docsource/usage/redshift/examples.md" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -100,32 +101,31 @@
              
   <div class="toctree-wrapper compound">
 </div>
-<section id="example-testing-subscription-counts-in-bigquery">
-<h1>Example: Testing Subscription Counts in BigQuery<a class="headerlink" href="#example-testing-subscription-counts-in-bigquery" title="Link to this heading"></a></h1>
+<section id="example-testing-subscription-counts-in-clickhouse">
+<h1>Example: Testing Subscription Counts in ClickHouse<a class="headerlink" href="#example-testing-subscription-counts-in-clickhouse" title="Link to this heading"></a></h1>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">from</span> <span class="nn">sql_mock.bigquery</span> <span class="kn">import</span> <span class="n">column_mocks</span> <span class="k">as</span> <span class="n">col</span>
-<span class="kn">from</span> <span class="nn">sql_mock.bigquery.table_mocks</span> <span class="kn">import</span> <span class="n">BigQueryMockTable</span>
+<span class="kn">from</span> <span class="nn">sql_mock.redshift</span> <span class="kn">import</span> <span class="n">column_mocks</span> <span class="k">as</span> <span class="n">col</span>
+<span class="kn">from</span> <span class="nn">sql_mock.redshift.table_mocks</span> <span class="kn">import</span> <span class="n">RedshiftMockTable</span>
 <span class="kn">from</span> <span class="nn">sql_mock.table_mocks</span> <span class="kn">import</span> <span class="n">table_meta</span>
 
-<span class="c1"># Define mock tables for your data model that inherit from BigQueryMockTable</span>
-<span class="nd">@table_meta</span><span class="p">(</span><span class="n">table_ref</span><span class="o">=</span><span class="s1">&#39;data.users&#39;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">BigQueryMockTable</span><span class="p">):</span>
-    <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">user_name</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;Mr. T&#39;</span><span class="p">)</span>
+<span class="c1"># Define mock tables for your data model that inherit from RedshiftMockTable</span>
+<span class="nd">@table_meta</span><span class="p">(</span><span class="n">table_ref</span><span class="o">=</span><span class="s2">&quot;data.users&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">UserTable</span><span class="p">(</span><span class="n">RedshiftMockTable</span><span class="p">):</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">INTEGER</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">user_name</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">VARCHAR</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;Mr. T&quot;</span><span class="p">)</span>
 
 
-<span class="nd">@table_meta</span><span class="p">(</span><span class="n">table_ref</span><span class="o">=</span><span class="s1">&#39;data.subscriptions&#39;</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">SubscriptionTable</span><span class="p">(</span><span class="n">BigQueryMockTable</span><span class="p">):</span>
-    <span class="n">subscription_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">period_start_date</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Date</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-    <span class="n">period_end_date</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Date</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-    <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
+<span class="nd">@table_meta</span><span class="p">(</span><span class="n">table_ref</span><span class="o">=</span><span class="s2">&quot;data.subscriptions&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SubscriptionTable</span><span class="p">(</span><span class="n">RedshiftMockTable</span><span class="p">):</span>
+    <span class="n">subscription_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">INTEGER</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">period_start_date</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">DATE</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">period_end_date</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">DATE</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">INTEGER</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Define a mock table for your expected results</span>
-<span class="k">class</span> <span class="nc">SubscriptionCountTable</span><span class="p">(</span><span class="n">BigQueryMockTable</span><span class="p">):</span>
-    <span class="n">subscription_count</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SubscriptionCountTable</span><span class="p">(</span><span class="n">RedshiftMockTable</span><span class="p">):</span>
+    <span class="n">subscription_count</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">INTEGER</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">user_id</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">INTEGER</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Your original SQL query</span>
 <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -147,15 +147,12 @@
 
 <span class="c1"># Define your expected results</span>
 <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subscription_count&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> 
+    <span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;subscription_count&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
     <span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;subscription_count&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 <span class="p">]</span>
 
 <span class="c1"># Simulate the SQL query using SQL Mock</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">SubscriptionCountTable</span><span class="o">.</span><span class="n">from_mocks</span><span class="p">(</span>
-    <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> 
-    <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">users</span><span class="p">,</span> <span class="n">subscriptions</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">SubscriptionCountTable</span><span class="o">.</span><span class="n">from_mocks</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">input_data</span><span class="o">=</span><span class="p">[</span><span class="n">users</span><span class="p">,</span> <span class="n">subscriptions</span><span class="p">])</span>
 
 <span class="c1"># Assert the results</span>
 <span class="n">res</span><span class="o">.</span><span class="n">assert_equal</span><span class="p">(</span><span class="n">expected</span><span class="p">)</span>
@@ -168,7 +165,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="settings.html" class="btn btn-neutral float-left" title="Settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../clickhouse/index.html" class="btn btn-neutral float-right" title="Clickhouse" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../snowflake/index.html" class="btn btn-neutral float-right" title="Snowflake" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

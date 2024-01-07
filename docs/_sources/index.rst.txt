@@ -6,7 +6,7 @@
 Welcome to SQL Mock's documentation!
 ====================================
 
-The primary purpose of this library is to simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios. 
+The primary purpose of this library is to simplify the testing of SQL data models and queries by allowing users to mock input data and create tests for various scenarios.
 It provides a consistent and convenient way to test the execution of your query without the need to process a massive amount of data.
 
 .. meta::
@@ -27,7 +27,7 @@ It provides a consistent and convenient way to test the execution of your query 
 
 .. toctree::
    :maxdepth: 3
-   :caption: Basic Usage   
+   :caption: Basic Usage
 
    usage/defining_table_mocks
    usage/dbt
@@ -38,10 +38,12 @@ It provides a consistent and convenient way to test the execution of your query 
 
 .. toctree::
    :maxdepth: 3
-   :caption: Database Specifics   
+   :caption: Database Specifics
 
    usage/bigquery/index
    usage/clickhouse/index
+   usage/redshift/index
+   usage/snowflake/index
 
 .. toctree::
    :maxdepth: 3

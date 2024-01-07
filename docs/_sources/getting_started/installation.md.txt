@@ -12,6 +12,12 @@ pip install --upgrade "sql-mock[bigquery]"
 
 # Clickhouse
 pip install --upgrade "sql-mock[clickhouse]"
+
+# Redshift
+pip install --upgrade "sql-mock[redshift]"
+
+# Snowflake
+pip install --upgrade "sql-mock[snowflake]"
 ```
 
 If you need to modify this source code, install the dependencies using poetry:
