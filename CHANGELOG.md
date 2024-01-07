@@ -13,10 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.5.0]
+
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.4.0...v0.5.0
+
+### Added
+
 * Support for Redshift
 * Support for Snowflake
-
-### Changed
 
 ## [0.4.0]
 
@@ -71,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2023-10-26
 Initial version.
 
-[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.0
 [0.4.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.4.0
 [0.3.1]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.3.1
 [0.3.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.3.0
