@@ -17,7 +17,7 @@ repos:
     args: ["--line-length", "119"]
     stages: [commit]
 - repo: https://github.com/pycqa/flake8
-  rev: 3.9.2
+  rev: 7.0.0
   hooks:
   - id: flake8
     args: ["--ignore", "E203,E266,E501,W503", "--max-line-length", "119", "--max-complexity", "18", "--select", "B,C,E,F,W,T4,B9"]
