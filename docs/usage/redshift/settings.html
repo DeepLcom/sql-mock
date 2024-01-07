@@ -4,10 +4,10 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clickhouse &mdash; SQL Mock 0.3.0 documentation</title>
+  <title>Settings &mdash; SQL Mock 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-    <link rel="canonical" href="https://deeplcom.github.io/sql-mock/usage/clickhouse/index.html" />
+    <link rel="canonical" href="https://deeplcom.github.io/sql-mock/usage/redshift/settings.html" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -20,8 +20,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Settings" href="settings.html" />
-    <link rel="prev" title="Example: Testing Subscription Counts in BigQuery" href="../bigquery/examples.html" /> 
+    <link rel="next" title="Example: Testing Subscription Counts in ClickHouse" href="examples.html" />
+    <link rel="prev" title="Redshift" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -61,12 +61,13 @@
 <p class="caption" role="heading"><span class="caption-text">Database Specifics</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../bigquery/index.html">BigQuery</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Clickhouse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clickhouse/index.html">Clickhouse</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Redshift</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples.html">Example: Testing Subscription Counts in ClickHouse</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../redshift/index.html">Redshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../snowflake/index.html">Snowflake</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -87,9 +88,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Clickhouse</li>
+          <li class="breadcrumb-item"><a href="index.html">Redshift</a></li>
+      <li class="breadcrumb-item active">Settings</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com/DeepLcom/sql-mock/blob/master/docsource/usage/clickhouse/index.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/DeepLcom/sql-mock/blob/master/docsource/usage/redshift/settings.md" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -97,23 +99,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="clickhouse">
-<h1>Clickhouse<a class="headerlink" href="#clickhouse" title="Link to this heading"></a></h1>
-<p>This section documents the specifics on how to use SQL Mock with Clickhouse</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Example: Testing Subscription Counts in ClickHouse</a></li>
-</ul>
+  <div class="toctree-wrapper compound">
 </div>
+<section id="settings">
+<h1>Settings<a class="headerlink" href="#settings" title="Link to this heading"></a></h1>
+<p>In order to use SQL Mock with Redshift, you need to provide the following environment variables when you run tests:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SQL_MOCK_REDSHIFT_HOST</span></code>: The host of your Redshift instance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQL_MOCK_REDSHIFT_USER</span></code>: The user of your Redshift instance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQL_MOCK_REDSHIFT_PASSWORD</span></code>: The password of your Redshift instance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SQL_MOCK_REDSHIFT_PORT</span></code>: The port of your Redshift instance</p></li>
+</ul>
+<p>Having those environment variables enables SQL Mock to connect to your Redshift instance.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../bigquery/examples.html" class="btn btn-neutral float-left" title="Example: Testing Subscription Counts in BigQuery" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="settings.html" class="btn btn-neutral float-right" title="Settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Redshift" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Example: Testing Subscription Counts in ClickHouse" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

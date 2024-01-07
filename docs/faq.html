@@ -61,7 +61,7 @@
 <p class="caption" role="heading"><span class="caption-text">Basic Usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/defining_table_mocks.html">Defining table mocks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage/dbt.html">Enhanced SQLMock with dbt Integration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/dbt.html">Use with dbt</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/your_sql_query_to_test.html">Your SQL query to test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/result_assertion.html">Result assertion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/default_values.html">Default values</a></li>
@@ -71,6 +71,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/bigquery/index.html">BigQuery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/clickhouse/index.html">Clickhouse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/redshift/index.html">Redshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/snowflake/index.html">Snowflake</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -122,7 +124,7 @@ For most of your column mocks you might only need to specify the <code class="do
 
 <span class="k">class</span> <span class="nc">MyFanceDatabaseColumnMock</span><span class="p">(</span><span class="n">ColumnMock</span><span class="p">):</span>
     <span class="c1"># In case you need some specific logic that overwrites the default behavior, you can do so here</span>
-    <span class="k">pass</span> 
+    <span class="k">pass</span>
 
 <span class="k">class</span> <span class="nc">Int</span><span class="p">(</span><span class="n">MyFanceDatabaseColumnMock</span><span class="p">):</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;Integer&quot;</span>
@@ -140,11 +142,11 @@ Feel free to create a PR on this repository that we can start supporting your da
 </section>
 <section id="i-am-missing-a-specific-columnmock-type-for-my-model-fields">
 <h2>I am missing a specific ColumnMock type for my model fields<a class="headerlink" href="#i-am-missing-a-specific-columnmock-type-for-my-model-fields" title="Link to this heading"></a></h2>
-<p>We implementd some basic column types but it could happen that you don’t find the one you need.
+<p>We implemented some basic column types but it could happen that you don’t find the one you need.
 Luckily, you can easily create those with the tools provided.
 The only thing you need to do is to inherit from the <code class="docutils literal notranslate"><span class="pre">ColumnMock</span></code> that is specific to your database system (e.g. <code class="docutils literal notranslate"><span class="pre">BigQueryColumnMock</span></code>) and write classes for the column mocks you are missing. Usually you only need to set the correct <code class="docutils literal notranslate"><span class="pre">dtype</span></code>. This would later be used in the <code class="docutils literal notranslate"><span class="pre">cast(col</span> <span class="pre">to</span> <span class="pre">&lt;dtype&gt;)</span></code> expression.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace the import with the database system you are using</span>
-<span class="kn">from</span> <span class="nn">sql_mock.bigquery.column_mock</span> <span class="kn">import</span> <span class="n">BigQueryColumnMock</span> 
+<span class="kn">from</span> <span class="nn">sql_mock.bigquery.column_mock</span> <span class="kn">import</span> <span class="n">BigQueryColumnMock</span>
 
 <span class="k">class</span> <span class="nc">MyFancyMissingColType</span><span class="p">(</span><span class="n">BigQueryColumnMock</span><span class="p">):</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;FancyMissingColType&quot;</span>

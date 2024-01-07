@@ -59,6 +59,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/bigquery/index.html">BigQuery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/clickhouse/index.html">Clickhouse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/redshift/index.html">Redshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/snowflake/index.html">Snowflake</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
@@ -105,6 +107,7 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -129,6 +132,8 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.settings.SnowflakeSettings.account">account (sql_mock.snowflake.settings.SnowflakeSettings attribute)</a>
+</li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Array">Array (class in sql_mock.bigquery.column_mocks)</a>
 
       <ul>
@@ -137,6 +142,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.ARRAY">ARRAY (class in sql_mock.snowflake.column_mocks)</a>
+</li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable.as_sql_input">as_sql_input() (sql_mock.table_mocks.BaseMockTable method)</a>
 </li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable.assert_cte_equal">assert_cte_equal() (sql_mock.table_mocks.BaseMockTable method)</a>
@@ -151,16 +158,26 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable">BaseMockTable (class in sql_mock.table_mocks)</a>
 </li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.BIGINT">BIGINT (class in sql_mock.redshift.column_mocks)</a>
+</li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.BigQueryColumnMock">BigQueryColumnMock (class in sql_mock.bigquery.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.table_mocks.BigQueryMockTable">BigQueryMockTable (class in sql_mock.bigquery.table_mocks)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.table_mocks.BigQueryMockTable">BigQueryMockTable (class in sql_mock.bigquery.table_mocks)</a>
-</li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings">BigQuerySettings (class in sql_mock.bigquery.settings)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.BINARY">BINARY (class in sql_mock.snowflake.column_mocks)</a>
 </li>
       <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Boolean">Boolean (class in sql_mock.clickhouse.column_mocks)</a>
 </li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.BOOLEAN">BOOLEAN (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.BOOLEAN">(class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -168,6 +185,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.column_mocks.ColumnMock.cast_field">cast_field() (sql_mock.column_mocks.ColumnMock method)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.CHAR">CHAR (class in sql_mock.redshift.column_mocks)</a>
 </li>
       <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.ClickhouseColumnMock">ClickhouseColumnMock (class in sql_mock.clickhouse.column_mocks)</a>
 </li>
@@ -191,10 +210,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.data">data (sql_mock.table_mocks.SQLMockData attribute)</a>
 </li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.database">database (sql_mock.redshift.settings.RedshiftSettings attribute)</a>
+</li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date">Date (class in sql_mock.bigquery.column_mocks)</a>
 
       <ul>
         <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Date">(class in sql_mock.clickhouse.column_mocks)</a>
+</li>
+      </ul></li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.DATE">DATE (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.DATE">(class in sql_mock.snowflake.column_mocks)</a>
 </li>
       </ul></li>
       <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Datetime">Datetime (class in sql_mock.clickhouse.column_mocks)</a>
@@ -207,9 +234,17 @@
         <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Decimal">(class in sql_mock.clickhouse.column_mocks)</a>
 </li>
       </ul></li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.DECIMAL">DECIMAL (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.DECIMAL">(class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      </ul></li>
       <li><a href="sql_mock.html#id0">default (sql_mock.column_mocks.ColumnMock attribute)</a>, <a href="sql_mock.html#sql_mock.column_mocks.ColumnMock.default">[1]</a>
 </li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.default_inputs">default_inputs (sql_mock.table_mocks.MockTableMeta attribute)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.DOUBLE_PRECISION">DOUBLE_PRECISION (class in sql_mock.redshift.column_mocks)</a>
 </li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Date.dtype">dtype (sql_mock.bigquery.column_mocks.Date attribute)</a>
 
@@ -236,6 +271,74 @@
 </li>
         <li><a href="sql_mock.html#id1">(sql_mock.column_mocks.ColumnMock attribute)</a>, <a href="sql_mock.html#sql_mock.column_mocks.ColumnMock.dtype">[1]</a>
 </li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.BIGINT.dtype">(sql_mock.redshift.column_mocks.BIGINT attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.BOOLEAN.dtype">(sql_mock.redshift.column_mocks.BOOLEAN attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.CHAR.dtype">(sql_mock.redshift.column_mocks.CHAR attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.DATE.dtype">(sql_mock.redshift.column_mocks.DATE attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.DOUBLE_PRECISION.dtype">(sql_mock.redshift.column_mocks.DOUBLE_PRECISION attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.GEOGRAPHY.dtype">(sql_mock.redshift.column_mocks.GEOGRAPHY attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.GEOMETRY.dtype">(sql_mock.redshift.column_mocks.GEOMETRY attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.HLLSKETCH.dtype">(sql_mock.redshift.column_mocks.HLLSKETCH attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.INTEGER.dtype">(sql_mock.redshift.column_mocks.INTEGER attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.REAL.dtype">(sql_mock.redshift.column_mocks.REAL attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.SMALLINT.dtype">(sql_mock.redshift.column_mocks.SMALLINT attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.SUPER.dtype">(sql_mock.redshift.column_mocks.SUPER attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIME.dtype">(sql_mock.redshift.column_mocks.TIME attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIMESTAMP.dtype">(sql_mock.redshift.column_mocks.TIMESTAMP attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIMESTAMPTZ.dtype">(sql_mock.redshift.column_mocks.TIMESTAMPTZ attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIMETZ.dtype">(sql_mock.redshift.column_mocks.TIMETZ attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.VARBYTE.dtype">(sql_mock.redshift.column_mocks.VARBYTE attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.VARCHAR.dtype">(sql_mock.redshift.column_mocks.VARCHAR attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.ARRAY.dtype">(sql_mock.snowflake.column_mocks.ARRAY attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.BINARY.dtype">(sql_mock.snowflake.column_mocks.BINARY attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.BOOLEAN.dtype">(sql_mock.snowflake.column_mocks.BOOLEAN attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.DATE.dtype">(sql_mock.snowflake.column_mocks.DATE attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.FLOAT.dtype">(sql_mock.snowflake.column_mocks.FLOAT attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.GEOGRAPHY.dtype">(sql_mock.snowflake.column_mocks.GEOGRAPHY attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.INTEGER.dtype">(sql_mock.snowflake.column_mocks.INTEGER attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.OBJECT.dtype">(sql_mock.snowflake.column_mocks.OBJECT attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.STRING.dtype">(sql_mock.snowflake.column_mocks.STRING attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TEXT.dtype">(sql_mock.snowflake.column_mocks.TEXT attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIME.dtype">(sql_mock.snowflake.column_mocks.TIME attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP.dtype">(sql_mock.snowflake.column_mocks.TIMESTAMP attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP_LTZ.dtype">(sql_mock.snowflake.column_mocks.TIMESTAMP_LTZ attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP_NTZ.dtype">(sql_mock.snowflake.column_mocks.TIMESTAMP_NTZ attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP_TZ.dtype">(sql_mock.snowflake.column_mocks.TIMESTAMP_TZ attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.VARIANT.dtype">(sql_mock.snowflake.column_mocks.VARIANT attribute)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -251,6 +354,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.FLOAT">FLOAT (class in sql_mock.snowflake.column_mocks)</a>
+</li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable.from_dicts">from_dicts() (sql_mock.table_mocks.BaseMockTable class method)</a>
 </li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.BaseMockTable.from_mocks">from_mocks() (sql_mock.table_mocks.BaseMockTable class method)</a>
@@ -261,6 +366,16 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.GEOGRAPHY">GEOGRAPHY (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.GEOGRAPHY">(class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.GEOMETRY">GEOMETRY (class in sql_mock.redshift.column_mocks)</a>
+</li>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.settings.BigQuerySettings.google_application_credentials">google_application_credentials (sql_mock.bigquery.settings.BigQuerySettings attribute)</a>
 </li>
   </ul></td>
@@ -269,8 +384,16 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.host">host (sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.HLLSKETCH">HLLSKETCH (class in sql_mock.redshift.column_mocks)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.host">host (sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.host">(sql_mock.redshift.settings.RedshiftSettings attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -279,12 +402,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.input_data">input_data (sql_mock.table_mocks.SQLMockData attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.bigquery.html#sql_mock.bigquery.column_mocks.Int">Int (class in sql_mock.bigquery.column_mocks)</a>
 
       <ul>
         <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.Int">(class in sql_mock.clickhouse.column_mocks)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.INTEGER">INTEGER (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.INTEGER">(class in sql_mock.snowflake.column_mocks)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -308,6 +437,10 @@
       <ul>
         <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.model_config">(sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
 </li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.model_config">(sql_mock.redshift.settings.RedshiftSettings attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.settings.SnowflakeSettings.model_config">(sql_mock.snowflake.settings.SnowflakeSettings attribute)</a>
+</li>
         <li><a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.model_config">(sql_mock.table_mocks.MockTableMeta attribute)</a>
 </li>
         <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.model_config">(sql_mock.table_mocks.SQLMockData attribute)</a>
@@ -317,6 +450,10 @@
 
       <ul>
         <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.model_fields">(sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
+</li>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.model_fields">(sql_mock.redshift.settings.RedshiftSettings attribute)</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.settings.SnowflakeSettings.model_fields">(sql_mock.snowflake.settings.SnowflakeSettings attribute)</a>
 </li>
         <li><a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.model_fields">(sql_mock.table_mocks.MockTableMeta attribute)</a>
 </li>
@@ -351,6 +488,22 @@
 </li>
         <li><a href="sql_mock.html#module-sql_mock.exceptions">sql_mock.exceptions</a>
 </li>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift">sql_mock.redshift</a>
+</li>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift.column_mocks">sql_mock.redshift.column_mocks</a>
+</li>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift.settings">sql_mock.redshift.settings</a>
+</li>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift.table_mocks">sql_mock.redshift.table_mocks</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake">sql_mock.snowflake</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake.column_mocks">sql_mock.snowflake.column_mocks</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake.settings">sql_mock.snowflake.settings</a>
+</li>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake.table_mocks">sql_mock.snowflake.table_mocks</a>
+</li>
         <li><a href="sql_mock.html#module-sql_mock.table_mocks">sql_mock.table_mocks</a>
 </li>
       </ul></li>
@@ -369,15 +522,33 @@
   </ul></td>
 </tr></table>
 
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.OBJECT">OBJECT (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.password">password (sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.password">(sql_mock.redshift.settings.RedshiftSettings attribute)</a>
 </li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.settings.SnowflakeSettings.password">(sql_mock.snowflake.settings.SnowflakeSettings attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.port">port (sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.port">(sql_mock.redshift.settings.RedshiftSettings attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -392,6 +563,16 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.REAL">REAL (class in sql_mock.redshift.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.RedshiftColumnMock">RedshiftColumnMock (class in sql_mock.redshift.column_mocks)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.table_mocks.RedshiftMockTable">RedshiftMockTable (class in sql_mock.redshift.table_mocks)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings">RedshiftSettings (class in sql_mock.redshift.settings)</a>
+</li>
       <li><a href="sql_mock.html#sql_mock.table_mocks.SQLMockData.rendered_query">rendered_query (sql_mock.table_mocks.SQLMockData attribute)</a>
 </li>
   </ul></td>
@@ -400,6 +581,14 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.SMALLINT">SMALLINT (class in sql_mock.redshift.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.SnowflakeColumnMock">SnowflakeColumnMock (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.table_mocks.SnowflakeMockTable">SnowflakeMockTable (class in sql_mock.snowflake.table_mocks)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.settings.SnowflakeSettings">SnowflakeSettings (class in sql_mock.snowflake.settings)</a>
+</li>
       <li>
     sql_mock
 
@@ -449,8 +638,6 @@
         <li><a href="sql_mock.clickhouse.html#module-sql_mock.clickhouse.column_mocks">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     sql_mock.clickhouse.settings
 
@@ -479,11 +666,69 @@
         <li><a href="sql_mock.html#module-sql_mock.constants">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     sql_mock.exceptions
 
       <ul>
         <li><a href="sql_mock.html#module-sql_mock.exceptions">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.redshift
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.redshift.column_mocks
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift.column_mocks">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.redshift.settings
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift.settings">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.redshift.table_mocks
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#module-sql_mock.redshift.table_mocks">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.snowflake
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.snowflake.column_mocks
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake.column_mocks">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.snowflake.settings
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake.settings">module</a>
+</li>
+      </ul></li>
+      <li>
+    sql_mock.snowflake.table_mocks
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#module-sql_mock.snowflake.table_mocks">module</a>
 </li>
       </ul></li>
       <li>
@@ -501,6 +746,10 @@
         <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.column_mocks.String">(class in sql_mock.clickhouse.column_mocks)</a>
 </li>
       </ul></li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.STRING">STRING (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.SUPER">SUPER (class in sql_mock.redshift.column_mocks)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -509,9 +758,33 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.table_mocks.table_meta">table_meta() (in module sql_mock.table_mocks)</a>
 </li>
+      <li><a href="sql_mock.html#id5">table_ref (sql_mock.table_mocks.MockTableMeta attribute)</a>, <a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.table_ref">[1]</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TEXT">TEXT (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIME">TIME (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIME">(class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      </ul></li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIMESTAMP">TIMESTAMP (class in sql_mock.redshift.column_mocks)</a>
+
+      <ul>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP">(class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="sql_mock.html#id5">table_ref (sql_mock.table_mocks.MockTableMeta attribute)</a>, <a href="sql_mock.html#sql_mock.table_mocks.MockTableMeta.table_ref">[1]</a>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP_LTZ">TIMESTAMP_LTZ (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP_NTZ">TIMESTAMP_NTZ (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.TIMESTAMP_TZ">TIMESTAMP_TZ (class in sql_mock.snowflake.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIMESTAMPTZ">TIMESTAMPTZ (class in sql_mock.redshift.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.TIMETZ">TIMETZ (class in sql_mock.redshift.column_mocks)</a>
 </li>
       <li><a href="sql_mock.html#sql_mock.column_mocks.ColumnMock.to_sql">to_sql() (sql_mock.column_mocks.ColumnMock method)</a>
 </li>
@@ -528,11 +801,19 @@
 </li>
         <li><a href="sql_mock.html#id3">(sql_mock.column_mocks.ColumnMock attribute)</a>, <a href="sql_mock.html#sql_mock.column_mocks.ColumnMock.use_quotes_for_casting">[1]</a>
 </li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.ARRAY.use_quotes_for_casting">(sql_mock.snowflake.column_mocks.ARRAY attribute)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.clickhouse.html#sql_mock.clickhouse.settings.ClickHouseSettings.user">user (sql_mock.clickhouse.settings.ClickHouseSettings attribute)</a>
+
+      <ul>
+        <li><a href="sql_mock.redshift.html#sql_mock.redshift.settings.RedshiftSettings.user">(sql_mock.redshift.settings.RedshiftSettings attribute)</a>
 </li>
+        <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.settings.SnowflakeSettings.user">(sql_mock.snowflake.settings.SnowflakeSettings attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -540,6 +821,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sql_mock.html#sql_mock.exceptions.ValidationError">ValidationError</a>
+</li>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.VARBYTE">VARBYTE (class in sql_mock.redshift.column_mocks)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sql_mock.redshift.html#sql_mock.redshift.column_mocks.VARCHAR">VARCHAR (class in sql_mock.redshift.column_mocks)</a>
+</li>
+      <li><a href="sql_mock.snowflake.html#sql_mock.snowflake.column_mocks.VARIANT">VARIANT (class in sql_mock.snowflake.column_mocks)</a>
 </li>
   </ul></td>
 </tr></table>
