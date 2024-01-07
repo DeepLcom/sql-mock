@@ -43,6 +43,7 @@ It provides a consistent and convenient way to test the execution of your query 
    usage/bigquery/index
    usage/clickhouse/index
    usage/redshift/index
+   usage/snowflake/index
 
 .. toctree::
    :maxdepth: 3
