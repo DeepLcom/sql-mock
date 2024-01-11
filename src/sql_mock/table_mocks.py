@@ -1,6 +1,7 @@
 from textwrap import dedent, indent
 from typing import List, Type
 
+import sqlglot
 from jinja2 import Template
 from pydantic import BaseModel, ConfigDict, SkipValidation
 
@@ -165,7 +166,9 @@ class BaseMockTable:
         """
         )
         input_data_ctes = self._generate_input_data_cte_snippet()
-        result_query = self._sql_mock_data.rendered_query
+
+        # Parse the query with sqlglot to to standardize it (e.g. removes semi-colons)
+        result_query = sqlglot.parse_one(self._sql_mock_data.rendered_query, dialect=self._sql_dialect).sql()
 
         if cte_to_select is not None:
             result_query = select_from_cte(result_query, cte_to_select, sql_dialect=self._sql_dialect)
@@ -177,8 +180,8 @@ class BaseMockTable:
 
         query = query_template.format(
             input_data_ctes=input_data_ctes,
-            result_query=indent(result_query, "\t"),
-            final_columns_to_select=indent(final_columns_to_select, "\t"),
+            result_query=result_query,
+            final_columns_to_select=final_columns_to_select,
         )
 
         query = replace_original_table_references(
