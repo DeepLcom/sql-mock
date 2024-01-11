@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+* Fixed generation of CTE names from references with hyphens
 
 ## [0.5.0]
 

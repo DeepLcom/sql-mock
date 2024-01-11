@@ -343,4 +343,4 @@ class MockTableMeta(BaseModel):
     @property
     def cte_name(self):
         if getattr(self, "table_ref", None):
-            return self.table_ref.replace('"', "").replace(".", "__")
+            return self.table_ref.replace('"', "").replace(".", "__").replace("-", "_")
