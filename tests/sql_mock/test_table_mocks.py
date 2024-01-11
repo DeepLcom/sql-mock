@@ -1,7 +1,7 @@
 import pytest
 
 from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable, table_meta
+from sql_mock.table_mocks import BaseMockTable, MockTableMeta, table_meta
 
 
 class IntTestColumn(ColumnMock):
@@ -180,3 +180,11 @@ class TestToSqlModel:
             ")"
         )
         assert sql_model == expected_sql_model
+
+
+def test_cte_name():
+    mock_table_meta = MockTableMeta(table_ref='"my-project.schema.table_name"')
+
+    expected_cte_name = "my_project__schema__table_name"
+
+    assert mock_table_meta.cte_name == expected_cte_name
