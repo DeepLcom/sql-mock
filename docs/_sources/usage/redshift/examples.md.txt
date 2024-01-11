@@ -2,7 +2,7 @@
 :maxdepth: 2
 ```
 
-# Example: Testing Subscription Counts in ClickHouse
+# Example: Testing Subscription Counts in Redshift
 
 ```python
 import datetime

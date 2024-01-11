@@ -30,12 +30,10 @@ def test_generate_query_no_cte_provided(mocker):
     mock_table_instance = MockTestTable.from_dicts([])
     mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
     original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref}"
-    cte_to_select = "some_cte"
-    cte_adjusted_query = f"SELECT * FROM {cte_to_select}"
     dummy_return_query = "SELECT foo FROM bar"
     mock_table_instance._sql_mock_data.rendered_query = original_query
 
-    mocked_select_from_cte = mocker.patch("sql_mock.table_mocks.select_from_cte", return_value=cte_adjusted_query)
+    mocked_select_from_cte = mocker.patch("sql_mock.table_mocks.select_from_cte")
     mocked_replace_original_table_references = mocker.patch(
         "sql_mock.table_mocks.replace_original_table_references", return_value=dummy_return_query
     )
@@ -47,12 +45,12 @@ def test_generate_query_no_cte_provided(mocker):
     ),
 
     result AS (
-    \t{original_query}
+    {original_query}
     )
 
     SELECT
-    \tcast(col1 AS Integer) AS col1,
-    \tcast(col2 AS String) AS col2
+    cast(col1 AS Integer) AS col1,
+    cast(col2 AS String) AS col2
     FROM result
     """
     )
@@ -92,11 +90,11 @@ def test_generate_query_cte_provided(mocker):
     ),
 
     result AS (
-    \t{cte_adjusted_query}
+    {cte_adjusted_query}
     )
 
     SELECT
-    \t*
+    *
     FROM result
     """
     )
@@ -113,3 +111,15 @@ def test_generate_query_cte_provided(mocker):
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
     assert query == mocked_replace_original_table_references.return_value
+
+
+def test_generate_query_sql_has_semicolon():
+    """...then the query should not break sql mock"""
+    # Arrange
+    mock_table_instance = MockTestTable.from_dicts([])
+    mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
+    original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref};"
+    mock_table_instance._sql_mock_data.rendered_query = original_query
+
+    # Act
+    mock_table_instance._generate_query()
