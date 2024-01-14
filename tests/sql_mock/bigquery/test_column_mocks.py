@@ -1,9 +1,9 @@
-from sql_mock.bigquery.column_mocks import Array, BigQueryColumnMock, Decimal
+from sql_mock.bigquery.column_mocks import Array, BigQueryColumnMock, Decimal, String, Int
 
 
-def test_init_not_nullable():
+def test_init_nullable():
     """
-    ...then nullable should be False and dtype be the same as passed.
+    ...then nullable should be tRUE and dtype be the same as passed.
     """
 
     class ColMock(BigQueryColumnMock):
@@ -13,22 +13,22 @@ def test_init_not_nullable():
 
     assert column.default == 42
     assert column.dtype == "Integer"
-    assert not column.nullable
+    assert column.nullable
 
 
 def test_init_nullable():
     """
-    ...then nullable should be True"
+    ...then nullable should be False"
     """
 
     class ColMock(BigQueryColumnMock):
         dtype = "Integer"
 
-    column = ColMock(default=42, nullable=True)
+    column = ColMock(default=42, nullable=False)
 
     assert column.default == 42
     assert column.dtype == "Integer"
-    assert column.nullable
+    assert not column.nullable
 
 
 class TestDecimalColumn:
@@ -49,8 +49,8 @@ class TestDecimalColumn:
 
 def test_array_column_inner_dtype():
     """Ensure that the inner dtype is processed correctly"""
-    string_array_col = Array(inner_dtype="String", default=["a", "b"], nullable=True)
-    int_array_col = Array(inner_dtype="Integer", default=[1, 2], nullable=False)
+    string_array_col = Array(inner_type=String, default=["a", "b"], nullable=True)
+    int_array_col = Array(inner_type=Int, default=[1, 2], nullable=False)
 
     assert string_array_col.dtype == "Array<String>"
     assert string_array_col.default == ["a", "b"]

@@ -12,11 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+* BigQuery column types
 
 ### Changed
+* ColumnMock nullable by default
 
 ### Breaking Changes
 * Path to dbt project.yml file is provided instead of manifest.json
+* Array types use other ColumnMock classes as inner type
 
 ### Fixed
 * Fixed generation of CTE names from references with hyphens

@@ -1,9 +1,9 @@
 from sql_mock.redshift.column_mocks import RedshiftColumnMock, DECIMAL
 
 
-def test_init_not_nullable():
+def test_init_nullable():
     """
-    ...then nullable should be False and dtype be the same as passed.
+    ...then nullable should be True and dtype be the same as passed.
     """
 
     class ColMock(RedshiftColumnMock):
@@ -13,22 +13,22 @@ def test_init_not_nullable():
 
     assert column.default == 42
     assert column.dtype == "BIGINT"
-    assert not column.nullable
+    assert column.nullable
 
 
-def test_init_nullable():
+def test_init_not_nullable():
     """
-    ...then nullable should be True"
+    ...then nullable should be False"
     """
 
     class ColMock(RedshiftColumnMock):
         dtype = "BIGINT"
 
-    column = ColMock(default=42, nullable=True)
+    column = ColMock(default=42, nullable=False)
 
     assert column.default == 42
     assert column.dtype == "BIGINT"
-    assert column.nullable
+    assert not column.nullable
 
 
 class TestDecimalColumn:
