@@ -15,8 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Breaking Changes
+* Path to dbt project.yml file is provided instead of manifest.json
+
 ### Fixed
 * Fixed generation of CTE names from references with hyphens
+* Fixed query paths if dbt project is in subdirectory
 
 ## [0.5.0]
 
