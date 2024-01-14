@@ -1,7 +1,7 @@
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 
 
-class BigQueryColumnMock(ColumnMock):
+class BigQueryColumnMock(BaseColumnMock):
     pass
 
 

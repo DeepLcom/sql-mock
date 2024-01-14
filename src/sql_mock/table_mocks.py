@@ -5,7 +5,7 @@ import sqlglot
 from jinja2 import Template
 from pydantic import BaseModel, ConfigDict, SkipValidation
 
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 from sql_mock.constants import NO_INPUT
 from sql_mock.helpers import (
     get_keys_from_list_of_dicts,
@@ -57,7 +57,7 @@ class SQLMockData(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    columns: dict[str, Type[ColumnMock]] = None
+    columns: dict[str, Type[BaseColumnMock]] = None
     data: list[dict] = None
     input_data: list[dict] = None
     rendered_query: str = None
@@ -95,7 +95,7 @@ class BaseTableMock:
             self._sql_mock_data = SQLMockData()
 
         self._sql_mock_data.columns = {
-            field: getattr(self, field) for field in dir(self) if isinstance(getattr(self, field), ColumnMock)
+            field: getattr(self, field) for field in dir(self) if isinstance(getattr(self, field), BaseColumnMock)
         }
 
         if data is not None:

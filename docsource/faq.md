@@ -17,15 +17,15 @@ You might want to create a settings class as well in case you need some specific
 
 ### Create your `ColumnMocks`
 
-Your database system might support specific database types. In order to make them available as column types, you can use the `sql_mock.column_mocks.ColumnMock` class as a base and inherit your specific column types from it.
+Your database system might support specific database types. In order to make them available as column types, you can use the `sql_mock.column_mocks.BaseColumnMock` class as a base and inherit your specific column types from it.
 For most of your column mocks you might only need to specify the `dtype` that should be used to parse the inputs.
 
-A good practise is to create a `ColumnMock` class that is specific to your database and inherit all your column types from it, e.g.:
+A good practise is to create a `BaseColumnMock` class that is specific to your database and inherit all your column types from it, e.g.:
 
 ```python
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 
-class MyFanceDatabaseColumnMock(ColumnMock):
+class MyFanceDatabaseColumnMock(BaseColumnMock):
     # In case you need some specific logic that overwrites the default behavior, you can do so here
     pass
 
@@ -41,11 +41,11 @@ class String(MyFanceDatabaseColumnMock):
 There will definitely be folks in the community that are in the need of support for the database you just created all the setup for.
 Feel free to create a PR on this repository that we can start supporting your database system!
 
-## I am missing a specific ColumnMock type for my model fields
+## I am missing a specific BaseColumnMock type for my model fields
 
 We implemented some basic column types but it could happen that you don't find the one you need.
 Luckily, you can easily create those with the tools provided.
-The only thing you need to do is to inherit from the `ColumnMock` that is specific to your database system (e.g. `BigQueryColumnMock`) and write classes for the column mocks you are missing. Usually you only need to set the correct `dtype`. This would later be used in the `cast(col to <dtype>)` expression.
+The only thing you need to do is to inherit from the `BaseColumnMock` that is specific to your database system (e.g. `BigQueryColumnMock`) and write classes for the column mocks you are missing. Usually you only need to set the correct `dtype`. This would later be used in the `cast(col to <dtype>)` expression.
 
 ```python
 # Replace the import with the database system you are using

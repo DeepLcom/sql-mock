@@ -2,7 +2,7 @@
 import pytest
 import sqlglot
 
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 from sql_mock.exceptions import ValidationError
 from sql_mock.helpers import (
     _validate_input_mocks_have_table_ref,
@@ -26,11 +26,11 @@ class TableRefMock(BaseTableMock):
         return []
 
 
-class IntTestColumn(ColumnMock):
+class IntTestColumn(BaseColumnMock):
     dtype = "Integer"
 
 
-class StringTestColumn(ColumnMock):
+class StringTestColumn(BaseColumnMock):
     dtype = "String"
 
 

@@ -1,14 +1,14 @@
 from textwrap import dedent
 
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 from sql_mock.table_mocks import BaseTableMock, table_meta
 
 
-class IntTestColumn(ColumnMock):
+class IntTestColumn(BaseColumnMock):
     dtype = "Integer"
 
 
-class StringTestColumn(ColumnMock):
+class StringTestColumn(BaseColumnMock):
     dtype = "String"
 
 

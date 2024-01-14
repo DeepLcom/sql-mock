@@ -1,7 +1,7 @@
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 
 
-class ClickhouseColumnMock(ColumnMock):
+class ClickhouseColumnMock(BaseColumnMock):
     def __init__(self, default, nullable=False) -> None:
         super().__init__(default, nullable)
         if nullable:
