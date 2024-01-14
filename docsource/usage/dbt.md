@@ -11,9 +11,9 @@ This guide will provide a quick start on how to use SQLMock with dbt (data build
 
 ## Configuration
 
-### Setting the dbt Manifest Path
+### Setting the dbt Project Path
 
-Initialize your testing environment by setting the global path to your dbt manifest file:
+Initialize your testing environment by setting the global path to your dbt project file:
 
 ```python
 from sql_mock.config import SQLMockConfig
