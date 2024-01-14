@@ -3,7 +3,7 @@ from sql_mock.bigquery.table_mocks import BigQueryTableMock
 from sql_mock.config import SQLMockConfig
 from sql_mock.dbt import dbt_model_meta, dbt_seed_meta, dbt_source_meta
 
-SQLMockConfig.set_dbt_manifest_path("./tests/resources/dbt/dbt_manifest.json")
+SQLMockConfig.set_dbt_project_path("./tests/resources/dbt/dbt_project.yml")
 
 
 # NOTE: The Source and Seed classes will not be used in the example test. They are only here for demonstration purpose.

@@ -143,7 +143,7 @@
                 
              ]
           },
-          "compiled_path":"tests/resources/dbt/compiled_example_models/my_first_dbt_model.sql",
+          "compiled_path":"dbt_target/compiled_example_models/my_first_dbt_model.sql",
           "compiled":true,
           "compiled_code":"\n\n/*\n    Welcome to your first dbt model!\n    Did you know that you can also configure models directly within SQL files?\n    This will override configurations stated in dbt_project.yml\n\n    Try changing \"table\" to \"view\" below\n*/\n\nwith source_data as (\n\n    select 1 as id\n    union all\n    select null as id\n\n)\n\nselect *\nfrom source_data\n\n/*\n    Uncomment the line below to remove records with null `id` values\n*/\n\n-- where id is not null",
           "extra_ctes_injected":true,

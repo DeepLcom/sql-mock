@@ -18,7 +18,7 @@ Initialize your testing environment by setting the global path to your dbt manif
 ```python
 from sql_mock.config import SQLMockConfig
 
-SQLMockConfig.set_dbt_manifest_path('/path/to/your/dbt/manifest.json')
+SQLMockConfig.set_dbt_project_path('/path/to/your/dbt_project.yml')
 ```
 
 ## Creating Mock Tables
