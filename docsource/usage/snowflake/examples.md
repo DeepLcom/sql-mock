@@ -7,18 +7,18 @@
 ```python
 import datetime
 from sql_mock.snowflake import column_mocks as col
-from sql_mock.snowflake.table_mocks import SnowflakeMockTable
+from sql_mock.snowflake.table_mocks import SnowflakeTableMock
 from sql_mock.table_mocks import table_meta
 
-# Define mock tables for your data model that inherit from SnowflakeMockTable
+# Define mock tables for your data model that inherit from SnowflakeTableMock
 @table_meta(table_ref="data.users")
-class UserTable(SnowflakeMockTable):
+class UserTable(SnowflakeTableMock):
     user_id = col.INTEGER(default=1)
     user_name = col.STRING(default="Mr. T")
 
 
 @table_meta(table_ref="data.subscriptions")
-class SubscriptionTable(SnowflakeMockTable):
+class SubscriptionTable(SnowflakeTableMock):
     subscription_id = col.INTEGER(default=1)
     period_start_date = col.DATE(default=datetime.date(2023, 9, 5))
     period_end_date = col.DATE(default=datetime.date(2023, 9, 5))
@@ -26,7 +26,7 @@ class SubscriptionTable(SnowflakeMockTable):
 
 
 # Define a mock table for your expected results
-class SubscriptionCountTable(SnowflakeMockTable):
+class SubscriptionCountTable(SnowflakeTableMock):
     subscription_count = col.INTEGER(default=1)
     user_id = col.INTEGER(default=1)
 

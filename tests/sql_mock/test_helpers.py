@@ -13,15 +13,15 @@ from sql_mock.helpers import (
     validate_all_input_mocks_for_query_provided,
     validate_input_mocks,
 )
-from sql_mock.table_mocks import BaseMockTable, table_meta
+from sql_mock.table_mocks import BaseTableMock, table_meta
 
 
-class NoTableRefMock(BaseMockTable):
+class NoTableRefMock(BaseTableMock):
     pass
 
 
 @table_meta(table_ref="some_table")
-class TableRefMock(BaseMockTable):
+class TableRefMock(BaseTableMock):
     def _get_results(self):
         return []
 
@@ -39,7 +39,7 @@ string_col = StringTestColumn(default="hey")
 
 
 @table_meta(table_ref="data.mock_test_table")
-class MockTestTable(BaseMockTable):
+class MockTestTable(BaseTableMock):
     col1 = int_col
     col2 = string_col
     _sql_dialect = "bigquery"
@@ -158,11 +158,11 @@ class TestValidateAllInputMocksForQueryProvided:
     """
 
     @table_meta(table_ref="bar.bar")
-    class BarMock(BaseMockTable):
+    class BarMock(BaseTableMock):
         pass
 
     @table_meta(table_ref="foo.foo")
-    class FooMock(BaseMockTable):
+    class FooMock(BaseTableMock):
         pass
 
     def test_all_input_mocks_provided(self):

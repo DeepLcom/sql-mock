@@ -10,20 +10,20 @@ from sql_mock.exceptions import ValidationError
 
 # Needed to avoid circular imports on type check
 if TYPE_CHECKING:
-    from sql_mock.table_mocks import BaseMockTable
+    from sql_mock.table_mocks import BaseTableMock
 
 
 def get_keys_from_list_of_dicts(data: list[dict]) -> set[str]:
     return set(key for dictionary in data for key in dictionary.keys())
 
 
-def replace_original_table_references(query: str, mock_tables: list["BaseMockTable"], dialect: str = None):
+def replace_original_table_references(query: str, mock_tables: list["BaseTableMock"], dialect: str = None):
     """
     Replace orignal table references to point them to the mocked data
 
     Args:
         query (str): Original SQL query
-        mock_tables (list[BaseMockTable]): List of BaseMockTable instances that are used as input
+        mock_tables (list[BaseTableMock]): List of BaseTableMock instances that are used as input
         dialect (str): The SQL dialect to use for parsing the query
     """
     ast = sqlglot.parse_one(query, dialect=dialect)
@@ -98,7 +98,7 @@ def get_source_tables(query, dialect) -> List[str]:
     return list(tables)
 
 
-def _validate_unique_input_mocks(input_mocks: List["BaseMockTable"]) -> None:
+def _validate_unique_input_mocks(input_mocks: List["BaseTableMock"]) -> None:
     counter = Counter(input_mocks)
     duplicated_mocks = [mock for mock, cnt in counter.items() if cnt > 1]
     if duplicated_mocks:
@@ -106,7 +106,7 @@ def _validate_unique_input_mocks(input_mocks: List["BaseMockTable"]) -> None:
         raise ValidationError(msg)
 
 
-def _validate_input_mocks_have_table_ref(input_mocks: List["BaseMockTable"]) -> None:
+def _validate_input_mocks_have_table_ref(input_mocks: List["BaseTableMock"]) -> None:
     missing_table_refs = [
         type(mock_table).__name__
         for mock_table in input_mocks
@@ -115,16 +115,16 @@ def _validate_input_mocks_have_table_ref(input_mocks: List["BaseMockTable"]) -> 
 
     if missing_table_refs:
         missing_table_ref_str = ",".join(missing_table_refs)
-        msg = f"If you want to use a MockTable instance as input, you need to provide a table_reference using the table_meta decorator. Missing table refs for models: {missing_table_ref_str}"
+        msg = f"If you want to use a TableMock instance as input, you need to provide a table_reference using the table_meta decorator. Missing table refs for models: {missing_table_ref_str}"
         raise ValidationError(msg)
 
 
-def validate_input_mocks(input_mocks: List["BaseMockTable"]):
+def validate_input_mocks(input_mocks: List["BaseTableMock"]):
     _validate_input_mocks_have_table_ref(input_mocks)
     _validate_unique_input_mocks(input_mocks)
 
 
-def validate_all_input_mocks_for_query_provided(query: str, input_mocks: List["BaseMockTable"], dialect: str) -> None:
+def validate_all_input_mocks_for_query_provided(query: str, input_mocks: List["BaseTableMock"], dialect: str) -> None:
     missing_source_table_mocks = get_source_tables(query=query, dialect=dialect)
     for mock_table in input_mocks:
         table_ref = getattr(mock_table._sql_mock_meta, "table_ref", None)

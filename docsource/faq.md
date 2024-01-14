@@ -5,13 +5,13 @@
 
 We are planning to add more and more supported database systems. However, if your system is not supported yet, you can still use SQL Mock. There are only 2 things you need to do:
 
-### Create your `MockTable` class
+### Create your `TableMock` class
 
-First, you need to create a `MockTable` class for your database system that inherits from `sql_mock.table_mocks.BaseMockTable`.
+First, you need to create a `TableMock` class for your database system that inherits from `sql_mock.table_mocks.BaseTableMock`.
 
 That class needs to implement the `_get_results` method which should make sure to fetch the results of a query (e.g. produced by `self._generate_query()`) and return it as list of dictionaries.
 
-Look at one of the existing client libraries to see how this could work (e.g. [BigQueryMockTable](https://github.com/DeepLcom/sql-mock/blob/main/src/sql_mock/bigquery/table_mocks.py)).
+Look at one of the existing client libraries to see how this could work (e.g. [BigQueryTableMock](https://github.com/DeepLcom/sql-mock/blob/main/src/sql_mock/bigquery/table_mocks.py)).
 
 You might want to create a settings class as well in case you need some specific connection settings to be available within the `_get_results` method.
 
@@ -40,7 +40,6 @@ class String(MyFanceDatabaseColumnMock):
 
 There will definitely be folks in the community that are in the need of support for the database you just created all the setup for.
 Feel free to create a PR on this repository that we can start supporting your database system!
-
 
 ## I am missing a specific ColumnMock type for my model fields
 

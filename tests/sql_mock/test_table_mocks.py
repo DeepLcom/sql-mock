@@ -1,7 +1,7 @@
 import pytest
 
 from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable, MockTableMeta, table_meta
+from sql_mock.table_mocks import BaseTableMock, TableMockMeta, table_meta
 
 
 class IntTestColumn(ColumnMock):
@@ -17,25 +17,25 @@ string_col = StringTestColumn(default="hey")
 
 
 @table_meta(table_ref="mock_test_table")
-class MockTestTable(BaseMockTable):
+class MockTestTable(BaseTableMock):
     col1 = int_col
     col2 = string_col
 
 
 @table_meta(table_ref="mock_test_table_with_defaults", default_inputs=[MockTestTable([])])
-class MockTestTableWithDefaults(BaseMockTable):
+class MockTestTableWithDefaults(BaseTableMock):
     col1 = int_col
     col2 = string_col
 
 
-# Create a fixture for an instance of BaseMockTable
+# Create a fixture for an instance of BaseTableMock
 @pytest.fixture
 def base_mock_table_instance():
     @table_meta(table_ref="base_mock_table")
-    class MockTable(BaseMockTable):
+    class TableMock(BaseTableMock):
         pass
 
-    return MockTable()
+    return TableMock()
 
 
 # Test the __init__ method
@@ -183,7 +183,7 @@ class TestToSqlModel:
 
 
 def test_cte_name():
-    mock_table_meta = MockTableMeta(table_ref='"my-project.schema.table_name"')
+    mock_table_meta = TableMockMeta(table_ref='"my-project.schema.table_name"')
 
     expected_cte_name = "my_project__schema__table_name"
 

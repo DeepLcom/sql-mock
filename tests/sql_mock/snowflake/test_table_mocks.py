@@ -4,12 +4,12 @@ import pytest
 from pydantic import ValidationError
 
 from sql_mock.snowflake.column_mocks import INTEGER
-from sql_mock.snowflake.table_mocks import SnowflakeMockTable
+from sql_mock.snowflake.table_mocks import SnowflakeTableMock
 from sql_mock.table_mocks import table_meta
 
 
 @table_meta(table_ref="mock_test_table")
-class MockTestTable(SnowflakeMockTable):
+class MockTestTable(SnowflakeTableMock):
     id = INTEGER(default=1)
 
 
@@ -61,7 +61,7 @@ def test_get_results(mocker):
     mock_fetchall = mock_cursor.return_value.__enter__.return_value.fetchall
     mock_fetchall.return_value = mock_query_job_result
 
-    instance = SnowflakeMockTable()
+    instance = SnowflakeTableMock()
     result = instance._get_results(query=query)
 
     assert result == mock_query_job_result

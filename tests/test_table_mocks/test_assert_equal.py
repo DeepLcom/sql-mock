@@ -1,7 +1,7 @@
 import pytest
 
 from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable, table_meta
+from sql_mock.table_mocks import BaseTableMock, table_meta
 
 
 class IntTestColumn(ColumnMock):
@@ -13,7 +13,7 @@ class StringTestColumn(ColumnMock):
 
 
 @table_meta(table_ref="test_data")
-class MockTestTable(BaseMockTable):
+class MockTestTable(BaseTableMock):
     name = StringTestColumn(default="Thomas")
     age = IntTestColumn(default=0)
     city = StringTestColumn(default="Munich")

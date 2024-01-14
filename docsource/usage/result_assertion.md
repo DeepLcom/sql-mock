@@ -9,7 +9,6 @@ There are 2 ways how you can check the output of your query given the mocked inp
 1. **`assert_equal` method:** Assert the normal result of the query (running the full query with your input mocks)
 2. **`assert_cte_equal` method:** Assert the result of a **CTE** in your query. A lot of times when we built more complicated data models, they include a bunch of CTEs that map to separate logical steps. In those cases, when we unit test our models, we want to be able to not only check the final result but also the single steps. To do this, you can use the `assert_cte_equal` method.
 
-
 Let's assume we have the following query:
 
 ```sql
@@ -23,7 +22,7 @@ WITH subscriptions_per_user AS (
 ),
 
 users_with_multiple_subs AS (
-    SELECT 
+    SELECT
         *
     FROM subscriptions_per_user
     WHERE subscription_count >= 2
@@ -34,21 +33,21 @@ SELECT user_id FROM users_with_multiple_subs
 
 ... and we define the following mock tables:
 
-```python 
+```python
 import datetime
 
 from sql_mock.bigquery import column_mocks as col
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 from sql_mock.table_mocks import table_meta
 
 @table_meta(table_ref="data.users")
-class UserTable(BigQueryMockTable):
+class UserTable(BigQueryTableMock):
     user_id = col.Int(default=1)
     user_name = col.String(default="Mr. T")
 
 
 @table_meta(table_ref="data.subscriptions")
-class SubscriptionTable(BigQueryMockTable):
+class SubscriptionTable(BigQueryTableMock):
     subscription_id = col.Int(default=1)
     period_start_date = col.Date(default=datetime.date(2023, 9, 5))
     period_end_date = col.Date(default=datetime.date(2023, 9, 5))
@@ -56,7 +55,7 @@ class SubscriptionTable(BigQueryMockTable):
 
 
 @table_meta(query_path="./examples/test_query.sql")
-class MultipleSubscriptionUsersTable(BigQueryMockTable):
+class MultipleSubscriptionUsersTable(BigQueryTableMock):
     user_id = col.Int(default=1)
 ```
 

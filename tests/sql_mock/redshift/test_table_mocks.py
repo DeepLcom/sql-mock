@@ -4,12 +4,12 @@ import pytest
 from pydantic import ValidationError
 
 from sql_mock.redshift.column_mocks import BIGINT
-from sql_mock.redshift.table_mocks import RedshiftMockTable
+from sql_mock.redshift.table_mocks import RedshiftTableMock
 from sql_mock.table_mocks import table_meta
 
 
 @table_meta(table_ref="mock_test_table")
-class MockTestTable(RedshiftMockTable):
+class MockTestTable(RedshiftTableMock):
     id = BIGINT(default=1)
 
 
@@ -66,7 +66,7 @@ def test_get_results(mocker):
     mock_dataframe.to_dict.return_value = mock_query_job_result
     mocked_fetch_dataframe.return_value = mock_dataframe
 
-    instance = RedshiftMockTable()
+    instance = RedshiftTableMock()
     result = instance._get_results(query=query)
 
     assert result == mock_query_job_result

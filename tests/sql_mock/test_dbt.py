@@ -9,7 +9,7 @@ from sql_mock.dbt import (
     dbt_seed_meta,
     dbt_source_meta,
 )
-from sql_mock.table_mocks import BaseMockTable
+from sql_mock.table_mocks import BaseTableMock
 
 
 class TestDbtModelMeta:
@@ -38,7 +38,7 @@ class TestDbtModelMeta:
         mock_open.return_value.__enter__.return_value.read.return_value = query
 
         @dbt_model_meta(model_name=model_name, manifest_path=manifest_path)
-        class TestMock(BaseMockTable):
+        class TestMock(BaseTableMock):
             pass
 
         assert TestMock._sql_mock_meta.query == query
@@ -71,7 +71,7 @@ class TestDbtModelMeta:
         mock_open.return_value.__enter__.return_value.read.return_value = query
 
         @dbt_model_meta(model_name=model_name)
-        class TestMock(BaseMockTable):
+        class TestMock(BaseTableMock):
             pass
 
         assert TestMock._sql_mock_meta.query == query
@@ -100,7 +100,7 @@ class TestDbtSourceMeta:
         mocked_get_source_metadata_from_dbt_manifest.return_value = {"table_ref": returned_table_ref}
 
         @dbt_source_meta(source_name=source_name, table_name=table_name, manifest_path=manifest_path)
-        class TestMock(BaseMockTable):
+        class TestMock(BaseTableMock):
             pass
 
         assert TestMock._sql_mock_meta.query is None
@@ -124,7 +124,7 @@ class TestDbtSourceMeta:
         mocked_get_source_metadata_from_dbt_manifest.return_value = {"table_ref": returned_table_ref}
 
         @dbt_source_meta(source_name=source_name, table_name=table_name, manifest_path=manifest_path)
-        class TestMock(BaseMockTable):
+        class TestMock(BaseTableMock):
             pass
 
         assert TestMock._sql_mock_meta.query is None
@@ -153,7 +153,7 @@ class TestDbtSeedMeta:
         }
 
         @dbt_seed_meta(seed_name=seed_name, manifest_path=manifest_path)
-        class TestMock(BaseMockTable):
+        class TestMock(BaseTableMock):
             pass
 
         assert TestMock._sql_mock_meta.query is None
@@ -178,7 +178,7 @@ class TestDbtSeedMeta:
         }
 
         @dbt_seed_meta(seed_name=seed_name)
-        class TestMock(BaseMockTable):
+        class TestMock(BaseTableMock):
             pass
 
         assert TestMock._sql_mock_meta.query is None

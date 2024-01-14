@@ -7,25 +7,25 @@
 ```python
 import datetime
 from sql_mock.redshift import column_mocks as col
-from sql_mock.redshift.table_mocks import RedshiftMockTable
+from sql_mock.redshift.table_mocks import RedshiftTableMock
 from sql_mock.table_mocks import table_meta
 
-# Define mock tables for your data model that inherit from RedshiftMockTable
+# Define mock tables for your data model that inherit from RedshiftTableMock
 @table_meta(table_ref="data.users")
-class UserTable(RedshiftMockTable):
+class UserTable(RedshiftTableMock):
     user_id = col.INTEGER(default=1)
     user_name = col.VARCHAR(default="Mr. T")
 
 
 @table_meta(table_ref="data.subscriptions")
-class SubscriptionTable(RedshiftMockTable):
+class SubscriptionTable(RedshiftTableMock):
     subscription_id = col.INTEGER(default=1)
     period_start_date = col.DATE(default=datetime.date(2023, 9, 5))
     period_end_date = col.DATE(default=datetime.date(2023, 9, 5))
     user_id = col.INTEGER(default=1)
 
 # Define a mock table for your expected results
-class SubscriptionCountTable(RedshiftMockTable):
+class SubscriptionCountTable(RedshiftTableMock):
     subscription_count = col.INTEGER(default=1)
     user_id = col.INTEGER(default=1)
 

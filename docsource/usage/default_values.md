@@ -6,17 +6,17 @@
 
 Testing SQL queries can often involve repetitive setup for mock tables. In SQLMock, one effective way to streamline this process is by using default values. By setting reasonable defaults, you can significantly reduce the boilerplate code in your tests, especially when dealing with multiple input tables or complex queries. Let’s explore how you can efficiently implement this.
 
-## Utilizing Default Values in MockTable Fields
+## Utilizing Default Values in TableMock Fields
 
 Defining default values at the field level in your mock tables is straightforward.
-The default argument in the field definition allows you to set default values consistency across all test scenarios in one step. 
+The default argument in the field definition allows you to set default values consistency across all test scenarios in one step.
 They are particularly useful for ensuring that joins and other query functionalities operate correctly.
 
 Here's an example:
 
-```python 
+```python
 @table_meta(table_ref="data.users")
-class UserTable(BigQueryMockTable):
+class UserTable(BigQueryTableMock):
     user_id = col.Int(default=1)
     user_name = col.String(default="Mr. T")
 
@@ -30,23 +30,22 @@ users = UserTable.from_dicts([
 
 ## Setting Mock Defaults with table_meta
 
-
-When defining your MockTable classes, the `table_meta` decorator accepts a `default_inputs` argument.
+When defining your TableMock classes, the `table_meta` decorator accepts a `default_inputs` argument.
 The Mock instances passed here, will be used as defaults in the `from_mocks` method.
 
 Consider this example:
 
-```python 
+```python
 @table_meta(
     query_path="./examples/test_query.sql",
     default_inputs=[UserTable([]), SubscriptionTable([])] # We can provide defaults for the class if needed.
 )
-class MultipleSubscriptionUsersTable(BigQueryMockTable):
+class MultipleSubscriptionUsersTable(BigQueryTableMock):
     user_id = col.Int(default=1)
 
 # Setting up different scenarios to demonstrate the use of defaults
 users = UserTable.from_dicts([
-    {"user_id": 1}, 
+    {"user_id": 1},
     {"user_id": 2}
 ])
 subscriptions = SubscriptionTable.from_dicts(

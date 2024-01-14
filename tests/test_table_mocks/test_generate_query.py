@@ -1,7 +1,7 @@
 from textwrap import dedent
 
 from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable, table_meta
+from sql_mock.table_mocks import BaseTableMock, table_meta
 
 
 class IntTestColumn(ColumnMock):
@@ -17,7 +17,7 @@ string_col = StringTestColumn(default="hey")
 
 
 @table_meta(table_ref="data.mock_test_table")
-class MockTestTable(BaseMockTable):
+class MockTestTable(BaseTableMock):
     col1 = int_col
     col2 = string_col
     _sql_dialect = "bigquery"

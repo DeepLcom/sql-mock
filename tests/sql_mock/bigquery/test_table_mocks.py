@@ -5,12 +5,12 @@ from google.cloud import bigquery
 from pydantic import ValidationError
 
 from sql_mock.bigquery.column_mocks import Int
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 from sql_mock.table_mocks import table_meta
 
 
 @table_meta(table_ref="mock_test_table")
-class MockTestTable(BigQueryMockTable):
+class MockTestTable(BigQueryTableMock):
     id = Int(default=1)
 
 
@@ -58,7 +58,7 @@ def test_get_results(mocker):
     query_job_instance = mock_client.query.return_value
     query_job_instance.result.return_value = mock_query_job_result
 
-    instance = BigQueryMockTable()
+    instance = BigQueryTableMock()
     result = instance._get_results(query=query)
 
     assert result == mock_query_job_result

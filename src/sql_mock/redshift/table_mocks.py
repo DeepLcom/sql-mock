@@ -1,10 +1,10 @@
 import redshift_connector
 
 from sql_mock.redshift.settings import RedshiftSettings
-from sql_mock.table_mocks import BaseMockTable
+from sql_mock.table_mocks import BaseTableMock
 
 
-class RedshiftMockTable(BaseMockTable):
+class RedshiftTableMock(BaseTableMock):
     _sql_dialect = "redshift"
 
     def __init__(

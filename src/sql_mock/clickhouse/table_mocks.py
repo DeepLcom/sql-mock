@@ -1,10 +1,10 @@
 from clickhouse_driver import Client
 
 from sql_mock.clickhouse.settings import ClickHouseSettings
-from sql_mock.table_mocks import BaseMockTable
+from sql_mock.table_mocks import BaseTableMock
 
 
-class ClickHouseTableMock(BaseMockTable):
+class ClickHouseTableMock(BaseTableMock):
     _sql_dialect = "clickhouse"
 
     def __init__(

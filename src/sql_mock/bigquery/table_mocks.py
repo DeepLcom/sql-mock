@@ -1,10 +1,10 @@
 from google.cloud import bigquery
 
 from sql_mock.bigquery.settings import BigQuerySettings
-from sql_mock.table_mocks import BaseMockTable
+from sql_mock.table_mocks import BaseTableMock
 
 
-class BigQueryMockTable(BaseMockTable):
+class BigQueryTableMock(BaseTableMock):
     _sql_dialect = "bigquery"
 
     def __init__(

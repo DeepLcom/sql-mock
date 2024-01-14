@@ -18,10 +18,10 @@ from sql_mock.helpers import (
 
 
 def table_meta(
-    table_ref: str = "", query_path: str = None, query: str = None, default_inputs: ["BaseMockTable"] = None
+    table_ref: str = "", query_path: str = None, query: str = None, default_inputs: ["BaseTableMock"] = None
 ):
     """
-    Decorator that is used to define MockTable metadata
+    Decorator that is used to define TableMock metadata
 
     Args:
         table_ref (string) : String that represents the table reference to the original table.
@@ -43,7 +43,7 @@ def table_meta(
             validate_input_mocks(default_inputs)
             mock_meta_kwargs["default_inputs"] = default_inputs
 
-        cls._sql_mock_meta = MockTableMeta(**mock_meta_kwargs)
+        cls._sql_mock_meta = TableMockMeta(**mock_meta_kwargs)
         return cls
 
     return decorator
@@ -51,7 +51,7 @@ def table_meta(
 
 class SQLMockData(BaseModel):
     """
-    Class to store data on BaseMockTable instances which is used during processing.
+    Class to store data on BaseTableMock instances which is used during processing.
     We use this class to avoid collision with field names of the table we want to mock.
     """
 
@@ -64,7 +64,7 @@ class SQLMockData(BaseModel):
     last_query: str = None
 
 
-class BaseMockTable:
+class BaseTableMock:
     """
     Represents a base class for creating mock database tables for testing.
     When inheriting from this class you need to add column attributes for the table you would like to mock - e.g.:
@@ -77,12 +77,12 @@ class BaseMockTable:
     """
 
     _sql_mock_data: SQLMockData = None
-    _sql_mock_meta: "MockTableMeta" = None
+    _sql_mock_meta: "TableMockMeta" = None
     _sql_dialect: str = None
 
     def __init__(self, data: list[dict] = None, sql_mock_data: SQLMockData = None) -> None:
         """
-        Initialize a BaseMockTable instance.
+        Initialize a BaseTableMock instance.
 
         Args:
             data (list[dict]): A list of dictionaries representing rows of data.
@@ -114,13 +114,13 @@ class BaseMockTable:
 
     @classmethod
     def from_mocks(
-        cls, input_data: list["BaseMockTable"] = None, query_template_kwargs: dict = None, query: str = None
+        cls, input_data: list["BaseTableMock"] = None, query_template_kwargs: dict = None, query: str = None
     ):
         """
         Instantiate the mock table from input mocks. This runs the tables query with static data provided by the input mocks.
 
         Arguments:
-            input_data: List of MockTable instances that hold static data that should be used as inputs.
+            input_data: List of TableMock instances that hold static data that should be used as inputs.
             query_template_kwargs: Dictionary of Jinja template key-value pairs that should be used to render the query.
             query: String of the SQL query that is used to generate the model. Can be a Jinja template. If provided, it overwrites the query on cls._sql_mock_meta.query.
         """
@@ -324,9 +324,9 @@ class BaseMockTable:
         )
 
 
-class MockTableMeta(BaseModel):
+class TableMockMeta(BaseModel):
     """
-    Class to store static metadata of BaseMockTable instances which is used during processing.
+    Class to store static metadata of BaseTableMock instances which is used during processing.
     We use this class to avoid collision with field names of the table we want to mock.
 
     Attributes:
@@ -336,7 +336,7 @@ class MockTableMeta(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    default_inputs: List[SkipValidation["BaseMockTable"]] = None
+    default_inputs: List[SkipValidation["BaseTableMock"]] = None
     table_ref: str = None
     query: str = None
 

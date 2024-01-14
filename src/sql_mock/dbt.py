@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING
 
 from sql_mock.config import SQLMockConfig
 from sql_mock.helpers import parse_table_refs, validate_input_mocks
-from sql_mock.table_mocks import MockTableMeta
+from sql_mock.table_mocks import TableMockMeta
 
 # Needed to avoid circular imports on type check
 if TYPE_CHECKING:
-    from sql_mock.table_mocks import BaseMockTable
+    from sql_mock.table_mocks import BaseTableMock
 
 
 def _get_model_metadata_from_dbt_manifest(manifest_path: str, model_name: str) -> dict:
@@ -85,9 +85,9 @@ def _get_seed_metadata_from_dbt_manifest(manifest_path: str, seed_name: str) -> 
     raise ValueError(f"Seed '{seed_name}' not found in dbt manifest.")
 
 
-def dbt_model_meta(model_name: str, manifest_path: str = None, default_inputs: ["BaseMockTable"] = None):
+def dbt_model_meta(model_name: str, manifest_path: str = None, default_inputs: ["BaseTableMock"] = None):
     """
-    Decorator that is used to define MockTable metadata for dbt models.
+    Decorator that is used to define TableMock metadata for dbt models.
 
     Args:
         model_name (string) : Name of the dbt model
@@ -107,7 +107,7 @@ def dbt_model_meta(model_name: str, manifest_path: str = None, default_inputs: [
         if default_inputs:
             validate_input_mocks(default_inputs)
 
-        cls._sql_mock_meta = MockTableMeta(
+        cls._sql_mock_meta = TableMockMeta(
             table_ref=parse_table_refs(dbt_meta["table_ref"], dialect=cls._sql_dialect),
             query=parsed_query,
             default_inputs=default_inputs or [],
@@ -118,10 +118,10 @@ def dbt_model_meta(model_name: str, manifest_path: str = None, default_inputs: [
 
 
 def dbt_source_meta(
-    source_name: str, table_name: str, manifest_path: str = None, default_inputs: ["BaseMockTable"] = None
+    source_name: str, table_name: str, manifest_path: str = None, default_inputs: ["BaseTableMock"] = None
 ):
     """
-    Decorator that is used to define MockTable metadata for dbt sources.
+    Decorator that is used to define TableMock metadata for dbt sources.
 
     Args:
         source_name (string) : Name of source
@@ -140,7 +140,7 @@ def dbt_source_meta(
         if default_inputs:
             validate_input_mocks(default_inputs)
 
-        cls._sql_mock_meta = MockTableMeta(
+        cls._sql_mock_meta = TableMockMeta(
             table_ref=parse_table_refs(dbt_meta["table_ref"], dialect=cls._sql_dialect),
             default_inputs=default_inputs or [],
         )
@@ -149,9 +149,9 @@ def dbt_source_meta(
     return decorator
 
 
-def dbt_seed_meta(seed_name: str, manifest_path: str = None, default_inputs: ["BaseMockTable"] = None):
+def dbt_seed_meta(seed_name: str, manifest_path: str = None, default_inputs: ["BaseTableMock"] = None):
     """
-    Decorator that is used to define MockTable metadata for dbt sources.
+    Decorator that is used to define TableMock metadata for dbt sources.
 
     Args:
         seed_name (string) : Name of the dbt seed
@@ -170,7 +170,7 @@ def dbt_seed_meta(seed_name: str, manifest_path: str = None, default_inputs: ["B
         if default_inputs:
             validate_input_mocks(default_inputs)
 
-        cls._sql_mock_meta = MockTableMeta(
+        cls._sql_mock_meta = TableMockMeta(
             table_ref=parse_table_refs(dbt_meta["table_ref"], dialect=cls._sql_dialect),
             default_inputs=default_inputs or [],
         )

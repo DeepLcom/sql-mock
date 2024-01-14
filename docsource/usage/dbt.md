@@ -31,10 +31,10 @@ For dbt models, use the `dbt_model_meta` decorator from `sql_mock.dbt`. This dec
 
 ```python
 from sql_mock.dbt import dbt_model_meta
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 
 @dbt_model_meta(model_name="your_dbt_model_name")
-class YourDBTModelTable(BigQueryMockTable):
+class YourDBTModelTable(BigQueryTableMock):
     # Define your table columns and other necessary attributes here
     ...
 ```
@@ -45,10 +45,10 @@ For dbt sources, use the `dbt_source_meta` decorator from `sql_mock.dbt`. This i
 
 ```python
 from sql_mock.dbt import dbt_source_meta
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 
 @dbt_source_meta(source_name="your_source_name", table_name="your_source_table")
-class YourDBTSourceTable(BigQueryMockTable):
+class YourDBTSourceTable(BigQueryTableMock):
     # Define your table columns and other necessary attributes here
     ...
 ```
@@ -59,10 +59,10 @@ For dbt seeds, which are static data sets loaded into the database, use the `dbt
 
 ```python
 from sql_mock.dbt import dbt_seed_meta
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 
 @dbt_seed_meta(seed_name="your_dbt_seed_name")
-class YourDBTSeedTable(BigQueryMockTable):
+class YourDBTSeedTable(BigQueryTableMock):
     # Define your table columns and other necessary attributes here
     ...
 ```
@@ -75,14 +75,14 @@ Let’s consider a dbt model named `monthly_user_spend` that aggregates data fro
 
 ```python
 @dbt_source_meta(source_name="transactions", table_name="user_transactions")
-class UserTransactionsTable(BigQueryMockTable):
+class UserTransactionsTable(BigQueryTableMock):
     transaction_id = col.Int(default=1)
     user_id = col.Int(default=1)
     amount = col.Float(default=1.0)
     transaction_date = col.Date(default='2023-12-24')
 
 @dbt_seed_meta(seed_name="user_categories")
-class UserCategoriesTable(BigQueryMockTable):
+class UserCategoriesTable(BigQueryTableMock):
     user_id = col.Int(default=1)
     category = col.String(default='foo')
 ```
@@ -91,7 +91,7 @@ class UserCategoriesTable(BigQueryMockTable):
 
 ```python
 @dbt_model_meta(model_name="monthly_user_spend")
-class MonthlyUserSpendTable(BigQueryMockTable):
+class MonthlyUserSpendTable(BigQueryTableMock):
     user_id = col.Int(default=1)
     month = col.String(default='foo')
     total_spend = col.Float(default=1.0)
