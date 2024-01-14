@@ -1,8 +1,17 @@
-```{toctree}
-:maxdepth: 2
-```
+# Bigquery Docs
 
-# Example: Testing Subscription Counts in Redshift
+## Settings
+
+In order to use SQL Mock with Redshift, you need to provide the following environment variables when you run tests:
+
+* `SQL_MOCK_REDSHIFT_HOST`: The host of your Redshift instance
+* `SQL_MOCK_REDSHIFT_USER`: The user of your Redshift instance
+* `SQL_MOCK_REDSHIFT_PASSWORD`: The password of your Redshift instance
+* `SQL_MOCK_REDSHIFT_PORT`: The port of your Redshift instance
+
+Having those environment variables enables SQL Mock to connect to your Redshift instance.
+
+## Example: Testing Subscription Counts in Redshift
 
 ```python
 import datetime
@@ -10,7 +19,7 @@ from sql_mock.redshift import column_mocks as col
 from sql_mock.redshift.table_mocks import RedshiftTableMock
 from sql_mock.table_mocks import table_meta
 
-# Define mock tables for your data model that inherit from RedshiftTableMock
+# Define table mocks for your data model that inherit from RedshiftTableMock
 @table_meta(table_ref="data.users")
 class UserTable(RedshiftTableMock):
     user_id = col.INTEGER(default=1)

@@ -1,32 +1,38 @@
-```{toctree}
-:maxdepth: 2
-```
+# Bigquery Docs
 
-# Example: Testing Subscription Counts in BigQuery
+## Settings
+
+In order to use SQL Mock with Clickhouse, you need to provide the following environment variables when you run tests:
+
+* `SQL_MOCK_CLICKHOUSE_HOST`: Host of your Clickhouse instance
+* `SQL_MOCK_CLICKHOUSE_USER`: User you want to use for the connection
+* `SQL_MOCK_CLICKHOUSE_PASSWORD`: Password of your user
+* `SQL_MOCK_CLICKHOUSE_PORT`: Port of your Clickhouse instance
+
+Having those environment variables enables SQL Mock to connect to your Clickhouse instance.
+
+## Example: Testing Subscription Counts in ClickHouse
 
 ```python
-import datetime
-from sql_mock.bigquery import column_mocks as col
-from sql_mock.bigquery.table_mocks import BigQueryTableMock
+from sql_mock.clickhouse import column_mocks as col
+from sql_mock.clickhouse.table_mocks import ClickHouseTableMock
 from sql_mock.table_mocks import table_meta
 
-# Define mock tables for your data model that inherit from BigQueryTableMock
+# Define table mocks for your data model that inherit from ClickHouseTableMock
 @table_meta(table_ref='data.users')
-class UserTable(BigQueryTableMock):
+class UserTable(ClickHouseTableMock):
     user_id = col.Int(default=1)
-    user_name = col.String(default='Mr. T')
-
+    user_name = col.String(default="Mr. T")
 
 @table_meta(table_ref='data.subscriptions')
-class SubscriptionTable(BigQueryTableMock):
+class SubscriptionTable(ClickHouseTableMock):
     subscription_id = col.Int(default=1)
     period_start_date = col.Date(default=datetime.date(2023, 9, 5))
     period_end_date = col.Date(default=datetime.date(2023, 9, 5))
     user_id = col.Int(default=1)
 
-
 # Define a mock table for your expected results
-class SubscriptionCountTable(BigQueryTableMock):
+class SubscriptionCountTable(ClickHouseTableMock):
     subscription_count = col.Int(default=1)
     user_id = col.Int(default=1)
 
@@ -55,10 +61,7 @@ expected = [
 ]
 
 # Simulate the SQL query using SQL Mock
-res = SubscriptionCountTable.from_mocks(
-    query=query,
-    input_data=[users, subscriptions]
-)
+res = SubscriptionCountTable.from_mocks(query=query, input_data=[users, subscriptions])
 
 # Assert the results
 res.assert_equal(expected)

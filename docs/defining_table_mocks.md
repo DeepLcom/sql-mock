@@ -1,10 +1,6 @@
-```{toctree}
-:maxdepth: 2
-```
-
 # Defining table mocks
 
-When you want to provide mocked data to test your SQL model, you need to create TableMock classes for all upstream data that your model uses, as well as for the model you want to test. Those mock tables can be created by inheriting from a `BaseTableMock` class for the database provider you are using (e.g. `BigQueryTableMock`).
+When you want to provide mocked data to test your SQL model, you need to create TableMock classes for all upstream data that your model uses, as well as for the model you want to test. Those table mocks can be created by inheriting from a `BaseTableMock` class for the database provider you are using (e.g. `BigQueryTableMock`).
 
 **We recommend to have a central `model.py` file where you create those models that you can easily reuse them across your tests**
 

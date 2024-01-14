@@ -1,7 +1,3 @@
-```{toctree}
-:maxdepth: 2
-```
-
 # Result assertion
 
 There are 2 ways how you can check the output of your query given the mocked input data on your Table Mock instance:
@@ -31,7 +27,7 @@ users_with_multiple_subs AS (
 SELECT user_id FROM users_with_multiple_subs
 ```
 
-... and we define the following mock tables:
+... and we define the following table mocks:
 
 ```python
 import datetime

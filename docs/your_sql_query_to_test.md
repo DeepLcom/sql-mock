@@ -27,7 +27,7 @@ The advantage of that option is that you only need to define your Table Mock cla
 
 You can also pass your query in your test case when you call the `from_mocks` method.
 
-```python 
+```python
 res = ResultTable.from_mocks(query='SELECT 1', input_data=[<your-input-mocks-table-instances>])
 ```
 
@@ -43,7 +43,7 @@ In those cases, you can provide the necessary context for rendering your query u
 Let's assume the following jinja template query:
 
 ```jinja
-SELECT * FROM data.users 
+SELECT * FROM data.users
 WHERE created_at > {{ creation_date }}
 ```
 

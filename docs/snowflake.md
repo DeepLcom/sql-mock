@@ -1,8 +1,16 @@
-```{toctree}
-:maxdepth: 2
-```
+# Bigquery Docs
 
-# Example: Testing Subscription Counts in Snowflake
+## Settings
+
+In order to use SQL Mock with Snowflake, you need to provide the following environment variables when you run tests:
+
+* `SQL_MOCK_SNOWFLAKE_ACCOUNT`: The name of your Snowflake account
+* `SQL_MOCK_SNOWFLAKE_USER`: The name of your Snowflake user
+* `SQL_MOCK_SNOWFLAKE_PASSWORD`: The password for your Snowflake user
+
+Having those environment variables enables SQL Mock to connect to your Snowflake instance.
+
+## Example: Testing Subscription Counts in Snowflake
 
 ```python
 import datetime
@@ -10,7 +18,7 @@ from sql_mock.snowflake import column_mocks as col
 from sql_mock.snowflake.table_mocks import SnowflakeTableMock
 from sql_mock.table_mocks import table_meta
 
-# Define mock tables for your data model that inherit from SnowflakeTableMock
+# Define table mocks for your data model that inherit from SnowflakeTableMock
 @table_meta(table_ref="data.users")
 class UserTable(SnowflakeTableMock):
     user_id = col.INTEGER(default=1)

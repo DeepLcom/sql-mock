@@ -21,7 +21,7 @@ from sql_mock.config import SQLMockConfig
 SQLMockConfig.set_dbt_manifest_path('/path/to/your/dbt/manifest.json')
 ```
 
-## Creating Mock Tables
+## Creating Table Mocks
 
 SQLMock offers specialized decorators for different dbt entities: models, sources, and seeds.
 
@@ -71,7 +71,7 @@ class YourDBTSeedTable(BigQueryTableMock):
 
 Let’s consider a dbt model named `monthly_user_spend` that aggregates data from a source `user_transactions` and a seed `user_categories`.
 
-### Step 1: Define Your Source and Seed Mock Tables
+### Step 1: Define Your Source and Seed Table Mocks
 
 ```python
 @dbt_source_meta(source_name="transactions", table_name="user_transactions")

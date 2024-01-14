@@ -1,14 +1,10 @@
-```{toctree}
-:maxdepth: 2
-```
-
 # Default values
 
-Testing SQL queries can often involve repetitive setup for mock tables. In SQLMock, one effective way to streamline this process is by using default values. By setting reasonable defaults, you can significantly reduce the boilerplate code in your tests, especially when dealing with multiple input tables or complex queries. Let’s explore how you can efficiently implement this.
+Testing SQL queries can often involve repetitive setup for table mocks. In SQLMock, one effective way to streamline this process is by using default values. By setting reasonable defaults, you can significantly reduce the boilerplate code in your tests, especially when dealing with multiple input tables or complex queries. Let’s explore how you can efficiently implement this.
 
 ## Utilizing Default Values in TableMock Fields
 
-Defining default values at the field level in your mock tables is straightforward.
+Defining default values at the field level in your table mocks is straightforward.
 The default argument in the field definition allows you to set default values consistency across all test scenarios in one step.
 They are particularly useful for ensuring that joins and other query functionalities operate correctly.
 
