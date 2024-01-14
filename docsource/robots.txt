@@ -1,3 +1,0 @@
-User-agent: *
-
-Sitemap: https://deeplcom.github.io/sql-mock/sitemap.xml
