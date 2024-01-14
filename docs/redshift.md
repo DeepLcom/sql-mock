@@ -1,4 +1,4 @@
-# Bigquery Docs
+# Redshift Docs
 
 ## Settings
 

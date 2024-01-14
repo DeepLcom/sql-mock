@@ -1,4 +1,4 @@
-# Bigquery Docs
+# Clickhouse Docs
 
 ## Settings
 

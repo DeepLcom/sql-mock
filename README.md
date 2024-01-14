@@ -16,7 +16,7 @@ The primary purpose of this library is to simplify the testing of SQL data model
   * [Create table mocks](/docs/defining_table_mocks.md)
   * [Specifying default values](/docs/default_values.md)
   * [Specifying the query to test](/docs/your_sql_query_to_test.md)
-  * [Result assertions](/docs/result_assertions.md)
+  * [Result assertions](/docs/result_assertion.md)
 * System specific usage
   * [Use with BigQuery](/docs/bigquery.md)
   * [Use with Clickhouse](/docs/clickhouse.md)
@@ -25,13 +25,6 @@ The primary purpose of this library is to simplify the testing of SQL data model
   * [Use with dbt](/docs/dbt.md)
 
 You can find some examples in the [examples folder](https://github.com/DeepLcom/sql-mock/tree/main/examples).
-
-The library currently supports the following databases. Click on the links to see the documentation for each database.
-
-* [BigQuery](/docs/bigquery.md)
-* [Clickhouse](/docs/clickhouse.md)
-* [Redshift](/docs/redshift.md)
-* [Snowflake](/docs/snowflake.md)
 
 ### Installation
 

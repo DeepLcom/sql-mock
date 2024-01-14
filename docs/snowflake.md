@@ -1,4 +1,4 @@
-# Bigquery Docs
+# Snowflake Docs
 
 ## Settings
 
