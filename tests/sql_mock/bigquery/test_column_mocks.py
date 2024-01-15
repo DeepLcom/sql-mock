@@ -1,9 +1,9 @@
-from sql_mock.bigquery.column_mocks import Array, BigQueryColumnMock, Decimal, String, Int
+from sql_mock.bigquery.column_mocks import Array, BigQueryColumnMock, Decimal, Int, String
 
 
 def test_init_nullable():
     """
-    ...then nullable should be tRUE and dtype be the same as passed.
+    ...then nullable should be True and dtype be the same as passed.
     """
 
     class ColMock(BigQueryColumnMock):
@@ -16,7 +16,7 @@ def test_init_nullable():
     assert column.nullable
 
 
-def test_init_nullable():
+def test_init_not_nullable():
     """
     ...then nullable should be False"
     """

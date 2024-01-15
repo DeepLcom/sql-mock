@@ -1,9 +1,9 @@
-from sql_mock.clickhouse.column_mocks import Array, ClickhouseColumnMock, Decimal, String, Int
+from sql_mock.clickhouse.column_mocks import Array, ClickhouseColumnMock, Decimal, Int, String
 
 
 def test_init_not_nullable():
     """
-    ...then nullable should be True and dtype be the same as passed.
+    ...then nullable should be False and dtype be the same as passed.
     """
 
     class ColMock(ClickhouseColumnMock):
@@ -18,7 +18,7 @@ def test_init_not_nullable():
 
 def test_init_nullable():
     """
-    ...then nullable should be False and dtype should be wrapped with "Nullable()"
+    ...then nullable should be True and dtype should be wrapped with "Nullable()"
     """
 
     class ColMock(ClickhouseColumnMock):
