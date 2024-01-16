@@ -11,22 +11,22 @@ def test_init_no_default_not_nullable():
         BaseColumnMock(default=None, nullable=False)
 
 
-def test_init_default_not_nullable():
-    """
-    ...then it should set the default value and nullable should be False.
-    """
-    column = BaseColumnMock(default=42)
-    assert column.default == 42
-    assert not column.nullable
-
-
 def test_init_default_nullable():
     """
     ...then it should set the default value and nullable should be True.
     """
-    column = BaseColumnMock(default="Hello", nullable=True)
-    assert column.default == "Hello"
+    column = BaseColumnMock(default=42)
+    assert column.default == 42
     assert column.nullable
+
+
+def test_init_default_not_nullable():
+    """
+    ...then it should set the default value and nullable should be False.
+    """
+    column = BaseColumnMock(default="Hello", nullable=False)
+    assert column.default == "Hello"
+    assert not column.nullable
 
 
 def test_to_sql_with_value():

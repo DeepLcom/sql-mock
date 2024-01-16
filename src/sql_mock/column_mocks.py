@@ -14,11 +14,11 @@ class BaseColumnMock:
     """
 
     dtype = None
-    nullable = False
+    nullable = True
     default = None
     use_quotes_for_casting = True
 
-    def __init__(self, default=None, nullable=False) -> None:
+    def __init__(self, default=None, nullable=True) -> None:
         """
         Initialize a BaseColumnMock instance.
 
