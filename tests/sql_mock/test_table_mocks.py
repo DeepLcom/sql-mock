@@ -110,7 +110,7 @@ def test_as_sql_input():
     ]
     sql_input = mock_table_instance.as_sql_input()
     expected = (
-        f"{mock_table_instance._sql_mock_meta.table_ref} AS (\n"
+        f"{mock_table_instance._sql_mock_meta.cte_name} AS (\n"
         "\tSELECT cast('1' AS Integer) AS col1, cast('value1' AS String) AS col2\n"
         "\tUNION ALL\n"
         "\tSELECT cast('2' AS Integer) AS col1, cast('value2' AS String) AS col2\n"
@@ -147,7 +147,7 @@ class TestToSqlModel:
         sql_model = mock_table.as_sql_input()
 
         expected_sql_model = (
-            "mock_test_table AS (\n"
+            f"{mock_table._sql_mock_meta.cte_name} AS (\n"
             "\tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE\n"
             ")"
         )
@@ -160,7 +160,7 @@ class TestToSqlModel:
         sql_model = mock_table.as_sql_input()
 
         expected_sql_model = (
-            "mock_test_table AS (\n"
+            f"{mock_table._sql_mock_meta.cte_name} AS (\n"
             "\tSELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n"
             ")"
         )
@@ -173,7 +173,7 @@ class TestToSqlModel:
         sql_model = mock_table.as_sql_input()
 
         expected_sql_model = (
-            "mock_test_table AS (\n"
+            f"{mock_table._sql_mock_meta.cte_name} AS (\n"
             "\tSELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n"
             "\tUNION ALL\n"
             "\tSELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2\n"
@@ -185,6 +185,6 @@ class TestToSqlModel:
 def test_cte_name():
     mock_table_meta = TableMockMeta(table_ref='"my-project.schema.table_name"')
 
-    expected_cte_name = "my_project__schema__table_name"
+    expected_cte_name = "sql_mock__my_project__schema__table_name"
 
     assert mock_table_meta.cte_name == expected_cte_name

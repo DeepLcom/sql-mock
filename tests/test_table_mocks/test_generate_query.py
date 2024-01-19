@@ -1,4 +1,4 @@
-from textwrap import dedent
+import sqlglot
 
 from sql_mock.column_mocks import BaseColumnMock
 from sql_mock.table_mocks import BaseTableMock, table_meta
@@ -30,7 +30,7 @@ def test_generate_query_no_cte_provided(mocker):
     mock_table_instance = MockTestTable.from_dicts([])
     mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
     original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref}"
-    dummy_return_query = "SELECT foo FROM bar"
+    dummy_return_query = sqlglot.parse_one("SELECT foo FROM bar")
     mock_table_instance._sql_mock_data.rendered_query = original_query
 
     mocked_select_from_cte = mocker.patch("sql_mock.table_mocks.select_from_cte")
@@ -38,7 +38,7 @@ def test_generate_query_no_cte_provided(mocker):
         "sql_mock.table_mocks.replace_original_table_references", return_value=dummy_return_query
     )
 
-    expected_query_template_result = dedent(
+    expected_query_template_result = sqlglot.parse_one(
         f"""
     WITH {mock_table_instance._sql_mock_meta.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
@@ -61,10 +61,13 @@ def test_generate_query_no_cte_provided(mocker):
     # Asserts
     mocked_select_from_cte.assert_not_called()
     mocked_replace_original_table_references.assert_called_once_with(
-        expected_query_template_result, mock_tables=[mock_table_instance], dialect=mock_table_instance._sql_dialect
+        query_ast=expected_query_template_result,
+        table_ref=mock_table_instance._sql_mock_meta.table_ref,
+        sql_mock_cte_name=mock_table_instance._sql_mock_meta.cte_name,
+        dialect=mock_table_instance._sql_dialect
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
-    assert query == mocked_replace_original_table_references.return_value
+    assert query == mocked_replace_original_table_references.return_value.sql(pretty=True)
 
 
 def test_generate_query_cte_provided(mocker):
@@ -75,7 +78,7 @@ def test_generate_query_cte_provided(mocker):
     original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref}"
     cte_to_select = "some_cte"
     cte_adjusted_query = f"SELECT * FROM {cte_to_select}"
-    dummy_return_query = "SELECT foo FROM bar"
+    dummy_return_query = sqlglot.parse_one("SELECT foo FROM bar")
     mock_table_instance._sql_mock_data.rendered_query = original_query
 
     mocked_select_from_cte = mocker.patch("sql_mock.table_mocks.select_from_cte", return_value=cte_adjusted_query)
@@ -83,7 +86,7 @@ def test_generate_query_cte_provided(mocker):
         "sql_mock.table_mocks.replace_original_table_references", return_value=dummy_return_query
     )
 
-    expected_query_template_result = dedent(
+    expected_query_template_result = sqlglot.parse_one(
         f"""
     WITH {mock_table_instance._sql_mock_meta.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
@@ -104,13 +107,17 @@ def test_generate_query_cte_provided(mocker):
 
     # Asserts
     mocked_select_from_cte.assert_called_once_with(
-        original_query, cte_to_select, sql_dialect=MockTestTable._sql_dialect
+        original_query, cte_to_select, sql_dialect=mock_table_instance._sql_dialect
     )
+    # replace_original_table_references should be called once since we have a single input table
     mocked_replace_original_table_references.assert_called_once_with(
-        expected_query_template_result, mock_tables=[mock_table_instance], dialect=mock_table_instance._sql_dialect
+        query_ast=expected_query_template_result,
+        table_ref=mock_table_instance._sql_mock_meta.table_ref,
+        sql_mock_cte_name=mock_table_instance._sql_mock_meta.cte_name,
+        dialect=mock_table_instance._sql_dialect
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
-    assert query == mocked_replace_original_table_references.return_value
+    assert query == mocked_replace_original_table_references.return_value.sql(pretty=True)
 
 
 def test_generate_query_sql_has_semicolon():
