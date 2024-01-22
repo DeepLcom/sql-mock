@@ -2,6 +2,7 @@ from textwrap import dedent, indent
 from typing import List, Type
 
 import sqlglot
+from sqlglot.optimizer.eliminate_ctes import eliminate_ctes
 from jinja2 import Template
 from pydantic import BaseModel, ConfigDict, SkipValidation
 
@@ -11,6 +12,7 @@ from sql_mock.helpers import (
     get_keys_from_list_of_dicts,
     parse_table_refs,
     replace_original_table_references,
+    remove_cte_from_query,
     select_from_cte,
     validate_all_input_mocks_for_query_provided,
     validate_input_mocks,
@@ -72,7 +74,7 @@ class BaseTableMock:
     col1 = Int(default=1)
 
     Attributes:
-        _sql_mock_data (SQLMockData): A class that stores data which is for processing. This is automatcially created on instantiation.
+        _sql_mock_data (SQLMockData): A class that stores data which is for processing. This is automatically created on instantiation.
         _sql_dialect (str): The sql dialect that the mock model uses. It will be leveraged by sqlglot.
     """
 
@@ -184,9 +186,13 @@ class BaseTableMock:
             final_columns_to_select=final_columns_to_select,
         )
 
-        query = replace_original_table_references(
-            query, mock_tables=self._sql_mock_data.input_data, dialect=self._sql_dialect
-        )
+        query_ast = sqlglot.parse_one(query, dialect=self._sql_dialect)
+        for mock_table in self._sql_mock_data.input_data:
+            query_ast = mock_table.replace_original_references(query_ast=query_ast)
+
+        # Remove superfluous CTEs
+        query_ast = eliminate_ctes(query_ast)
+        query = query_ast.sql(pretty=True, dialect=self._sql_dialect)
         # Store last query for debugging
         self._sql_mock_data.last_query = query
         return query
@@ -234,6 +240,17 @@ class BaseTableMock:
         # Indent whole CTE content for better query readability
         snippet = indent(f"SELECT {snippet}", "\t")
         return f"{self._sql_mock_meta.cte_name} AS (\n{snippet}\n)"
+
+    def replace_original_references(self, query_ast: sqlglot.Expression) -> sqlglot.Expression:
+        # In case we mock a CTE, we need to drop the original CTE from the query
+        query_ast = remove_cte_from_query(query_ast=query_ast, cte_name=self._sql_mock_meta.table_ref)
+
+        return replace_original_table_references(
+            query_ast=query_ast,
+            table_ref=self._sql_mock_meta.table_ref,
+            sql_mock_cte_name=self._sql_mock_meta.cte_name,
+            dialect=self._sql_dialect,
+        )
 
     def _assert_equal(
         self,
@@ -343,4 +360,5 @@ class TableMockMeta(BaseModel):
     @property
     def cte_name(self):
         if getattr(self, "table_ref", None):
-            return self.table_ref.replace('"', "").replace(".", "__").replace("-", "_")
+            cleaned_ref = self.table_ref.replace('"', "").replace(".", "__").replace("-", "_")
+            return f"sql_mock__{cleaned_ref}"
