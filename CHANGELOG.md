@@ -16,18 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
-
-## [0.5.1]
-
-**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.5.0...v0.5.1
-
-### Added
-
-### Changed
-* Use chdb to fully mock the Clickhouse connection
-
-
-### Fixed
 * Fixed generation of CTE names from references with hyphens
 
 ## [0.5.0]
