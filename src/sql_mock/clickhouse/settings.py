@@ -7,3 +7,4 @@ class ClickHouseSettings(BaseSettings):
     user: str
     password: str
     port: str
+    use_secure_connection: bool = False
