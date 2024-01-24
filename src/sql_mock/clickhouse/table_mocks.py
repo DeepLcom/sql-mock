@@ -23,5 +23,5 @@ class ClickHouseTableMock(BaseMockTable):
             password=self.settings.password,
             port=self.settings.port,
         ) as client:
-            res = client.query_df(query)
-        return res.to_dict("records")
+            res = client.query(query, use_none=True)
+        return [dict(zip(res.column_names, row)) for row in res.result_rows]
