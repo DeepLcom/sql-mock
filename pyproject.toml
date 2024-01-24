@@ -43,7 +43,8 @@ pydantic-settings = "^2.0.3"
 sqlglot = "^20.5.0"
 
 # Clickhouse specific
-clickhouse-driver = {extras = ["numpy"], version = "^0.2.6", optional = true}
+clickhouse-connect = {version = "^0.7.0", optional = true}
+numpy = {version = "^1.26.3", optional = true}
 
 # Google Bigquery specific
 google-cloud-bigquery = {version ="^3.11.4", optional = true}
@@ -57,7 +58,7 @@ snowflake-connector-python = "^3.6.0"
 
 [tool.poetry.extras]
 bigquery = ["google-cloud-bigquery"]
-clickhouse = ["clickhouse-driver"]
+clickhouse = ["clickhouse-connect", "numpy"]
 redshift = ["redshift-connector", "boto3"]
 snowflake = ["snowflake-connector-python"]
 

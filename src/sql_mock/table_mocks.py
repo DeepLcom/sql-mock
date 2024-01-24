@@ -168,7 +168,9 @@ class BaseMockTable:
         input_data_ctes = self._generate_input_data_cte_snippet()
 
         # Parse the query with sqlglot to to standardize it (e.g. removes semi-colons)
-        result_query = sqlglot.parse_one(self._sql_mock_data.rendered_query, dialect=self._sql_dialect).sql()
+        result_query = sqlglot.parse_one(self._sql_mock_data.rendered_query, dialect=self._sql_dialect).sql(
+            dialect=self._sql_dialect
+        )
 
         if cte_to_select is not None:
             result_query = select_from_cte(result_query, cte_to_select, sql_dialect=self._sql_dialect)
