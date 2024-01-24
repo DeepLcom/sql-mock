@@ -68,4 +68,4 @@ def test_get_results(mocker):
     result = instance._get_results(query=query)
 
     assert result == mock_query_result
-    mock_client.return_value.__enter__.return_value.query.assert_called_once_with(query)
+    mock_client.return_value.__enter__.return_value.query.assert_called_once_with(query, use_none=True)
