@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [0.5.3]
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.5.2...v0.5.3
+
+### Added
+
 * Clickhouse: Support for secure connections
 
 ### Changed
@@ -105,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2023-10-26
 Initial version.
 
-[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.5.3...HEAD
+[0.5.3]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.3
 [0.5.2]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.2
 [0.5.1]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.1
 [0.5.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.0
