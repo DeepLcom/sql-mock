@@ -30,8 +30,8 @@ class MockTestTableWithDefaults(BaseTableMock):
 
 # Create a fixture for an instance of BaseTableMock
 @pytest.fixture
-def base_mock_table_instance():
-    @table_meta(table_ref="base_mock_table")
+def base_table_mock_instance():
+    @table_meta(table_ref="base_table_mock")
     class TableMock(BaseTableMock):
         pass
 
@@ -52,9 +52,9 @@ def test_wrong_fields_prodivded_to_model():
 
 
 class TestFromMocks:
-    def test_from_mocks(self, base_mock_table_instance, mocker):
+    def test_from_mocks(self, base_table_mock_instance, mocker):
         query = "SELECT * FROM some_table"
-        input_data = [base_mock_table_instance]
+        input_data = [base_table_mock_instance]
         query_template_kwargs = {}
         mocked_validate_input_mocks_for_query = mocker.patch(
             "sql_mock.table_mocks.validate_all_input_mocks_for_query_provided"
@@ -72,9 +72,9 @@ class TestFromMocks:
         mocked_validate_input_mocks_for_query.assert_called_once()
         mocked_validate_input_mocks.assert_called_once()
 
-    def test_from_mocks_with_defaults(self, base_mock_table_instance, mocker):
+    def test_from_mocks_with_defaults(self, base_table_mock_instance, mocker):
         query = "SELECT * FROM some_table"
-        input_data = [*MockTestTableWithDefaults._sql_mock_meta.default_inputs, base_mock_table_instance]
+        input_data = [*MockTestTableWithDefaults._sql_mock_meta.default_inputs, base_table_mock_instance]
         query_template_kwargs = {}
         mocked_validate_input_mocks_for_query = mocker.patch(
             "sql_mock.table_mocks.validate_all_input_mocks_for_query_provided"
@@ -94,23 +94,23 @@ class TestFromMocks:
 
 
 # Test the _generate_input_data_cte_snippet method
-def test_generate_input_data_cte_snippet(base_mock_table_instance):
-    base_mock_table_instance._sql_mock_data.input_data = [base_mock_table_instance]
-    snippet = base_mock_table_instance._generate_input_data_cte_snippet()
+def test_generate_input_data_cte_snippet(base_table_mock_instance):
+    base_table_mock_instance._sql_mock_data.input_data = [base_table_mock_instance]
+    snippet = base_table_mock_instance._generate_input_data_cte_snippet()
     assert isinstance(snippet, str)
-    assert "base_mock_table AS (" in snippet
+    assert "base_table_mock AS (" in snippet
 
 
 # Test the as_sql_input method
 def test_as_sql_input():
-    mock_table_instance = MockTestTable()
-    mock_table_instance._sql_mock_data.data = [
+    table_mock_instance = MockTestTable()
+    table_mock_instance._sql_mock_data.data = [
         {"col1": 1, "col2": "value1"},
         {"col1": 2, "col2": "value2"},
     ]
-    sql_input = mock_table_instance.as_sql_input()
+    sql_input = table_mock_instance.as_sql_input()
     expected = (
-        f"{mock_table_instance._sql_mock_meta.cte_name} AS (\n"
+        f"{table_mock_instance._sql_mock_meta.cte_name} AS (\n"
         "\tSELECT cast('1' AS Integer) AS col1, cast('value1' AS String) AS col2\n"
         "\tUNION ALL\n"
         "\tSELECT cast('2' AS Integer) AS col1, cast('value2' AS String) AS col2\n"
@@ -123,8 +123,8 @@ class TestToSqlRow:
     def test_to_sql_row_all_values_provided(self):
         """...then the values should be used"""
         mock_data = [{"col1": 42, "col2": "test_value"}]
-        mock_table = MockTestTable(data=mock_data)
-        sql_row = mock_table._to_sql_row(mock_data[0])
+        table_mock = MockTestTable(data=mock_data)
+        sql_row = table_mock._to_sql_row(mock_data[0])
 
         expected_sql_row = "cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2"
         assert sql_row == expected_sql_row
@@ -132,8 +132,8 @@ class TestToSqlRow:
     def test_to_sql_row_only_some_values_provided(self):
         """...then the missing values should be filled with the default"""
         mock_data = [{"col1": 42}]
-        mock_table = MockTestTable(data=mock_data)
-        sql_row = mock_table._to_sql_row(mock_data[0])
+        table_mock = MockTestTable(data=mock_data)
+        sql_row = table_mock._to_sql_row(mock_data[0])
 
         expected_sql_row = "cast('42' AS Integer) AS col1, cast('hey' AS String) AS col2"
         assert sql_row == expected_sql_row
@@ -143,11 +143,11 @@ class TestToSqlModel:
     def test_to_sql_model_no_data_provided(self):
         """...then it should populate a dummy row with defaults but filter for no results with WHERE FALSE"""
         mock_data = []
-        mock_table = MockTestTable(mock_data)
-        sql_model = mock_table.as_sql_input()
+        table_mock = MockTestTable(mock_data)
+        sql_model = table_mock.as_sql_input()
 
         expected_sql_model = (
-            f"{mock_table._sql_mock_meta.cte_name} AS (\n"
+            f"{table_mock._sql_mock_meta.cte_name} AS (\n"
             "\tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE\n"
             ")"
         )
@@ -156,11 +156,11 @@ class TestToSqlModel:
     def test_to_sql_model_single_row_provided(self):
         """...then it should only select data for that row and not add UNION ALL"""
         mock_data = [{"col1": 42, "col2": "test_value"}]
-        mock_table = MockTestTable(mock_data)
-        sql_model = mock_table.as_sql_input()
+        table_mock = MockTestTable(mock_data)
+        sql_model = table_mock.as_sql_input()
 
         expected_sql_model = (
-            f"{mock_table._sql_mock_meta.cte_name} AS (\n"
+            f"{table_mock._sql_mock_meta.cte_name} AS (\n"
             "\tSELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n"
             ")"
         )
@@ -169,11 +169,11 @@ class TestToSqlModel:
     def test_to_sql_model_multiple_provided(self):
         """...then it should combine the rows with UNION ALL"""
         mock_data = [{"col1": 42, "col2": "test_value"}, {"col1": 100, "col2": "another_value"}]
-        mock_table = MockTestTable(mock_data)
-        sql_model = mock_table.as_sql_input()
+        table_mock = MockTestTable(mock_data)
+        sql_model = table_mock.as_sql_input()
 
         expected_sql_model = (
-            f"{mock_table._sql_mock_meta.cte_name} AS (\n"
+            f"{table_mock._sql_mock_meta.cte_name} AS (\n"
             "\tSELECT cast('42' AS Integer) AS col1, cast('test_value' AS String) AS col2\n"
             "\tUNION ALL\n"
             "\tSELECT cast('100' AS Integer) AS col1, cast('another_value' AS String) AS col2\n"
@@ -183,8 +183,8 @@ class TestToSqlModel:
 
 
 def test_cte_name():
-    mock_table_meta = TableMockMeta(table_ref='"my-project.schema.table_name"')
+    table_mock_meta = TableMockMeta(table_ref='"my-project.schema.table_name"')
 
     expected_cte_name = "sql_mock__my_project__schema__table_name"
 
-    assert mock_table_meta.cte_name == expected_cte_name
+    assert table_mock_meta.cte_name == expected_cte_name

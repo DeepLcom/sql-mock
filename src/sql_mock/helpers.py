@@ -119,9 +119,9 @@ def _validate_unique_input_mocks(input_mocks: List["BaseTableMock"]) -> None:
 
 def _validate_input_mocks_have_table_ref(input_mocks: List["BaseTableMock"]) -> None:
     missing_table_refs = [
-        type(mock_table).__name__
-        for mock_table in input_mocks
-        if not getattr(mock_table._sql_mock_meta, "table_ref", False)
+        type(table_mock).__name__
+        for table_mock in input_mocks
+        if not getattr(table_mock._sql_mock_meta, "table_ref", False)
     ]
 
     if missing_table_refs:
@@ -145,7 +145,7 @@ def validate_all_input_mocks_for_query_provided(query: str, input_mocks: List["B
         input_mocks (List[BaseTableMock]): The input mocks that are provided
         dialect (str): The SQL dialect to use for parsing the query
     """
-    provided_table_refs = [mock_table._sql_mock_meta.table_ref for mock_table in input_mocks if hasattr(mock_table._sql_mock_meta, "table_ref")]
+    provided_table_refs = [table_mock._sql_mock_meta.table_ref for table_mock in input_mocks if hasattr(table_mock._sql_mock_meta, "table_ref")]
     ast = sqlglot.parse_one(query, dialect=dialect)
 
     # In case the table_ref is a CTE, we need to remove it from the query
@@ -157,13 +157,13 @@ def validate_all_input_mocks_for_query_provided(query: str, input_mocks: List["B
 
     # The remaining query should not contain raw table references anymore if everything is mocked correctly
     missing_source_table_mocks = get_source_tables(query=remaining_query, dialect=dialect)
-    for mock_table in input_mocks:
-        table_ref = getattr(mock_table._sql_mock_meta, "table_ref", None)
+    for table_mock in input_mocks:
+        table_ref = getattr(table_mock._sql_mock_meta, "table_ref", None)
         # If the table exists as mock, we can remove it from missing source tables
         try:
             missing_source_table_mocks.remove(table_ref)
         except ValueError:
-            msg = f"Your input mock {mock_table.__class__.__name__} is not a table that is referenced in the query"
+            msg = f"Your input mock {table_mock.__class__.__name__} is not a table that is referenced in the query"
             raise ValidationError(msg)
 
     if missing_source_table_mocks:

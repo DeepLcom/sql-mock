@@ -134,9 +134,9 @@ class BaseTableMock:
         # Update defaults with provided data. We use the table ref dictionaries to avoid duplicated inputs.
         if getattr(cls._sql_mock_meta, "default_inputs", None):
             default_inputs = {
-                mock_table._sql_mock_meta.table_ref: mock_table for mock_table in cls._sql_mock_meta.default_inputs
+                table_mock._sql_mock_meta.table_ref: table_mock for table_mock in cls._sql_mock_meta.default_inputs
             }
-            input_dict = {mock_table._sql_mock_meta.table_ref: mock_table for mock_table in input_data}
+            input_dict = {table_mock._sql_mock_meta.table_ref: table_mock for table_mock in input_data}
             input_data = list({**default_inputs, **input_dict}.values())
 
         validate_input_mocks(input_data)
@@ -147,7 +147,7 @@ class BaseTableMock:
 
     def _generate_input_data_cte_snippet(self):
         # Convert instances into SQL snippets that serve as input to a CTE
-        table_ctes = [mock_table.as_sql_input() for mock_table in self._sql_mock_data.input_data]
+        table_ctes = [table_mock.as_sql_input() for table_mock in self._sql_mock_data.input_data]
         return ",\n".join(table_ctes)
 
     def _generate_query(
@@ -189,8 +189,8 @@ class BaseTableMock:
         )
 
         query_ast = sqlglot.parse_one(query, dialect=self._sql_dialect)
-        for mock_table in self._sql_mock_data.input_data:
-            query_ast = mock_table.replace_original_references(query_ast=query_ast)
+        for table_mock in self._sql_mock_data.input_data:
+            query_ast = table_mock.replace_original_references(query_ast=query_ast)
 
         # Remove superfluous CTEs
         query_ast = eliminate_ctes(query_ast)

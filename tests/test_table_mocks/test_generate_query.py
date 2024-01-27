@@ -27,11 +27,11 @@ class MockTestTable(BaseTableMock):
 def test_generate_query_no_cte_provided(mocker):
     """Then the query should be generated with the provided query template"""
     # Arrange
-    mock_table_instance = MockTestTable.from_dicts([])
-    mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
-    original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref}"
+    table_mock_instance = MockTestTable.from_dicts([])
+    table_mock_instance._sql_mock_data.input_data = [table_mock_instance]
+    original_query = f"SELECT * FROM {table_mock_instance._sql_mock_meta.table_ref}"
     dummy_return_query = sqlglot.parse_one("SELECT foo FROM bar")
-    mock_table_instance._sql_mock_data.rendered_query = original_query
+    table_mock_instance._sql_mock_data.rendered_query = original_query
 
     mocked_select_from_cte = mocker.patch("sql_mock.table_mocks.select_from_cte")
     mocked_replace_original_table_references = mocker.patch(
@@ -40,7 +40,7 @@ def test_generate_query_no_cte_provided(mocker):
 
     expected_query_template_result = sqlglot.parse_one(
         f"""
-    WITH {mock_table_instance._sql_mock_meta.cte_name} AS (
+    WITH {table_mock_instance._sql_mock_meta.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
     ),
 
@@ -56,15 +56,15 @@ def test_generate_query_no_cte_provided(mocker):
     )
 
     # Act
-    query = mock_table_instance._generate_query()
+    query = table_mock_instance._generate_query()
 
     # Asserts
     mocked_select_from_cte.assert_not_called()
     mocked_replace_original_table_references.assert_called_once_with(
         query_ast=expected_query_template_result,
-        table_ref=mock_table_instance._sql_mock_meta.table_ref,
-        sql_mock_cte_name=mock_table_instance._sql_mock_meta.cte_name,
-        dialect=mock_table_instance._sql_dialect
+        table_ref=table_mock_instance._sql_mock_meta.table_ref,
+        sql_mock_cte_name=table_mock_instance._sql_mock_meta.cte_name,
+        dialect=table_mock_instance._sql_dialect
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
     assert query == mocked_replace_original_table_references.return_value.sql(pretty=True)
@@ -73,13 +73,13 @@ def test_generate_query_no_cte_provided(mocker):
 def test_generate_query_cte_provided(mocker):
     """...then the query reference needs to be replaced to SELECT * FROM <cte>"""
     # Arrange
-    mock_table_instance = MockTestTable.from_dicts([])
-    mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
-    original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref}"
+    table_mock_instance = MockTestTable.from_dicts([])
+    table_mock_instance._sql_mock_data.input_data = [table_mock_instance]
+    original_query = f"SELECT * FROM {table_mock_instance._sql_mock_meta.table_ref}"
     cte_to_select = "some_cte"
     cte_adjusted_query = f"SELECT * FROM {cte_to_select}"
     dummy_return_query = sqlglot.parse_one("SELECT foo FROM bar")
-    mock_table_instance._sql_mock_data.rendered_query = original_query
+    table_mock_instance._sql_mock_data.rendered_query = original_query
 
     mocked_select_from_cte = mocker.patch("sql_mock.table_mocks.select_from_cte", return_value=cte_adjusted_query)
     mocked_replace_original_table_references = mocker.patch(
@@ -88,7 +88,7 @@ def test_generate_query_cte_provided(mocker):
 
     expected_query_template_result = sqlglot.parse_one(
         f"""
-    WITH {mock_table_instance._sql_mock_meta.cte_name} AS (
+    WITH {table_mock_instance._sql_mock_meta.cte_name} AS (
     \tSELECT cast('1' AS Integer) AS col1, cast('hey' AS String) AS col2 FROM (SELECT 1) WHERE FALSE
     ),
 
@@ -103,18 +103,18 @@ def test_generate_query_cte_provided(mocker):
     )
 
     # Act
-    query = mock_table_instance._generate_query(cte_to_select=cte_to_select)
+    query = table_mock_instance._generate_query(cte_to_select=cte_to_select)
 
     # Asserts
     mocked_select_from_cte.assert_called_once_with(
-        original_query, cte_to_select, sql_dialect=mock_table_instance._sql_dialect
+        original_query, cte_to_select, sql_dialect=table_mock_instance._sql_dialect
     )
     # replace_original_table_references should be called once since we have a single input table
     mocked_replace_original_table_references.assert_called_once_with(
         query_ast=expected_query_template_result,
-        table_ref=mock_table_instance._sql_mock_meta.table_ref,
-        sql_mock_cte_name=mock_table_instance._sql_mock_meta.cte_name,
-        dialect=mock_table_instance._sql_dialect
+        table_ref=table_mock_instance._sql_mock_meta.table_ref,
+        sql_mock_cte_name=table_mock_instance._sql_mock_meta.cte_name,
+        dialect=table_mock_instance._sql_dialect
     )
     # The final query should be equal to whatever is returned by `replace_original_table_references`
     assert query == mocked_replace_original_table_references.return_value.sql(pretty=True)
@@ -123,10 +123,10 @@ def test_generate_query_cte_provided(mocker):
 def test_generate_query_sql_has_semicolon():
     """...then the query should not break sql mock"""
     # Arrange
-    mock_table_instance = MockTestTable.from_dicts([])
-    mock_table_instance._sql_mock_data.input_data = [mock_table_instance]
-    original_query = f"SELECT * FROM {mock_table_instance._sql_mock_meta.table_ref};"
-    mock_table_instance._sql_mock_data.rendered_query = original_query
+    table_mock_instance = MockTestTable.from_dicts([])
+    table_mock_instance._sql_mock_data.input_data = [table_mock_instance]
+    original_query = f"SELECT * FROM {table_mock_instance._sql_mock_meta.table_ref};"
+    table_mock_instance._sql_mock_data.rendered_query = original_query
 
     # Act
-    mock_table_instance._generate_query()
+    table_mock_instance._generate_query()
