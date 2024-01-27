@@ -277,8 +277,15 @@ class BaseTableMock:
             keys_to_keep = get_keys_from_list_of_dicts(expected)
             data = [{key: value for key, value in dictionary.items() if key in keys_to_keep} for dictionary in data]
         if ignore_order:
-            data = sorted(data, key=lambda d: sorted(d.items()))
-            expected = sorted(expected, key=lambda d: sorted(d.items()))
+            def sort_handling_none(d):
+                """
+                Sorts a dictionary by its values, but handles None values as -inf.
+                We do this to avoid issues with mixed None and non-None values in the same column.
+                """
+                none_safe_items = [(key, value) if value is not None else (key, float('-inf')) for key, value in d.items()]
+                return sorted(none_safe_items)
+            data = sorted(data, key=sort_handling_none)
+            expected = sorted(expected, key=sort_handling_none)
         try:
             assert expected == data
         except Exception as e:

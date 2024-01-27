@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Failing on mixed None values <https://github.com/DeepLcom/sql-mock/issues/34>
+
 ## [0.5.4]
 
 **Full Changelog**: <https://github.com/DeepLcom/sql-mock/compare/v0.5.3...v0.5.4>
