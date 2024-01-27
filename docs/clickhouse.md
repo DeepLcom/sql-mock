@@ -9,6 +9,10 @@ In order to use SQL Mock with Clickhouse, you need to provide the following envi
 * `SQL_MOCK_CLICKHOUSE_PASSWORD`: Password of your user
 * `SQL_MOCK_CLICKHOUSE_PORT`: Port of your Clickhouse instance
 
+Additionally, there are optional environment variables:
+
+* `SQL_MOCK_CLICKHOUSE_USE_SECURE_CONNECTION`: Whether to use a secure connection or not (default False)
+
 Having those environment variables enables SQL Mock to connect to your Clickhouse instance.
 
 ## Example: Testing Subscription Counts in ClickHouse

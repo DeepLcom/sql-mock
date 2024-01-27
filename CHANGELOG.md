@@ -8,7 +8,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
 
 ### Added
@@ -20,6 +19,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking Changes
 * Path to dbt project.yml file is provided instead of manifest.json
 * Array types use other ColumnMock classes as inner type
+
+### Fixed
+
+## [0.5.4]
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.5.3...v0.5.4
+
+### Added
+
+### Changed
+
+* Clickhouse: Remove numpy dependency
+
+### Fixed
+
+## [0.5.3]
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.5.2...v0.5.3
+
+### Added
+
+* Clickhouse: Support for secure connections
+
+### Changed
+
+### Fixed
+
+## [0.5.2]
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.5.1...v0.5.2
+
+### Added
+
+### Changed
+
+### Fixed
+
+* Removed usage of chdb since it turned out it sometimes does not return results
+
+## [0.5.1]
+
+**Full Changelog**: https://github.com/DeepLcom/sql-mock/compare/v0.5.0...v0.5.1
+
+### Added
+
+### Changed
+* Use chdb to fully mock the Clickhouse connection
+
 
 ### Fixed
 * Fixed generation of CTE names from references with hyphens
@@ -87,7 +131,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2023-10-26
 Initial version.
 
-[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.5.4...HEAD
+[0.5.4]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.4
+[0.5.3]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.3
+[0.5.2]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.2
+[0.5.1]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.1
 [0.5.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.0
 [0.4.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.4.0
 [0.3.1]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.3.1
