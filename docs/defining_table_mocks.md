@@ -10,7 +10,7 @@ When you want to provide mocked data to test your SQL model, you need to create 
 from sql_mock.bigquery import column_mocks as col
 from sql_mock.bigquery.table_mocks import BigQueryTableMock, table_meta
 
-# The models you are goign to use as inputs need to have a `table_ref` specified
+# The models you are going to use as inputs need to have a `table_ref` specified
 @table_meta(table_ref='data.table1')
 class Table(BigQueryTableMock):
     id = col.Int(default=1)
@@ -27,11 +27,12 @@ class ResultTable(BigQueryTableMock):
 
 Some important things to mention:
 
-**The models you are goign to use as inputs need to have a `table_ref` specified.**
-The `table_ref` is how the table will be referenced in your production database (usually some pattern like `<schema>.<table>`)
+**The models you are going to use as inputs need to have a `table_ref` specified.**
+The `table_ref` is how the table will be referenced in your production database (usually some pattern like `<schema>.<table>`).
+In case you want to mock a CTE, you can use the `table_ref` to specify the name of the CTE.
 
 **The result model needs to have a query.**
-There are currently 2 ways to provide a query to the model:
+There are currently 3 ways to provide a query to the model:
 
 1. Pass a path to your query file in the class definition using the `table_meta` decorator. This allows us to only specify it once.
 
@@ -46,5 +47,7 @@ There are currently 2 ways to provide a query to the model:
     ```python
     res = ResultTable.from_mocks(query='SELECT 1', input_data=[<your-input-mocks-table-instances>])
     ```
+
+3. If you are using dbt there is a third option to use dbt-specific decorators. More details on that can be found [in the "Use with dbt" doc](./dbt.md)
 
 More details on how to handle queries can be found [in the "Your SQL query to test" section](./your_sql_query_to_test.md)

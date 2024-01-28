@@ -21,7 +21,7 @@ class ResultTable(BigQueryTableMock):
     id = col.Int(default=1)
 ```
 
-The advantage of that option is that you only need to define your Table Mock class once (e.g. in a `models.py` file). After that you can reuse it for many tests.
+The advantage of that option is that you only need to define your Table Mock class once (e.g. in a `models.py` file). After that you can reuse it for many tests. For dbt projects there are specific decorators. More details on that can be found [in the "Use with dbt" doc](./dbt.md)
 
 ### Option 2: Pass the query in the `.from_mocks` call
 

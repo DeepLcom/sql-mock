@@ -208,14 +208,14 @@ A good practise is to create a `BaseColumnMock` class that is specific to your d
 ```python
 from sql_mock.column_mocks import BaseColumnMock
 
-class MyFanceDatabaseColumnMock(BaseColumnMock):
+class MyFancyDatabaseColumnMock(BaseColumnMock):
     # In case you need some specific logic that overwrites the default behavior, you can do so here
     pass
 
-class Int(MyFanceDatabaseColumnMock):
+class Int(MyFancyDatabaseColumnMock):
     dtype = "Integer"
 
-class String(MyFanceDatabaseColumnMock):
+class String(MyFancyDatabaseColumnMock):
     dtype = "String"
 ```
 
