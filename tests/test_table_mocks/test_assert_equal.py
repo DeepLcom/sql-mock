@@ -40,6 +40,20 @@ _assert_equal_successful_test_cases = [
             id="Matching data - Missing keys ignored - Order ignored",
         ),
         pytest.param(
+            [{"name": "Alice", "age": None, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],  # data
+            [{"name": "Alice", "age": None}, {"name": "Bob", "age": 30}],  # expected_data
+            True,  # ignore_missing_keys
+            True,  # ignore_order
+            id="Matching data - Missing keys ignored - Order ignored - including mixed None and int values",
+        ),
+        pytest.param(
+            [{"name":None, "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],  # data
+            [{"name": None, "age": 25}, {"name": "Bob", "age": 30}],  # expected_data
+            True,  # ignore_missing_keys
+            True,  # ignore_order
+            id="Matching data - Missing keys ignored - Order ignored - including mixed None and str values",
+        ),
+        pytest.param(
             [{"name": "Alice", "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],  # data
             [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}],  # expected_data
             True,  # ignore_missing_keys
