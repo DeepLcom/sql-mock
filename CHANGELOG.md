@@ -1,8 +1,3 @@
-Changelog
-All notable changes to this project will be documented in this file.
-
-The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
-
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -14,7 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-* BigQuery column types
+### Changed
+
+### Breaking Changes
+
+### Fixed
+
+## [0.6.0]
+
+**Full Changelog**: <https://github.com/DeepLcom/sql-mock/compare/v0.5.4...v0.6.0>
+
+### Added
+
+* New BigQuery column types
 
 ### Changed
 
@@ -149,7 +156,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial version.
 
-[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.5.4...HEAD
+[Unreleased]: https://github.com/DeepLcom/sql-mock/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.6.0
 [0.5.4]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.4
 [0.5.3]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.3
 [0.5.2]: https://github.com/DeepLcom/sql-mock/releases/tag/v0.5.2

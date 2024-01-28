@@ -6,10 +6,6 @@ Please ensure the following steps have been taken before publishing a new releas
 
 - [ ] The version has been bumped in `pyproject.toml` in accordance with [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Documentation
-
-- [ ] The documentation has been updated by running `make build-docs-github`.
-
 ## Changelog
 
 - [ ] The "Unreleased" entries in the Changelog have been moved to the new version.
