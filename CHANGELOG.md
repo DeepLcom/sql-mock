@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Add default target path for dbt
+
 ## [0.6.0]
 
 **Full Changelog**: <https://github.com/DeepLcom/sql-mock/compare/v0.5.4...v0.6.0>
