@@ -12,11 +12,13 @@ from sql_mock.table_mocks import TableMockMeta
 if TYPE_CHECKING:
     from sql_mock.table_mocks import BaseTableMock
 
+DBT_DEFAULT_TARGET_PATH = "target"
+
 
 def _get_manifest_from_project_file(project_path: str) -> dict:
     with open(project_path, "r") as f:
         dbt_project = yaml.safe_load(f)
-    target_path = dbt_project["target-path"]
+    target_path = dbt_project.get("target-path", DBT_DEFAULT_TARGET_PATH)
     project_dir = os.path.dirname(project_path)
     with open(os.path.join(project_dir, target_path, "manifest.json"), "r") as file:
         manifest = json.load(file)
@@ -144,9 +146,7 @@ def dbt_source_meta(
     def decorator(cls):
         path = project_path or SQLMockConfig.get_dbt_project_path()
 
-        dbt_meta = _get_source_metadata(
-            project_path=path, source_name=source_name, table_name=table_name
-        )
+        dbt_meta = _get_source_metadata(project_path=path, source_name=source_name, table_name=table_name)
 
         if default_inputs:
             validate_input_mocks(default_inputs)
