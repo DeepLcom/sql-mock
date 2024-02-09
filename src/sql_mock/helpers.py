@@ -55,7 +55,7 @@ def _replace_table_ref_in_columns(
         if col_table.name == ref_table.name:
             col.set("table", new_ref)
             # Make sure to remove the schema and db from the col table reference
-            # to fully exchange it wit the provided table ref
+            # to fully exchange it with the provided table ref
             col.set("schema", None)
             col.set("db", None)
     return query_ast
