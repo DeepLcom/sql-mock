@@ -2,8 +2,8 @@ from collections import Counter
 from typing import TYPE_CHECKING, List
 
 import sqlglot
+from sqlglot.expressions import replace_tables, to_table
 from sqlglot.optimizer.eliminate_ctes import eliminate_ctes
-from sqlglot.expressions import replace_tables
 from sqlglot.optimizer.scope import build_scope
 
 from sql_mock.exceptions import ValidationError
@@ -15,6 +15,7 @@ if TYPE_CHECKING:
 
 def get_keys_from_list_of_dicts(data: list[dict]) -> set[str]:
     return set(key for dictionary in data for key in dictionary.keys())
+
 
 def remove_cte_from_query(query_ast: sqlglot.Expression, cte_name: str) -> sqlglot.Expression:
     """
@@ -29,7 +30,40 @@ def remove_cte_from_query(query_ast: sqlglot.Expression, cte_name: str) -> sqlgl
             cte.pop()
     return query_ast
 
-def replace_original_table_references(query_ast: sqlglot.Expression, table_ref: str, sql_mock_cte_name: str, dialect: str) -> sqlglot.Expression:
+
+def _replace_table_ref_in_columns(
+    query_ast: sqlglot.Expression, table_ref: str, new_ref: str, dialect: str
+) -> sqlglot.Expression:
+    """
+    Replace original table reference with a new ref
+
+    Args:
+        query_ast (str): Original SQL query - parsed by sqlglot
+        table_ref (str): Table ref to be replaced
+        new_ref (str): Name of the new table ref
+    """
+    ref_table = to_table(table_ref, dialect=dialect)
+
+    root = build_scope(query_ast)
+    cols_in_query = [col for scope in root.traverse() for col in scope.columns]
+    for col in cols_in_query:
+        if not col.table:
+            continue
+        # For column replacement we simplify the comparison to the table name
+        # which is why we cast the col.table string to a table object
+        col_table = to_table(col.table, dialect=dialect)
+        if col_table.name == ref_table.name:
+            col.set("table", new_ref)
+            # Make sure to remove the schema and db from the col table reference
+            # to fully exchange it with the provided table ref
+            col.set("schema", None)
+            col.set("db", None)
+    return query_ast
+
+
+def replace_original_table_references(
+    query_ast: sqlglot.Expression, table_ref: str, sql_mock_cte_name: str, dialect: str
+) -> sqlglot.Expression:
     """
     Replace original table reference with sql mock cte name to point them to the mocked data
 
@@ -39,6 +73,9 @@ def replace_original_table_references(query_ast: sqlglot.Expression, table_ref: 
         sql_mock_cte_name (str): Name of the CTE that will contain the mocked data
         dialect (str): The SQL dialect to use for parsing the query
     """
+    query_ast = _replace_table_ref_in_columns(
+        query_ast=query_ast, table_ref=table_ref, new_ref=sql_mock_cte_name, dialect=dialect
+    )
     return replace_tables(expression=query_ast, mapping={table_ref: sql_mock_cte_name}, dialect=dialect)
 
 
@@ -145,7 +182,11 @@ def validate_all_input_mocks_for_query_provided(query: str, input_mocks: List["B
         input_mocks (List[BaseTableMock]): The input mocks that are provided
         dialect (str): The SQL dialect to use for parsing the query
     """
-    provided_table_refs = [table_mock._sql_mock_meta.table_ref for table_mock in input_mocks if hasattr(table_mock._sql_mock_meta, "table_ref")]
+    provided_table_refs = [
+        table_mock._sql_mock_meta.table_ref
+        for table_mock in input_mocks
+        if hasattr(table_mock._sql_mock_meta, "table_ref")
+    ]
     ast = sqlglot.parse_one(query, dialect=dialect)
 
     # In case the table_ref is a CTE, we need to remove it from the query

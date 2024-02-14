@@ -69,6 +69,21 @@ class TestReplaceOriginalTableReference:
             dialect="bigquery",
         ).sql(pretty=True)
 
+    def test_replace_original_table_reference_when_used_in_col_ref(self):
+        """...then the column reference should also be replaced"""
+        query = f"""
+        SELECT {MockTestTable._sql_mock_meta.table_ref}.col1
+        FROM data.some_table as b
+        JOIN {MockTestTable._sql_mock_meta.table_ref} ON {MockTestTable._sql_mock_meta.table_ref}.col1 = b.col1
+        """
+        expected = f"SELECT\n  {MockTestTable._sql_mock_meta.cte_name}.col1\nFROM data.some_table AS b\nJOIN {MockTestTable._sql_mock_meta.cte_name} /* data.mock_test_table */\n  ON {MockTestTable._sql_mock_meta.cte_name}.col1 = b.col1"
+        assert expected == replace_original_table_references(
+            query_ast=sqlglot.parse_one(query),
+            table_ref=MockTestTable._sql_mock_meta.table_ref,
+            sql_mock_cte_name=MockTestTable._sql_mock_meta.cte_name,
+            dialect="bigquery",
+        ).sql(pretty=True)
+
 
 class TestSelectFromCTE:
     def test_select_from_cte_when_cte_exists(self):
@@ -213,13 +228,12 @@ class TestValidateAllInputMocksForQueryProvided:
 
         SELECT a, b, * FROM cte_2
         """
+
         @table_meta(table_ref="cte_1")
         class Cte1Mock(BaseTableMock):
             pass
 
-        validate_all_input_mocks_for_query_provided(
-            query=query, input_mocks=[Cte1Mock()], dialect="bigquery"
-        )
+        validate_all_input_mocks_for_query_provided(query=query, input_mocks=[Cte1Mock()], dialect="bigquery")
 
     def test_cte_superfluous_after_mocking(self):
         """...then the validation should pass since the CTE will be removed anyways and does not need to be mocked"""
@@ -236,13 +250,12 @@ class TestValidateAllInputMocksForQueryProvided:
 
         SELECT a, b, * FROM cte_2
         """
-        @table_meta(table_ref="cte_2") # This will make cte_1 superfluous
+
+        @table_meta(table_ref="cte_2")  # This will make cte_1 superfluous
         class Cte1Mock(BaseTableMock):
             pass
 
-        validate_all_input_mocks_for_query_provided(
-            query=query, input_mocks=[Cte1Mock()], dialect="bigquery"
-        )
+        validate_all_input_mocks_for_query_provided(query=query, input_mocks=[Cte1Mock()], dialect="bigquery")
 
 
 class TestGetSourceTables:
