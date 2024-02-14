@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 * Add default target path for dbt
+* Improve replacement of tables (also taking into account missing alias)
 
 ## [0.6.0]
 
