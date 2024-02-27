@@ -84,6 +84,21 @@ class TestReplaceOriginalTableReference:
             dialect="bigquery",
         ).sql(pretty=True)
 
+    def test_replace_original_table_reference_when_used_in_col_ref_with_alias_that_has_same_name_as_table(self):
+        """...then the alias should not be replaced"""
+        query = f"""
+        SELECT mock_test_table.col1
+        FROM {MockTestTable._sql_mock_meta.table_ref} as mock_test_table
+        JOIN data.some_table as a ON a.col1 = mock_test_table.col1
+        """
+        expected = f"SELECT\n  mock_test_table.col1\nFROM {MockTestTable._sql_mock_meta.cte_name} AS mock_test_table /* data.mock_test_table */\nJOIN data.some_table AS a\n  ON a.col1 = mock_test_table.col1"
+        assert expected == replace_original_table_references(
+            query_ast=sqlglot.parse_one(query),
+            table_ref=MockTestTable._sql_mock_meta.table_ref,
+            sql_mock_cte_name=MockTestTable._sql_mock_meta.cte_name,
+            dialect="bigquery",
+        ).sql(pretty=True)
+
 
 class TestSelectFromCTE:
     def test_select_from_cte_when_cte_exists(self):

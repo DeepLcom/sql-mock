@@ -45,19 +45,21 @@ def _replace_table_ref_in_columns(
     ref_table = to_table(table_ref, dialect=dialect)
 
     root = build_scope(query_ast)
-    cols_in_query = [col for scope in root.traverse() for col in scope.columns]
-    for col in cols_in_query:
-        if not col.table:
-            continue
-        # For column replacement we simplify the comparison to the table name
-        # which is why we cast the col.table string to a table object
-        col_table = to_table(col.table, dialect=dialect)
-        if col_table.name == ref_table.name:
-            col.set("table", new_ref)
-            # Make sure to remove the schema and db from the col table reference
-            # to fully exchange it with the provided table ref
-            col.set("schema", None)
-            col.set("db", None)
+    for scope in root.traverse():
+        for col in scope.columns:
+            if not col.table:
+                continue
+            # For column replacement we simplify the comparison to the table name
+            # which is why we cast the col.table string to a table object
+            scope_table_aliases = [table.alias for table in scope.tables]
+            col_table = to_table(col.table, dialect=dialect)
+            # We need to be careful that we don't replace column aliases that match the table alias
+            if col_table.name == ref_table.name and col_table.name not in scope_table_aliases:
+                col.set("table", new_ref)
+                # Make sure to remove the schema and db from the col table reference
+                # to fully exchange it with the provided table ref
+                col.set("schema", None)
+                col.set("db", None)
     return query_ast
 
 
@@ -76,6 +78,7 @@ def replace_original_table_references(
     query_ast = _replace_table_ref_in_columns(
         query_ast=query_ast, table_ref=table_ref, new_ref=sql_mock_cte_name, dialect=dialect
     )
+    print(query_ast.sql(pretty=True))
     return replace_tables(expression=query_ast, mapping={table_ref: sql_mock_cte_name}, dialect=dialect)
 
 
