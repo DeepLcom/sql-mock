@@ -1,10 +1,10 @@
 from snowflake.connector import DictCursor, connect
 
 from sql_mock.snowflake.settings import SnowflakeSettings
-from sql_mock.table_mocks import BaseMockTable
+from sql_mock.table_mocks import BaseTableMock
 
 
-class SnowflakeMockTable(BaseMockTable):
+class SnowflakeTableMock(BaseTableMock):
     _sql_dialect = "snowflake"
 
     def __init__(

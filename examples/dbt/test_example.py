@@ -1,32 +1,32 @@
 from sql_mock.bigquery import column_mocks as col
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 from sql_mock.config import SQLMockConfig
 from sql_mock.dbt import dbt_model_meta, dbt_seed_meta, dbt_source_meta
 
-SQLMockConfig.set_dbt_manifest_path("./tests/resources/dbt/dbt_manifest.json")
+SQLMockConfig.set_dbt_project_path("./tests/resources/dbt/dbt_project.yml")
 
 
 # NOTE: The Source and Seed classes will not be used in the example test. They are only here for demonstration purpose.
 @dbt_source_meta(source_name="source_data", table_name="opportunity_events")
-class OpportunityEventsSource(BigQueryMockTable):
+class OpportunityEventsSource(BigQueryTableMock):
     event_id = col.Int(default=1)
     event_type = col.String(default="foo")
     event_date = col.Date(default="2023-12-24")
 
 
 @dbt_seed_meta(seed_name="country_codes")
-class CountryCodesSeed(BigQueryMockTable):
+class CountryCodesSeed(BigQueryTableMock):
     country_code = col.String(default="foo")
     country_name = col.String(default="foo")
 
 
 @dbt_model_meta(model_name="my_first_dbt_model")
-class MyFirstDBTModel(BigQueryMockTable):
+class MyFirstDBTModel(BigQueryTableMock):
     id = col.Int(default=1)
 
 
 @dbt_model_meta(model_name="my_second_dbt_model")
-class MySecondDBTModel(BigQueryMockTable):
+class MySecondDBTModel(BigQueryTableMock):
     id = col.Int(default=1)
 
 

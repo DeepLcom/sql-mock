@@ -1,19 +1,19 @@
 import pytest
 
-from sql_mock.column_mocks import ColumnMock
-from sql_mock.table_mocks import BaseMockTable, table_meta
+from sql_mock.column_mocks import BaseColumnMock
+from sql_mock.table_mocks import BaseTableMock, table_meta
 
 
-class IntTestColumn(ColumnMock):
+class IntTestColumn(BaseColumnMock):
     dtype = "Integer"
 
 
-class StringTestColumn(ColumnMock):
+class StringTestColumn(BaseColumnMock):
     dtype = "String"
 
 
 @table_meta(table_ref="test_data")
-class MockTestTable(BaseMockTable):
+class MockTestTable(BaseTableMock):
     name = StringTestColumn(default="Thomas")
     age = IntTestColumn(default=0)
     city = StringTestColumn(default="Munich")
@@ -38,6 +38,20 @@ _assert_equal_successful_test_cases = [
             True,  # ignore_missing_keys
             True,  # ignore_order
             id="Matching data - Missing keys ignored - Order ignored",
+        ),
+        pytest.param(
+            [{"name": "Alice", "age": None, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],  # data
+            [{"name": "Alice", "age": None}, {"name": "Bob", "age": 30}],  # expected_data
+            True,  # ignore_missing_keys
+            True,  # ignore_order
+            id="Matching data - Missing keys ignored - Order ignored - including mixed None and int values",
+        ),
+        pytest.param(
+            [{"name":None, "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],  # data
+            [{"name": None, "age": 25}, {"name": "Bob", "age": 30}],  # expected_data
+            True,  # ignore_missing_keys
+            True,  # ignore_order
+            id="Matching data - Missing keys ignored - Order ignored - including mixed None and str values",
         ),
         pytest.param(
             [{"name": "Alice", "age": 25, "city": "New York"}, {"name": "Bob", "age": 30, "city": "Munich"}],  # data

@@ -1,18 +1,18 @@
 import datetime
 
 from sql_mock.bigquery import column_mocks as col
-from sql_mock.bigquery.table_mocks import BigQueryMockTable
+from sql_mock.bigquery.table_mocks import BigQueryTableMock
 from sql_mock.table_mocks import table_meta
 
 
 @table_meta(table_ref="data.users")
-class UserTable(BigQueryMockTable):
+class UserTable(BigQueryTableMock):
     user_id = col.Int(default=1)
     user_name = col.String(default="Mr. T")
 
 
 @table_meta(table_ref="data.subscriptions")
-class SubscriptionTable(BigQueryMockTable):
+class SubscriptionTable(BigQueryTableMock):
     subscription_id = col.Int(default=1)
     period_start_date = col.Date(default=datetime.date(2023, 9, 5))
     period_end_date = col.Date(default=datetime.date(2023, 9, 5))
@@ -26,7 +26,7 @@ class SubscriptionTable(BigQueryMockTable):
         SubscriptionTable([]),
     ],  # We can provide defaults for the class if needed. Then we don't always need to provide data for all input tables.
 )
-class MultipleSubscriptionUsersTable(BigQueryMockTable):
+class MultipleSubscriptionUsersTable(BigQueryTableMock):
     user_id = col.Int(default=1)
 
 

@@ -1,4 +1,4 @@
-from sql_mock.clickhouse.column_mocks import Array, ClickhouseColumnMock, Decimal
+from sql_mock.clickhouse.column_mocks import Array, ClickhouseColumnMock, Decimal, Int, String
 
 
 def test_init_not_nullable():
@@ -49,8 +49,8 @@ def test_decimal_initialization_nullable():
 
 def test_array_column_inner_dtype():
     """Ensure that the inner dtype is processed correctly"""
-    string_array_col = Array(inner_dtype="String", default=["a", "b"], nullable=True)
-    int_array_col = Array(inner_dtype="Integer", default=[1, 2], nullable=False)
+    string_array_col = Array(inner_type=String, default=["a", "b"], nullable=True)
+    int_array_col = Array(inner_type=Int, default=[1, 2], nullable=False)
 
     assert string_array_col.dtype == "Nullable(Array(String))"
     assert string_array_col.default == ["a", "b"]

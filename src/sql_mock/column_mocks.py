@@ -2,7 +2,7 @@ import json
 from sql_mock.constants import NO_INPUT, NoInput
 
 
-class ColumnMock:
+class BaseColumnMock:
     """
     Represents a mock column in a database table.
 
@@ -14,13 +14,13 @@ class ColumnMock:
     """
 
     dtype = None
-    nullable = False
+    nullable = True
     default = None
     use_quotes_for_casting = True
 
-    def __init__(self, default=None, nullable=False) -> None:
+    def __init__(self, default=None, nullable=True) -> None:
         """
-        Initialize a ColumnMock instance.
+        Initialize a BaseColumnMock instance.
 
         Args:
             default: The default value for the column.

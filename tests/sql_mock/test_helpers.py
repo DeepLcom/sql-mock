@@ -2,7 +2,7 @@
 import pytest
 import sqlglot
 
-from sql_mock.column_mocks import ColumnMock
+from sql_mock.column_mocks import BaseColumnMock
 from sql_mock.exceptions import ValidationError
 from sql_mock.helpers import (
     _validate_input_mocks_have_table_ref,
@@ -13,24 +13,24 @@ from sql_mock.helpers import (
     validate_all_input_mocks_for_query_provided,
     validate_input_mocks,
 )
-from sql_mock.table_mocks import BaseMockTable, table_meta
+from sql_mock.table_mocks import BaseTableMock, table_meta
 
 
-class NoTableRefMock(BaseMockTable):
+class NoTableRefMock(BaseTableMock):
     pass
 
 
 @table_meta(table_ref="some_table")
-class TableRefMock(BaseMockTable):
+class TableRefMock(BaseTableMock):
     def _get_results(self):
         return []
 
 
-class IntTestColumn(ColumnMock):
+class IntTestColumn(BaseColumnMock):
     dtype = "Integer"
 
 
-class StringTestColumn(ColumnMock):
+class StringTestColumn(BaseColumnMock):
     dtype = "String"
 
 
@@ -39,7 +39,7 @@ string_col = StringTestColumn(default="hey")
 
 
 @table_meta(table_ref="data.mock_test_table")
-class MockTestTable(BaseMockTable):
+class MockTestTable(BaseTableMock):
     col1 = int_col
     col2 = string_col
     _sql_dialect = "bigquery"
@@ -48,18 +48,41 @@ class MockTestTable(BaseMockTable):
 class TestReplaceOriginalTableReference:
     def test_replace_original_table_references_when_reference_exists(self):
         """...then the original table reference should be replaced with the mocked table reference"""
-        query = f"SELECT * FROM {MockTestTable._sql_mock_meta.table_ref}"
-        mock_tables = [MockTestTable()]
+        query_ast = sqlglot.parse_one(f"SELECT * FROM {MockTestTable._sql_mock_meta.table_ref}")
         # Note that sqlglot will add a comment with the original table name at the end
-        expected = "SELECT\n  *\nFROM data__mock_test_table /* data.mock_test_table */"
-        assert expected == replace_original_table_references(query, mock_tables)
+        expected = f"SELECT\n  *\nFROM {MockTestTable._sql_mock_meta.cte_name} /* data.mock_test_table */"
+        assert expected == replace_original_table_references(
+            query_ast=query_ast,
+            table_ref=MockTestTable._sql_mock_meta.table_ref,
+            sql_mock_cte_name=MockTestTable._sql_mock_meta.cte_name,
+            dialect="bigquery",
+        ).sql(pretty=True)
 
     def test_replace_original_table_references_when_reference_does_not_exist(self):
         """...then the original reference should not be replaced"""
-        query = "SELECT * FROM some_table"
-        mock_tables = [MockTestTable()]
+        query_ast = sqlglot.parse_one("SELECT * FROM some_table")
         expected = "SELECT\n  *\nFROM some_table"
-        assert expected == replace_original_table_references(query, mock_tables)
+        assert expected == replace_original_table_references(
+            query_ast=query_ast,
+            table_ref=MockTestTable._sql_mock_meta.table_ref,
+            sql_mock_cte_name=MockTestTable._sql_mock_meta.cte_name,
+            dialect="bigquery",
+        ).sql(pretty=True)
+
+    def test_replace_original_table_reference_when_used_in_col_ref(self):
+        """...then the column reference should also be replaced"""
+        query = f"""
+        SELECT {MockTestTable._sql_mock_meta.table_ref}.col1
+        FROM data.some_table as b
+        JOIN {MockTestTable._sql_mock_meta.table_ref} ON {MockTestTable._sql_mock_meta.table_ref}.col1 = b.col1
+        """
+        expected = f"SELECT\n  {MockTestTable._sql_mock_meta.cte_name}.col1\nFROM data.some_table AS b\nJOIN {MockTestTable._sql_mock_meta.cte_name} /* data.mock_test_table */\n  ON {MockTestTable._sql_mock_meta.cte_name}.col1 = b.col1"
+        assert expected == replace_original_table_references(
+            query_ast=sqlglot.parse_one(query),
+            table_ref=MockTestTable._sql_mock_meta.table_ref,
+            sql_mock_cte_name=MockTestTable._sql_mock_meta.cte_name,
+            dialect="bigquery",
+        ).sql(pretty=True)
 
 
 class TestSelectFromCTE:
@@ -158,11 +181,11 @@ class TestValidateAllInputMocksForQueryProvided:
     """
 
     @table_meta(table_ref="bar.bar")
-    class BarMock(BaseMockTable):
+    class BarMock(BaseTableMock):
         pass
 
     @table_meta(table_ref="foo.foo")
-    class FooMock(BaseMockTable):
+    class FooMock(BaseTableMock):
         pass
 
     def test_all_input_mocks_provided(self):
@@ -189,6 +212,50 @@ class TestValidateAllInputMocksForQueryProvided:
             str(e.value)
             == f"Your input mock {TableRefMock.__class__.__name__} is not a table that is referenced in the query"
         )
+
+    def test_input_mocks_missing_for_tables_within_mocked_cte(self):
+        """...then the validation should pass since the CTE would be mocked anyways"""
+        query = """
+        WITH cte_1 AS (
+            SELECT * FROM some_table
+        ),
+
+        cte_2 AS (
+            SELECT a, b
+            FROM cte_1
+            WHERE a = 'foo'
+        )
+
+        SELECT a, b, * FROM cte_2
+        """
+
+        @table_meta(table_ref="cte_1")
+        class Cte1Mock(BaseTableMock):
+            pass
+
+        validate_all_input_mocks_for_query_provided(query=query, input_mocks=[Cte1Mock()], dialect="bigquery")
+
+    def test_cte_superfluous_after_mocking(self):
+        """...then the validation should pass since the CTE will be removed anyways and does not need to be mocked"""
+        query = """
+        WITH cte_1 AS (
+            SELECT * FROM some_table
+        ),
+
+        cte_2 AS (
+            SELECT a, b
+            FROM cte_1
+            WHERE a = 'foo'
+        )
+
+        SELECT a, b, * FROM cte_2
+        """
+
+        @table_meta(table_ref="cte_2")  # This will make cte_1 superfluous
+        class Cte1Mock(BaseTableMock):
+            pass
+
+        validate_all_input_mocks_for_query_provided(query=query, input_mocks=[Cte1Mock()], dialect="bigquery")
 
 
 class TestGetSourceTables:
@@ -224,3 +291,18 @@ class TestGetSourceTables:
         expected = ["table_2"]
         assert len(res) == len(expected)
         assert all([val in expected for val in res])
+
+    def test_query_with_comment(self):
+        """...then the comment should be ignored"""
+
+        query = """
+        SELECT
+            1,
+            2
+        FROM table_1 /* some comment */
+        """
+
+        res = get_source_tables(query, dialect="bigquery")
+
+        expected = ["table_1"]
+        assert res == expected

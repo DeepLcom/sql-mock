@@ -1,7 +1,8 @@
-from sql_mock.column_mocks import ColumnMock
+from typing import Any
+from sql_mock.column_mocks import BaseColumnMock
 
 
-class ClickhouseColumnMock(ColumnMock):
+class ClickhouseColumnMock(BaseColumnMock):
     def __init__(self, default, nullable=False) -> None:
         super().__init__(default, nullable)
         if nullable:
@@ -47,9 +48,9 @@ class Array(ClickhouseColumnMock):
 
     def __init__(
         self,
-        inner_dtype,
-        default,
-        nullable=False,
+        inner_type: ClickhouseColumnMock,
+        default: Any,
+        nullable: bool=False,
     ) -> None:
-        self.dtype = f"Array({inner_dtype})"
+        self.dtype = f"Array({inner_type.dtype})"
         super().__init__(default, nullable)
