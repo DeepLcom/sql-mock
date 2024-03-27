@@ -144,6 +144,10 @@ def get_source_tables(query, dialect) -> List[str]:
         #     then `source` will be a Table instance.
         for alias, (node, source) in scope.selected_sources.items()
         if isinstance(source, sqlglot.exp.Table)
+        # When using ARRAY joins sqlglot percieves the inputs as tables even though they are infact not.
+        # This fixes it but does not allow for multiple types of joins to be mixed with the ARRAY JOIN,
+        # For now we consider it a reasonable solution.
+        and not (node.parent.key == "join" and any(join.kind == "ARRAY" for join in node.parent_select.args["joins"]))
     }
 
     return list(tables)
