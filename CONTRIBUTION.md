@@ -42,7 +42,7 @@ We use [Poetry](https://python-poetry.org/) for dependency management. If you do
 Once you have Poetry, you can install the project's dependencies:
 
 ```bash
-poetry install
+poetry install --all-extras
 ```
 
 ### 3. Pre-Commit Hooks
