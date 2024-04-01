@@ -86,3 +86,13 @@ As part of the pre-commit hooks, code formatting and linting will be automatical
 We are using sphinx to generate our documentation. 
 The documentation pages can be found in `docsource`. Go there and add / adjust the files.
 After that, we need to run `make build-docs-github` in order to populate the changes in the documentation and commit those.
+
+
+## Release process
+
+To create a new release, you need to perform the following steps:
+
+1. Create a PR to bump the library version, update the changelog, etc. The full steps needed can be found in the [PR template for a release process](https://github.com/DeepLcom/sql-mock/blob/a98eca804e0901b8b4488f8ed95e0bff32cf112b/.github/PULL_REQUEST_TEMPLATE/release_template.md?plain=1).
+2. Merge your PR
+3. Go to [Releaes](https://github.com/DeepLcom/sql-mock/releases) and [draft a new release](https://github.com/DeepLcom/sql-mock/releases/new). You might need to create a new Tag with the same version as the updated one from your PR. Make sure to describe the changes made (compare to previous releases). You can copy-paste the content for your new version from the changelog. Select the latest master branch as a target branch.
+4. When your release is published, an automatic GitHub action should take care of publishing the release to PyPi. Monitor the [actions](https://github.com/DeepLcom/sql-mock/actions) to check that everything works.
