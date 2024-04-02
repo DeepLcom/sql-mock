@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [0.6.1]
+
+**Full Changelog**: <https://github.com/DeepLcom/sql-mock/compare/v0.6.0...v0.6.1>
+
+### Fixed
+
 * Add default target path for dbt
 * Improve replacement of tables (also taking into account missing alias)
 * Do not require mocks for ARRAY JOIN clause arguments
