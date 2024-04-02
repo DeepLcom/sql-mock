@@ -321,3 +321,27 @@ class TestGetSourceTables:
 
         expected = ["table_1"]
         assert res == expected
+
+    def test_query_with_array_joins(self):
+        """...then the array join fields should not be treated as tables to be mocked"""
+
+        query = """
+        SELECT
+            sum(1) AS impressions,
+            city,
+            browser
+        FROM
+        (
+            SELECT
+                ['Istanbul', 'Berlin', 'Bobruisk'] AS cities,
+                ['Firefox', 'Chrome', 'Chrome'] AS browsers
+        )
+        ARRAY JOIN
+            cities AS city,
+            browsers AS browser
+        """
+
+        res = get_source_tables(query, dialect="clickhouse")
+
+        expected = []
+        assert res == expected

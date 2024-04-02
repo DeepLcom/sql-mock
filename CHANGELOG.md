@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Add default target path for dbt
 * Improve replacement of tables (also taking into account missing alias)
+* Do not require mocks for ARRAY JOIN clause arguments
 
 ## [0.6.0]
 
