@@ -75,9 +75,12 @@ flake8 = "^6.1.0"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-# Ignore Google Bigquery namespace deprecation warnings
 [tool.pytest.ini_options]
+# Ignore Google Bigquery namespace deprecation warnings
 filterwarnings = [
     "ignore:Deprecated call to `pkg_resources\\.declare_namespace\\('.*'\\):DeprecationWarning",
     "ignore::DeprecationWarning:google.rpc",
+]
+markers = [
+    "integration: Integration tests requiring running database instances"
 ]

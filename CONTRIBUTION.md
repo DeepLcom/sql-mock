@@ -45,22 +45,42 @@ Once you have Poetry, you can install the project's dependencies:
 poetry install --all-extras
 ```
 
-### 3. Pre-Commit Hooks
+### 3. External Dependencies
 
-This project uses pre-commit hooks to ensure code quality. To install the hooks, run:
+This project uses several external dependencies in the developer workflow. These are:
 
-```bash
-poetry run pre-commit install
-```
-
-This will set up the necessary hooks to check code formatting, linting, and other code quality checks before each commit.
+- [Pre-commit](https://pre-commit.com/) hooks are used to ensure code quality. Install the hooks with
+    ```
+    poetry run pre-commit install
+    ```
+    This will set up the necessary hooks to check code formatting, linting, and other code quality checks before each commit.
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) for running integrations tests (see below).
+- [Make](https://www.gnu.org/software/make/) is used as convenience wrapper around some of the more convoluted commands. This is optional as you can always run the commands directly (see the `Makefile` for the actual commands being run).
 
 ### 4. Running Tests
 
 We use [pytest](https://docs.pytest.org/en/latest/) for running tests. You can run all the tests with:
 
 ```bash
-poetry run pytest tests/
+make test
+```
+
+There are two types of tests: those testing the internal functions and methods of the library and those testing the test execution with example queries. The latter require a running database instance to be available (either locally or remotely). Note, integration testing is currently only supported for Clickhouse. You can run internal testing only with:
+
+```bash
+make test-unit
+```
+
+Running integration tests locally requires [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/). First, start the local database services with:
+
+```bash
+docker compose up -d
+```
+
+Then you can run integration tests with:
+
+```bash
+make test-integration
 ```
 
 ### 5. Environment Variables
