@@ -1,4 +1,5 @@
 from typing import Any
+
 from sql_mock.column_mocks import BaseColumnMock
 
 
@@ -7,7 +8,7 @@ class BigQueryColumnMock(BaseColumnMock):
 
 
 class Boolean(BigQueryColumnMock):
-    dtype = 'Boolean'
+    dtype = "Boolean"
 
 
 class Int(BigQueryColumnMock):
@@ -33,7 +34,7 @@ class Decimal(BigQueryColumnMock):
 
 
 class Timestamp(BigQueryColumnMock):
-    dtype = 'Timestamp'
+    dtype = "Timestamp"
 
 
 class Array(BigQueryColumnMock):
@@ -43,7 +44,7 @@ class Array(BigQueryColumnMock):
         self,
         inner_type: BigQueryColumnMock,
         default: Any,
-        nullable: bool=False,
+        nullable: bool = False,
     ) -> None:
         self.dtype = f"Array<{inner_type.dtype}>"
         super().__init__(default, nullable)

@@ -1,4 +1,5 @@
 from typing import Any
+
 from sql_mock.column_mocks import BaseColumnMock
 
 
@@ -50,7 +51,7 @@ class Array(ClickhouseColumnMock):
         self,
         inner_type: ClickhouseColumnMock,
         default: Any,
-        nullable: bool=False,
+        nullable: bool = False,
     ) -> None:
         self.dtype = f"Array({inner_type.dtype})"
         super().__init__(default, nullable)
