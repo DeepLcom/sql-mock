@@ -78,7 +78,6 @@ def replace_original_table_references(
     query_ast = _replace_table_ref_in_columns(
         query_ast=query_ast, table_ref=table_ref, new_ref=sql_mock_cte_name, dialect=dialect
     )
-    print(query_ast.sql(pretty=True))
     return replace_tables(expression=query_ast, mapping={table_ref: sql_mock_cte_name}, dialect=dialect)
 
 
