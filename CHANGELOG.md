@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* Remove unnecessary `print` statement leading to test failures
+
 ## [0.6.1]
 
 **Full Changelog**: <https://github.com/DeepLcom/sql-mock/compare/v0.6.0...v0.6.1>
