@@ -1,4 +1,4 @@
-from sql_mock.redshift.column_mocks import RedshiftColumnMock, DECIMAL
+from sql_mock.redshift.column_mocks import DECIMAL, RedshiftColumnMock
 
 
 def test_init_nullable():
@@ -45,4 +45,3 @@ class TestDecimalColumn:
         assert decimal_col.dtype == "DECIMAL(10, 2)"
         assert decimal_col.default is None
         assert decimal_col.nullable
-
