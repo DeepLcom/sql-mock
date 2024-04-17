@@ -7,11 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+## [0.6.2]
 
-### Changed
-
-### Breaking Changes
+**Full Changelog**: <https://github.com/DeepLcom/sql-mock/compare/v0.6.1...v0.6.2>
 
 ### Fixed
 
